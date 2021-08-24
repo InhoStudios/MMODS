@@ -86,42 +86,33 @@
             <h1 style="font-size:48px;color: #172d68">Quiz<br></h1>
           </div>
         </div>
-        <div class="row">
-          <div class="col-md-2"></div>
+        <div class="row justify-content-center mb-2 element-animate">
+          <div class="col-md-8 mb-2 text-left">
+            <h4>1) For the skin image below, please provide your diagnosis.</h4>
+          </div>
+        </div>
+        <div class="row justify-content-center">
           <div class="col-md-8 element-animate">
             <form action="#" method="post">
               <div class="row">
                 <div class="col-md-6 form-group">
-                  <h6 for="fname1">First Name</h6>
-                  <input type="text" class="form-control form-control-lg" placeholder="John" id="fname1" name="fname1" style="font-size:14px;">
+                  <!--h6 for="search">Search</h6-->
+                  <input type="text" class="form-control form-control-lg" placeholder="Search diagnosis" id="search" name="search" style="font-size:14px;">
                 </div>
                 <div class="col-md-6 form-group">
-                  <h6 for="grade"><span style="color:red;">*</span> Grade Level</h6>
-                  <select id="grade1" name="grade1" class="form-control form-control-lg" style="font-size:14px;">
-                    <option value="">Choose a grade level</option>
-                    <option value="8">Grade 8</option>
-                    <option value="9">Grade 9</option>
-                    <option value="10">Grade 10</option>
-                    <option value="11">Grade 11</option>
-                    <option value="12">Grade 12</option>
-                    <option value="Sec2">Secondaire II</option>
-                    <option value="Sec3">Secondaire III</option>
-                    <option value="Sec4">Secondaire IV</option>
-                    <option value="Sec5">Secondaire V</option>
-                    <option value="CEGEP1">CEGEP I</option>
-                    <option value="CEGEP2">CEGEP II</option>
-                    <option value="Int5">Intermedio 5</option>
-                    <option value="Ava1">Avanzado 1</option>
-                    <option value="Ava2">Avanzado 2</option>
+                  <!--h6 for="diagnoses">Diagnoses</h6-->
+                  <select id="diagnoses" name="diagnoses" class="form-control form-control-lg" style="font-size:14px;">
+                    <option value="">Choose diagnosis</option>
                   </select>
 
                 </div>
               </div>
               <br/><br/>
-              <div class="row">
-                
+              <div class="row justify-content-center mb-2">
+                <img src="img/imgq1.jpg" class="img-fluid">
               </div>
-              <div class="row">
+              <br/><br/>
+              <!--div class="row">
                 <div class="col-md-12 form-group">
                   <h6 for="category"><span style="color:red;">*</span> Project Category</h6>
 
@@ -175,50 +166,20 @@
                     </div>
                   </div>
                 </div>
-              </div>
+              </div-->
 
               <div class="row mt-5" >
                 <div class="col-md-12 form-group" style="margin-top:-35px;">
-                  <input type="button" value="Submit IRIC Application" class="btn btn-primary btn-lg btn-block" onclick="sub()">
+                  <input type="button" value="Submit IRIC Application" class="btn btn-primary btn-lg btn-block" onclick="checkCorrect()">
                 </div>
               </div>
 
             </form>
           </div>
-          <div class="col-md-2"></div>
         </div>
       </div>
     </section>
 
-			<script>
-			function sub() {
-				swal({
-				  title: "Confirm Submission",
-				  text: "You will be judged on your project based on all materials you have submitted here. You will not be able to change anything from here on forward. Please make sure everything is filled in and uploaded properly!",
-				  icon: "info",
-				  buttons: ["Go back", "Submit Application!"],
-				})
-				.then((willDelete) => {
-				  if (willDelete) { writeSubmission(); } else { }
-				});
-			}
-			document.getElementById('ptinfo').style.display = "none";
-			var toggle_id = 0;
-			function partnerinfo() {
-				activity('Add Partner Info.');
-				if (toggle_id == 0) {
-					document.getElementById('ptinfo').style.display = "block";
-					document.getElementById('pttoggle').innerHTML = "Remove Partner";
-					toggle_id = 1;
-				}
-				else {
-					document.getElementById('ptinfo').style.display = "none";
-					document.getElementById("fname2").value = "";
-					document.getElementById('pttoggle').innerHTML = "Add Partner Information";
-					toggle_id = 0;
-				}
-			}
-			</script>
     <!-- loader -->
     <div id="loader" class="show fullscreen"><svg class="circular" width="48px" height="48px"><circle class="path-bg" cx="24" cy="24" r="22" fill="none" stroke-width="4" stroke="#eeeeee"/><circle class="path" cx="24" cy="24" r="22" fill="none" stroke-width="4" stroke-miterlimit="10" stroke="#f4b214"/></svg></div>
 
@@ -234,6 +195,7 @@
 	
     <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
     <script src="js/load-projects.js?v=1"></script>
+    <script src="js/icd.js"></script>
 	<script>
 	</script>
   </body>
