@@ -1,9 +1,0 @@
-
-
-function searchICD() {
-
-}
-
-function checkCorrect() {
-    
-}
