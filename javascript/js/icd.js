@@ -3,23 +3,33 @@ const client_secret = "F7nKrGPgfcGNQ7en2CBKZJhd4Pi4LP7F8wbe7nLUXqc=";
 const scope = "icdapi_access";
 const grant_type = "client_credentials";
 
-let token; // = "https://icdaccessmanagement.who.int/connect/token";
+let token_endpoint = "https://icdaccessmanagement.who.int/connect/token";
+
+const payload = {
+    "client_id": client_id,
+    "client_secret": client_secret,
+    "scope": scope,
+    "grant_type": grant_type
+};
 
 function getToken() {
-    const payload = {
-        "client_id": client_id,
-        "client_secret": client_secret,
-        "scope": scope,
-        "grant_type": grant_type
-    };
     
 }
 
 function searchICD() {
+
+    fetch(token_endpoint, {
+        credentials: 'include'
+    });
+
+    var endpoint = token_endpoint + "&" + client_id + "&" + client_secret;
+
     var xhr = new XMLHttpRequest();
-    xhr.open("POST", token_endpoint, false);
+    xhr.open("POST", endpoint, true);
     xhr.setRequestHeader('Content-Type', 'application/json');
-    r = xhr.send(payload);
+    xhr.setRequestHeader('Authorization', 'Basic ' + btoa(client_id + ":" + client_secret))
+    xhr.addEventListener("load", listener);
+    xhr.send();
 
     access_token = r['access_token'];
 

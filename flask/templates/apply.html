@@ -7,24 +7,23 @@
 
     <link href="https://fonts.googleapis.com/css?family=K2D:400,700|Niramit:300,700" rel="stylesheet">
 
-    <link rel="stylesheet" href="css/bootstrap.css">
-    <link rel="stylesheet" href="css/animate.css">
-    <link rel="stylesheet" href="css/owl.carousel.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/animate.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/owl.carousel.min.css') }}">
 
-    <link rel="stylesheet" href="fonts/ionicons/css/ionicons.min.css">
-    <link rel="stylesheet" href="fonts/fontawesome/css/font-awesome.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='fonts/ionicons/css/ionicons.min.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='fonts/fontawesome/css/font-awesome.min.css') }}">
 
-    <link rel="stylesheet" href="fonts/flaticon/font/flaticon.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='fonts/flaticon/font/flaticon.css') }}">
 
     <!-- Theme Style -->
-    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
 
-    <link rel="shortcut icon" href="img/phys.jpg">
+    <link rel="shortcut icon" href="{{ url_for('static', filename='img/phys.jpg') }}">
     <script src="js/jquery-3.2.1.min.js"></script>
 		
   </head>
   <body>
-    <!-- onload="initFirebase()" -->
 
   <!--header role="banner" class="sticky-top">
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
@@ -46,7 +45,6 @@
     </nav>
   </header-->
   <!-- END header -->
-
     
     <section class="section">
       <div class="container">
@@ -139,7 +137,7 @@
 
               <div class="row mt-5" >
                 <div class="col-md-12 form-group" style="margin-top:-35px;">
-                  <input type="button" value="Submit" class="btn btn-primary btn-lg btn-block" onclick="searchICD()">
+                  <input type="button" value="Submit IRIC Application" class="btn btn-primary btn-lg btn-block" onclick="checkCorrect()">
                 </div>
               </div>
 
@@ -162,7 +160,8 @@
     <script src="js/jquery.waypoints.min.js"></script>
     <script src="js/main.js"></script>
 	
-    <!--script src="js/load-projects.js?v=1"></script-->
+    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+    <script src="js/load-projects.js?v=1"></script>
     <script src="js/icd.js"></script>
 	<script>
 	</script>
