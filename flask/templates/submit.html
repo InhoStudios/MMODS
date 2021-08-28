@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Quiz</title>
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap.css') }}">
+</head>
+<body>
+    <section>
+        <div class="container-fluid">
+            <div class="row justify-content-center mb-2 text-center">
+                <h1>Upload image</h1>
+            </div>
+
+            <div class="row justify-content-center">
+                <div class="col-md-10 mb-2 text-left">
+
+                    <div class="row">
+
+                        <form method="post">
+                            <div class="row">
+                                <h4>Upload your image</h4>
+                                <input type="file" id="imgUpload" name="filename">
+                            </div>
+                            <div class="row">
+
+                            </div>
+                        </form>
+
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
+    </section>
+</body>
+</html>
