@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Confirmation</title>
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap.css') }}">
+</head>
+<body>
+    <section>
+        <div class="container-fluid">
+            <div class="row justify-content-center mt-5 mb-5 text-center">
+                <h1>{{ confirmation }}</h1>
+            </div>
+
+            <div class="row justify-content-center">
+                <div class="col-md-10 mt-5 mb-5 text-left">
+                    <div class="row">
+                        <form method="post">
+                            <div class="row">
+                                <div class="form-group mb-3">
+                                    <input type="submit" value="Return" class="form-control form-control-lg btn btn-outline-primary btn-lg">
+                                </div>
+                            </div>
+                        </form>
+
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
+    </section>
+</body>
+</html>

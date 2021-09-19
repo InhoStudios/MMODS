@@ -55,6 +55,15 @@ def searchGetIDs(query):
     
     return IDs
 
+def getExactQueryID(query):
+    r_dict = search(query)
+    id = ""
+    for entity in r_dict['destinationEntities']:
+        id_uri = entity['id']
+        tokens = id_uri.split('/')
+        id = tokens[5]
+    return id
+
 def searchGetPairs(query):
     r_dict = search(query)
     pairs = []
