@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Submit</title>
+
+    <link rel="shortcut icon" href="{{ url_for('static', filename='img/phys.jpg') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
+</head>
+<body>
+    <section>
+        <div class="container-fluid">
+            <div class="row justify-content-center mt-5 mb-3 text-center">
+                <h1>Images</h1>
+            </div>
+
+            <div class="row justify-content-center">
+                <div class="col-md-10 mb-2 text-left">
+
+                    <div class="row mt-5">
+                        
+                        {% for image in imgs %}
+                        <div class="col-lg-3 mb-5 mt-2">
+                            <a class="btn" href="">
+                                <div class="card round">
+                                    <img src="{{ url_for('static', filename=image) }}" class="img-fluid round">
+                                    <div class="card-body">
+                                        <span>http://id.who.int/icd/entity/(URI)</span>
+                                        <h4>Diagnosis</h4>
+                                        <p></p>
+                                    </div>
+                                </div>
+                            </a>
+                        </div>
+                        {% endfor %}
+                        <!--
+                        <div class="modal-content">
+                            <span class="close">&times;</span>
+                            <p>Text in the modal</p>
+                        </div>
+                        -->
+
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <script src="{{ url_for('static', filename='js/modal.js') }}"></script>
+</body>
+</html>

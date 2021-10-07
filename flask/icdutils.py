@@ -1,7 +1,7 @@
 import credentials
 import requests
 import json
-import nltk
+# import nltk
 
 token_endpoint = "https://icdaccessmanagement.who.int/connect/token"
 scope = "icdapi_access"
@@ -22,13 +22,14 @@ def getToken():
 def search(query):
     token = getToken()
     useFlexisearch = 'false'
+    flatResults = 'false'
     headers = {
         'Authorization': 'Bearer ' + token,
         'Accept': 'application/json',
         'Accept-Language': 'en',
         'API-Version': 'v2'
     }
-    url = f'https://id.who.int/icd/entity/search?q={query}&useFlexisearch={useFlexisearch}'
+    url = f'https://id.who.int/icd/entity/search?q={query}&useFlexisearch={useFlexisearch}&flatResults={flatResults}'
 
     r = requests.post(url, headers=headers, verify=False)
 
@@ -37,22 +38,22 @@ def search(query):
 def searchGetTitles(query):
     r_dict = search(query)
     titles = []
+    str = ""
     for entity in r_dict['destinationEntities']:
-        title = entity['title']
-        # title = nltk.clean_html(title)
-        titles.append(title)
+        str = str + indexDescendants(entity, 1, 'title')
+    
+    titles = str.split("\n")
 
     return titles
 
 def searchGetIDs(query):
     r_dict = search(query)
     IDs = []
+    str = ""
     for entity in r_dict['destinationEntities']:
-        id_uri = entity['id']
-        tokens = id_uri.split('/')
-        id = tokens[5]
-        IDs.append(id)
-    
+        str = str + indexDescendants(entity, i, 'id')
+    str = str.replace(" ", "")
+    IDs = int(str.split("\n"))
     return IDs
 
 def getExactQueryID(query):
@@ -67,16 +68,32 @@ def getExactQueryID(query):
 def searchGetPairs(query):
     r_dict = search(query)
     pairs = []
+    str_titles = ""
+    str_ids = ""
     for entity in r_dict['destinationEntities']:
-        id_uri = entity['id']
-        tokens = id_uri.split('/')
-        id = tokens[5]
-        title = entity['title']
+        str_titles = str_titles + indexDescendants(entity, 1, 'title')
+        str_ids = str_ids + indexDescendants(entity, 1, 'id')
 
+    print(str_titles)
+    titles = str_titles.split('\n')
+    ids = str_ids.split('\n')
+
+    for i in range(len(titles)):
+        titles[i] = titles[i].replace("<em class='found'>", "")
+        titles[i] = titles[i].replace("</em>", "")
         id_title_pair = {
-            'id': id,
-            'title': title
+            'title': titles[i],
+            'id': ids[i]
         }
 
         pairs.append(id_title_pair)
     return pairs
+
+def indexDescendants(entity, indentationLevel, key):
+    entityValue = entity[key]
+    returnString = entityValue + "\n"
+    indent = "——"
+    descendants = entity['descendants']
+    for descendant in descendants:
+        returnString = returnString + indent * indentationLevel + indexDescendants(descendant, indentationLevel + 1, key)
+    return returnString
