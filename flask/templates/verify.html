@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Submit</title>
+    <title>Verify</title>
 
     <link rel="shortcut icon" href="{{ url_for('static', filename='img/phys.jpg') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap.css') }}">
@@ -22,9 +22,9 @@
                         
                         {% for image in imgs %}
                         <div class="col-lg-3 mb-5 mt-2">
-                            <a class="btn" href="">
-                                <div class="card round">
-                                    <img src="{{ url_for('static', filename=image) }}" class="img-fluid round">
+                            <a class="btn" onclick="openOverlay('{{ image }}')">
+                                <div class="card card-shadow round">
+                                    <img src="{{ url_for('static', filename='img/' + image) }}" class="img-fluid crop-img round">
                                     <div class="card-body">
                                         <span>http://id.who.int/icd/entity/(URI)</span>
                                         <h4>Diagnosis</h4>
@@ -33,13 +33,44 @@
                                 </div>
                             </a>
                         </div>
-                        {% endfor %}
-                        <!--
-                        <div class="modal-content">
-                            <span class="close">&times;</span>
-                            <p>Text in the modal</p>
+                        <div id="{{ image }}" class="modal">
+                        
+                            <!-- Modal content -->
+                            <div class="modal-content">
+                                <span class="close" onclick="closeOverlay('{{ image }}')">&times;</span>
+                                <div class="row">
+                                    <div class='col-lg-4'>
+                                        <img src="{{ url_for('static', filename='img/' + image) }}" class="img-fluid round">
+                                    </div>
+                                    <div class ='col-lg-8'>
+                                        <form>
+                                            <div class="row">
+                                                <h2>Submitted diagnosis:</h2>
+                                                <h4 class="mb-3">placeholder text for diagnosis name: {{ image }}</h4>
+                                                <h2>Alternative diagnoses:</h2>
+                                                <div class="form-group mb-3">
+                                                    <select class="form-control form-control-lg" name="results" id="results">
+                                                        <option name="">http://id.who.int/icd/entity/(URI)</option>
+                                                    </select>
+                                                </div>
+                                                <h2>Image filename:</h2>
+                                                <h4 class="mb-3">{{ image }}</h4>
+                                            </div>
+                                            <div class="row">
+                                                <div class="form-group mb-3">
+                                                    <input type="submit" class="form-control form-control-lg btn btn-outline-primary btn-lg" id="verify_button" value="Verify">
+                                                </div>
+                                                <div class="form-group mb-3">
+                                                    <a class="form-control form-control-lg btn btn-outline-secondary btn-lg" onclick="closeOverlay('{{ image }}')">Cancel</a>
+                                                </div>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        
                         </div>
-                        -->
+                        {% endfor %}
 
                     </div>
 

@@ -2,10 +2,10 @@ from flask import Flask, flash, request, render_template, url_for, session
 from werkzeug.utils import redirect, secure_filename
 import icdutils
 
-# UPLOAD_FOLDER = "/images"
+UPLOAD_FOLDER = "/images"
 
 app = Flask(__name__)
-# app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
+app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
 @app.route('/')
 def home():
@@ -17,7 +17,7 @@ def quiz():
         query = request.form['search']
         IDs = icdutils.searchGetIDs(query)
         confirmID = IDs[0]
-        confirmation = "Incorrect :("
+        confirmation = "Incorrect"
         if confirmID == '1627987797':
             confirmation = "Correct!"
         return redirect(url_for('confirm', confirmation=confirmation))
@@ -45,7 +45,8 @@ def confirm():
 
 @app.route('/verify')
 def verify():
-    return render_template("verify.html")
+    imgs = ['imgq1.jpg', 'wide.jpg', 'tall.jpg', 'square.png']
+    return render_template("verify.html", imgs=imgs)
 
 if __name__ == "__main__":
     app.run(debug = True)

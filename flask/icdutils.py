@@ -51,9 +51,12 @@ def searchGetIDs(query):
     IDs = []
     str = ""
     for entity in r_dict['destinationEntities']:
-        str = str + indexDescendants(entity, i, 'id')
+        str = str + indexDescendants(entity, 1, 'id')
     str = str.replace(" ", "")
-    IDs = int(str.split("\n"))
+    ID_URLs = str.split("\n")
+    for ID_URL in ID_URLs:
+        id = ID_URL.replace("http://id.who.int/icd/entity/", "")
+        IDs.append(id)
     return IDs
 
 def getExactQueryID(query):
@@ -81,6 +84,7 @@ def searchGetPairs(query):
     for i in range(len(titles)):
         titles[i] = titles[i].replace("<em class='found'>", "")
         titles[i] = titles[i].replace("</em>", "")
+        ids[i] = ids[i].replace("——","")
         id_title_pair = {
             'title': titles[i],
             'id': ids[i]
