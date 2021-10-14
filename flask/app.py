@@ -27,12 +27,13 @@ def quiz():
 def submit():
     results=[]
     if request.method == 'POST':
-        query = request.form['search']
-        results = icdutils.searchGetPairs(query)
-        # if request.form['results'] != "Select diagnosis":
-        #     img = request.files['filename']
-        #     filename = secure_filename(img.filename)
-        #     img.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+        if request.form['results'] != "Select diagnosis":
+            img = request.files['filename']
+            filename = secure_filename(img.filename)
+            img.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+        else:
+            query = request.form['search']
+            results = icdutils.searchGetPairs(query)
     return render_template("submit.html", results=results)
 
 @app.route('/confirm', methods=['POST', 'GET'])
