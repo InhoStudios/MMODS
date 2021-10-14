@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <title>Submit</title>
 
-    <link rel="shortcut icon" href="{{ url_for('static', filename='img/phys.jpg') }}">
+    <link rel="shortcut icon" href="{{ url_for('static', filename='assets/phys.jpg') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
 </head>
@@ -25,15 +25,15 @@
                                 <h4 class="mb-3">Search and select diagnosis</h4>
                                 <div class="col-md-6">
                                     <div class="form-group mb-3">
-                                        <input type="input" class="form-control form-control-lg" id="search" name="search" placeholder="Search diagnosis">
+                                        <input type="input" class="form-control form-control-lg" id="search" name="search" placeholder="Search">
                                     </div>
                                 </div>
                                 <div class="col-md-6">
                                     <div class="form-group mb-3">
                                         <select class="form-control form-control-lg" name="results" id="results">
-                                            <option name="">Search diagnosis</option>
+                                            <option value="null">Search diagnosis</option>
                                         {% for result in results %}
-                                            <option name="{{ result['id'] }}">{{ result['title'] }}</option>
+                                            <option value="{{ result['title'] }}">{{ result['title'] }}</option>
                                         {% endfor %}
                                         </select>
                                     </div>

@@ -1,6 +1,8 @@
 from os.path import join
+from os import listdir
 from flask import Flask, flash, request, render_template, url_for, session
 from werkzeug.utils import redirect, secure_filename
+from time import time
 import icdutils
 
 UPLOAD_FOLDER = "./static/img/"
@@ -9,18 +11,31 @@ ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'bmp', 'pdf', 'tiff', 'gif'}
 app = Flask(__name__)
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
+# pre: filename is a valid file name with a file extension
+# post: returns if the file is within the accepted files in ALLOWED_EXTENSIONS
 def allowedFile(filename):
     return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
+# redirects homepage to submission page for convenience
 @app.route('/')
 def home():
     return redirect('/submit')
 
 @app.route('/quiz', methods=['POST', 'GET'])
 def quiz():
+    # set up back_url for redirects
     back_url = url_for('quiz')
+
+    # submission
     if request.method == 'POST':
+        # searches answer
         query = request.form['search']
+
+        # if the search is empty, refresh page
+        if query == '':
+            return redirect(request.url)
+        
+        # compile all numerical IDs from icdutils
         IDs = icdutils.searchGetIDs(query)
         confirmID = IDs[0]
         confirmation = "Incorrect"
@@ -34,7 +49,7 @@ def submit():
     back_url = url_for('submit')
     results=[]
     if request.method == 'POST':
-        if request.form['results'] != "Search diagnosis":
+        if request.form['results'] != "null":
             # check for no file
             if 'filename' not in request.files:
                 return redirect(request.url);
@@ -47,10 +62,17 @@ def submit():
             
             # file exists
             if file and allowedFile(file.filename):
-                print("## EMPTY FILENAME ##")
-                filename = secure_filename(file.filename)
+                utc_code = str(round(time() * 1000))
+                diag = request.form['results'].replace("——","")
+                fileEnding = file.filename.split('.')[1]
+
+                filename_str = utc_code + "__" + diag + "." + fileEnding;
+
+                filename = secure_filename(filename_str)
                 print(join(app.config['UPLOAD_FOLDER']))
                 file.save(join(app.config['UPLOAD_FOLDER'], filename))
+
+                # confirmation page configuration
                 confirmation = "Uploaded successfully!"
                 return redirect(url_for('confirm', confirmation=confirmation, back_url=back_url))
         else:
@@ -70,8 +92,22 @@ def confirm():
 
 @app.route('/verify')
 def verify():
-    imgs = ['imgq1.jpg', 'wide.jpg', 'tall.jpg', 'square.png']
-    return render_template("verify.html", imgs=imgs)
+
+    imgs = listdir(join(app.static_folder, "img"))
+    entries = []
+    for img in imgs:
+        tokens = img.split("__")
+        id = tokens[0]
+        title = tokens[1].split(".")[0].replace("_", " ")
+        uri = icdutils.getExactQueryID(title)
+        entry = {
+            'id': id,
+            'file': img,
+            'title': title,
+            'uri': uri
+        }
+        entries.append(entry)
+    return render_template("verify.html", entries=entries)
 
 if __name__ == "__main__":
     app.run(debug = True)

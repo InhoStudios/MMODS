@@ -64,9 +64,9 @@ def getExactQueryID(query):
     id = ""
     for entity in r_dict['destinationEntities']:
         id_uri = entity['id']
-        tokens = id_uri.split('/')
-        id = tokens[5]
-    return id
+        token = id_uri.replace("http://id.who.int/icd/entity/", "")
+        id = token
+        return id
 
 def searchGetPairs(query):
     r_dict = search(query)
@@ -84,7 +84,7 @@ def searchGetPairs(query):
     for i in range(len(titles)):
         titles[i] = titles[i].replace("<em class='found'>", "")
         titles[i] = titles[i].replace("</em>", "")
-        ids[i] = ids[i].replace("——","")
+        ids[i] = ids[i].replace("——","").replace("http://id.who.int/icd/entity/", "")
         id_title_pair = {
             'title': titles[i],
             'id': ids[i]
