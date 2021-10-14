@@ -1,10 +1,16 @@
+import os
 from flask import Flask, flash, request, render_template, url_for, session
 from werkzeug.utils import redirect, secure_filename
 import icdutils
-import fileHandler as fh
+
+UPLOAD_FOLDER = "/static/img"
+ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'bmp', 'pdf', 'tiff', 'gif'}
 
 app = Flask(__name__)
-app.config['UPLOAD_FOLDER'] = fh.getUploadFolder()
+app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
+
+def allowedFile(filename):
+    return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
 @app.route('/')
 def home():
@@ -26,10 +32,16 @@ def quiz():
 def submit():
     results=[]
     if request.method == 'POST':
-        if request.form['results'] != "Select diagnosis":
-            img = request.files['filename']
-            filename = secure_filename(img.filename)
-            img.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+        if request.form['results'] != "Search diagnosis":
+            if 'file' not in request.files:
+                return redirect(request.url);
+            file = request.files['file']
+            if file.filename == '':
+                return redirect(request.url)
+            if file and allowedFile(file.filename):
+                filename = secure_filename(file.filename)
+                file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+                return redirect(url_for(request.url))
         else:
             query = request.form['search']
             results = icdutils.searchGetPairs(query)
