@@ -1,11 +1,10 @@
 from flask import Flask, flash, request, render_template, url_for, session
 from werkzeug.utils import redirect, secure_filename
 import icdutils
-
-UPLOAD_FOLDER = "/images"
+import fileHandler as fh
 
 app = Flask(__name__)
-app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
+app.config['UPLOAD_FOLDER'] = fh.getUploadFolder()
 
 @app.route('/')
 def home():
