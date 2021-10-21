@@ -54,3 +54,7 @@
     cursor: pointer;
 }
 /* end modal */
+
+.hidden-passthrough {
+    display: none;
+}

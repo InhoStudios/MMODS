@@ -1,5 +1,5 @@
-from os.path import join
-from os import listdir
+from os.path import join, exists
+from os import listdir, remove
 from flask import Flask, flash, request, render_template, url_for, session
 from werkzeug.utils import redirect, secure_filename
 from time import time
@@ -109,6 +109,7 @@ def verify():
     # load CSV, find file, requery query to show all diagnoses options
     meta = open(join(app.static_folder, METADATA_FILE), 'r')
     metadata = list(csv.reader(meta))
+    meta.close()
 
     for img in imgs:
         # get basic metadata
@@ -133,18 +134,33 @@ def verify():
             'results': results
         }
         entries.append(entry)
+    
+    
     if request.method == "POST":
-        # get ID from verify button
-        id = request.form['verify'].split(" ")[1]
+        reqid = request.form['imgID']
 
         # get corresponding entry index to insert into
-        i, data = getCorrespondingEntry(metadata, id)
-        correctedURI = request.form['results']
+        i, data = getCorrespondingEntry(metadata, reqid)
 
-        # change URI to new URI from form, change verified to 1
-        data[1] = correctedURI
-        data[3] = 1
-        metadata[i] = data
+        # get ID from verify button
+        postMethod = request.form['verify']
+        if postMethod == "Delete":
+            # TODO: Add deletion confirmation pop up
+            filePath = join(app.config['UPLOAD_FOLDER'], request.form['filename'])
+            if exists(filePath):
+                print ("File exists at " + filePath)
+                remove(filePath)
+                print ("File deleted")
+            metadata.remove(data)
+        elif postMethod == "Verify":
+            # TODO: Add diagnosis modification confirmation pop up
+            # get data from form
+            correctedURI = request.form['results']
+
+            # change URI to new URI from form, change verified to 1
+            data[1] = correctedURI
+            data[3] = 1
+            metadata[i] = data
 
         # write data to csv
         with open(join(app.static_folder, METADATA_FILE), 'w') as f:
@@ -153,6 +169,9 @@ def verify():
         return redirect(request.url)
     return render_template("verify.html", entries=entries)
 
+# Helper function to search CSV for corresponding entry with ID
+# PRE: Takes metadata as array and valid image ID
+# POST: Returns i, data as index in metadata and list of data, respectively
 def getCorrespondingEntry(data, id):
     for i in range(len(data)):
         entry = data[i]
