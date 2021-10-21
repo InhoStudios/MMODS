@@ -1,2 +1,2 @@
-flask/credentials.py
-flask/__pycache__/
+credentials.py
+__pycache__/
