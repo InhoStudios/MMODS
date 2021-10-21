@@ -19,6 +19,9 @@ def getToken():
     token = r['access_token']
     return token
 
+# Helper search function
+# PRE: Takes a plaintext search query
+# POST: Returns all ICD entities as a json object
 def search(query):
     token = getToken()
     useFlexisearch = 'false'
@@ -35,6 +38,26 @@ def search(query):
 
     return json.loads(r.text)
 
+# PRE: Takes in a valid ICD ID number (numerical ID following ICD uri)
+# POST: Returns exact disease diagnosis
+def getEntityByID(id):
+    token = getToken()
+    headers = {
+        'Authorization': 'Bearer ' + token,
+        'Accept': 'application/json',
+        'Accept-Language': 'en', # Perhaps make language toggle-able from a select list
+        'API-Version': 'v2'
+    }
+    url = f'https://id.who.int/icd/entity/{id}'
+
+    r = requests.get(url, headers=headers, verify=False)
+    r_dict = json.loads(r.text)
+    title = r_dict["title"]["@value"]
+
+    return title
+
+# PRE: Takes a plaintext search query
+# POST: Returns a list of all diagnoses names
 def searchGetTitles(query):
     r_dict = search(query)
     titles = []
@@ -46,6 +69,8 @@ def searchGetTitles(query):
 
     return titles
 
+# PRE: Takes a plaintext search query
+# POST: Returns a list of all diagnoses numerical IDs
 def searchGetIDs(query):
     r_dict = search(query)
     IDs = []
@@ -68,6 +93,8 @@ def getExactQueryID(query):
         id = token
         return id
 
+# PRE: Takes a plain text query to send to the ICD-API
+# POST: Returns all search queries as a list of dictionaries containing both the title and the id
 def searchGetPairs(query):
     r_dict = search(query)
     pairs = []
@@ -77,7 +104,6 @@ def searchGetPairs(query):
         str_titles = str_titles + indexDescendants(entity, 1, 'title')
         str_ids = str_ids + indexDescendants(entity, 1, 'id')
 
-    print(str_titles)
     titles = str_titles.split('\n')
     ids = str_ids.split('\n')
 
@@ -93,6 +119,8 @@ def searchGetPairs(query):
         pairs.append(id_title_pair)
     return pairs
 
+# PRE: Takes an entity json object returned from the ICD-API, a level of indentation (nesting), and the key to index
+# POST: Returns a string of all the query results formatted in a nested format
 def indexDescendants(entity, indentationLevel, key):
     entityValue = entity[key]
     returnString = entityValue + "\n"

@@ -25,7 +25,7 @@
                                 <h4 class="mb-3">Search and select diagnosis</h4>
                                 <div class="col-md-6">
                                     <div class="form-group mb-3">
-                                        <input type="input" class="form-control form-control-lg" id="search" name="search" placeholder="Search">
+                                        <input type="input" class="form-control form-control-lg" id="search" name="search" placeholder="Search" value="{{ query }}">
                                     </div>
                                 </div>
                                 <div class="col-md-6">
@@ -33,7 +33,7 @@
                                         <select class="form-control form-control-lg" name="results" id="results">
                                             <option value="null">Search diagnosis</option>
                                         {% for result in results %}
-                                            <option value="{{ result['title'] }}">{{ result['title'] }}</option>
+                                            <option value="{{ result.id }}">{{ result.title }}</option>
                                         {% endfor %}
                                         </select>
                                     </div>

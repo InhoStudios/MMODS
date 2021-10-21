@@ -4,8 +4,10 @@ from flask import Flask, flash, request, render_template, url_for, session
 from werkzeug.utils import redirect, secure_filename
 from time import time
 import icdutils
+import csv
 
 UPLOAD_FOLDER = "./static/img/"
+METADATA_FILE = "meta.csv"
 ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'bmp', 'pdf', 'tiff', 'gif'}
 
 app = Flask(__name__)
@@ -48,6 +50,7 @@ def quiz():
 def submit():
     back_url = url_for('submit')
     results=[]
+    query = ""
     if request.method == 'POST':
         if request.form['results'] != "null":
             # check for no file
@@ -63,14 +66,21 @@ def submit():
             # file exists
             if file and allowedFile(file.filename):
                 utc_code = str(round(time() * 1000))
-                diag = request.form['results'].replace("——","")
+                uri = request.form['results']
                 fileEnding = file.filename.split('.')[1]
 
-                filename_str = utc_code + "__" + diag + "." + fileEnding;
+                filename_str = utc_code + "." + fileEnding;
 
                 filename = secure_filename(filename_str)
-                print(join(app.config['UPLOAD_FOLDER']))
                 file.save(join(app.config['UPLOAD_FOLDER'], filename))
+
+                # get exact query and search results
+                query = request.form['search']
+                test = [utc_code, uri, query, 0]
+                
+                with open(join(app.static_folder, METADATA_FILE), "a") as f:
+                    writer = csv.writer(f)
+                    writer.writerow(test)
 
                 # confirmation page configuration
                 confirmation = "Uploaded successfully!"
@@ -80,7 +90,7 @@ def submit():
             if query == "":
                 return redirect(request.url)
             results = icdutils.searchGetPairs(query)
-    return render_template("submit.html", results=results)
+    return render_template("submit.html", results=results, query=query)
 
 @app.route('/confirm', methods=['POST', 'GET'])
 def confirm():
@@ -90,24 +100,65 @@ def confirm():
         return redirect(back_url)
     return render_template("confirmation.html", confirmation=confirmation, back_url=back_url)
 
-@app.route('/verify')
+@app.route('/verify', methods=['POST', 'GET'])
 def verify():
 
     imgs = listdir(join(app.static_folder, "img"))
     entries = []
+
+    # load CSV, find file, requery query to show all diagnoses options
+    meta = open(join(app.static_folder, METADATA_FILE), 'r')
+    metadata = list(csv.reader(meta))
+
     for img in imgs:
-        tokens = img.split("__")
-        id = tokens[0]
-        title = tokens[1].split(".")[0].replace("_", " ")
-        uri = icdutils.getExactQueryID(title)
+        # get basic metadata
+        id = img.split('.')[0]
+
+        i, data = getCorrespondingEntry(metadata, id)
+
+        uri = data[1]
+        query = data[2]
+
+        title = icdutils.getEntityByID(uri)
+        results = icdutils.searchGetPairs(query)
+
+        if int(data[3]) == 1:
+            title += " ✅";
+
         entry = {
             'id': id,
             'file': img,
             'title': title,
-            'uri': uri
+            'uri': uri,
+            'results': results
         }
         entries.append(entry)
+    if request.method == "POST":
+        # get ID from verify button
+        id = request.form['verify'].split(" ")[1]
+
+        # get corresponding entry index to insert into
+        i, data = getCorrespondingEntry(metadata, id)
+        correctedURI = request.form['results']
+
+        # change URI to new URI from form, change verified to 1
+        data[1] = correctedURI
+        data[3] = 1
+        metadata[i] = data
+
+        # write data to csv
+        with open(join(app.static_folder, METADATA_FILE), 'w') as f:
+            writer = csv.writer(f)
+            writer.writerows(metadata)
+        return redirect(request.url)
     return render_template("verify.html", entries=entries)
+
+def getCorrespondingEntry(data, id):
+    for i in range(len(data)):
+        entry = data[i]
+        if (entry[0] == id):
+            return i, entry
+    return None
 
 if __name__ == "__main__":
     app.run(debug = True)

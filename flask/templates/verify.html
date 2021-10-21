@@ -43,23 +43,33 @@
                                         <img src="{{ url_for('static', filename='img/' + entry.file) }}" class="img-fluid round">
                                     </div>
                                     <div class ='col-lg-8'>
-                                        <form>
+                                        <form method="post" enctype="multipart/form-data">
                                             <div class="row">
                                                 <span>http://id.who.int/icd/entity/{{ entry.uri }}</span>
                                                 <h2>Submitted diagnosis:</h2>
-                                                <h4 class="mb-3">{{ entry.title }}</h4>
+                                                <div class="form-group mb-3">
+                                                    <input type="input" class="form-control form-control-lg" id="title" name="title" value="{{ entry.title }}" disabled>
+                                                </div>
                                                 <h2>Alternative diagnoses:</h2>
                                                 <div class="form-group mb-3">
                                                     <select class="form-control form-control-lg" name="results" id="results">
-                                                        <option name="">http://id.who.int/icd/entity/(NUMERIC_ID)</option>
+                                                        <option value="{{entry.uri}}">{{entry.title}}</option>
+                                                    {% for result in entry.results %}
+                                                        <option value="{{result.id}}">{{result.title}}</option>
+                                                    {% endfor %}
                                                     </select>
                                                 </div>
                                                 <h2>Image filename:</h2>
-                                                <h4 class="mb-3">{{ entry.file }}</h4>
+                                                <div class="form-group mb-3">
+                                                    <input type="input" class="form-control form-control-lg" id="filename" name="filename" value="{{ entry.file }}" disabled>
+                                                </div>
                                             </div>
                                             <div class="row">
                                                 <div class="form-group mb-3">
-                                                    <input type="submit" class="form-control form-control-lg btn btn-outline-primary btn-lg" id="verify_button" value="Verify">
+                                                    <input type="submit" class="form-control form-control-lg btn btn-success btn-lg" id="verify" name="verify" value="Verify {{entry.id}}">
+                                                </div>
+                                                <div class="form-group mb-3">
+                                                    <a class="form-control form-control-lg btn btn-danger btn-lg" onclick="closeOverlay('{{ entry.id }}')">Delete</a>
                                                 </div>
                                                 <div class="form-group mb-3">
                                                     <a class="form-control form-control-lg btn btn-outline-secondary btn-lg" onclick="closeOverlay('{{ entry.id }}')">Cancel</a>
