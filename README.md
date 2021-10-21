@@ -1,5 +1,5 @@
 # ICD-11 Interface
-The ICD-11 Interface contains a few proof-of-concept use cases for the ICD-API. This project is developed by Andy Zhao, under the supervision of and in conjunction with Dr. Harvey Lui and Dr. Tim Lee.
+The ICD-11 Interface contains a few proof-of-concept use cases for the ICD-API. This project is developed by Andy Zhao, under the supervision of and in conjunction with Dr. Harvey Lui and Dr. Tim Lee from the BC Cancer Research Institute.
 This interface uses Python Flask and the ICD-API to standardize nomenclature and identification for disease names. 
 
 The ICD-11 Interface contains two user stories:
