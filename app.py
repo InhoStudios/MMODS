@@ -50,12 +50,21 @@ def quiz():
 def submit():
     back_url = url_for('submit')
     results=[]
-    query = ""
+    if 'query' in request.args.keys():
+        query = request.args['query']
+        if query == "":
+            return redirect(request.url)
+        results = icdutils.searchGetPairs(query)
+        hideclass = ""
+    else:
+        query = ""
+        results=[]
+        hideclass = "hidden-passthrough"
     if request.method == 'POST':
         if request.form['results'] != "null":
             # check for no file
             if 'filename' not in request.files:
-                return redirect(request.url);
+                return redirect(request.url)
             
             file = request.files['filename']
             
@@ -69,28 +78,21 @@ def submit():
                 uri = request.form['results']
                 fileEnding = file.filename.split('.')[1]
 
-                filename_str = utc_code + "." + fileEnding;
+                filename_str = utc_code + "." + fileEnding
 
                 filename = secure_filename(filename_str)
                 file.save(join(app.config['UPLOAD_FOLDER'], filename))
 
                 # get exact query and search results
                 query = request.form['search']
-                test = [utc_code, uri, query, 0]
-                
-                with open(join(app.static_folder, METADATA_FILE), "a") as f:
-                    writer = csv.writer(f)
-                    writer.writerow(test)
-
-                # confirmation page configuration
-                confirmation = "Uploaded successfully!"
-                return redirect(url_for('confirm', confirmation=confirmation, back_url=back_url))
+                return redirect(url_for('upload', imgname = filename, uri = uri, back_url = back_url, query = query))
         else:
             query = request.form['search']
             if query == "":
                 return redirect(request.url)
             results = icdutils.searchGetPairs(query)
-    return render_template("submit.html", results=results, query=query)
+            hideclass = ""
+    return render_template("submit.html", results = results, query = query, hideclass = hideclass)
 
 @app.route('/confirm', methods=['POST', 'GET'])
 def confirm():
@@ -98,7 +100,43 @@ def confirm():
     back_url = request.args['back_url']
     if request.method == 'POST':
         return redirect(back_url)
-    return render_template("confirmation.html", confirmation=confirmation, back_url=back_url)
+    return render_template("confirmation.html", confirmation = confirmation, back_url = back_url)
+
+@app.route('/upload', methods=['POST', 'GET'])
+
+def upload():
+    imgname = request.args['imgname']
+    uri = request.args['uri']
+    back_url = request.args['back_url']
+    query = request.args['query']
+    diagnosis = icdutils.getEntityByID(uri)
+
+    if request.method == "POST":
+        postMethod = request.form["upload"]
+        if postMethod == "Edit":
+            filePath = join(app.config['UPLOAD_FOLDER'], imgname)
+
+            if exists(filePath):
+                print ("File exists at " + filePath)
+                remove(filePath)
+                print ("File deleted")
+            
+            # obtain necessary variables
+            results = icdutils.searchGetPairs(query)
+
+            return redirect(url_for('submit', query = query, results = results, hideclass = ""))
+        elif postMethod == "Confirm":
+            utc_code = imgname.split('.')[0]
+            data = [utc_code, uri, query, 0]
+
+            with open(join(app.static_folder, METADATA_FILE), "a") as f:
+                writer = csv.writer(f)
+                writer.writerow(data)
+            
+            confirmation = "Uploaded successfully!"
+            return redirect(url_for("confirm", confirmation = confirmation, back_url = back_url))
+    
+    return render_template("upload.html", imgname = imgname, diagnosis = diagnosis)
 
 @app.route('/verify', methods=['POST', 'GET'])
 def verify():

@@ -22,32 +22,31 @@
 
                         <form method="post" enctype="multipart/form-data">
                             <div class="row">
-                                <h4 class="mb-3">Search and select diagnosis</h4>
-                                <div class="col-md-6">
-                                    <div class="form-group mb-3">
-                                        <input type="input" class="form-control form-control-lg" id="search" name="search" placeholder="Search" value="{{ query }}">
-                                    </div>
-                                </div>
-                                <div class="col-md-6">
-                                    <div class="form-group mb-3">
-                                        <select class="form-control form-control-lg" name="results" id="results">
-                                            <option value="null">Search diagnosis</option>
-                                        {% for result in results %}
-                                            <option value="{{ result.id }}">{{ result.title }}</option>
-                                        {% endfor %}
-                                        </select>
-                                    </div>
+                                <h4 class="mb-3">Search diagnosis</h4>
+                                <div class="form-group mb-3">
+                                    <input type="input" class="form-control form-control-lg" id="search" name="search" placeholder="Search" value="{{ query }}">
                                 </div>
                             </div>
-                            <div class="row">
+                            <div class="row {{ hideclass }}">
+                                <h4 class="mb-3">Select diagnosis</h4>
+                                <div class="form-group mb-3">
+                                    <select class="form-control form-control-lg" name="results" id="results">
+                                        <option value="null">Search diagnosis</option>
+                                    {% for result in results %}
+                                        <option value="{{ result.id }}">{{ result.title }}</option>
+                                    {% endfor %}
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="row {{ hideclass }}">
                                 <h4 class="mb-3">Upload your image</h4>
                                 <div class="form-group mb-3">
-                                    <input type="file" class="form-control form-control-lg" id="imgUpload" name="filename">
+                                    <input type="file" class="form-control form-control-lg}" id="imgUpload" name="filename">
                                 </div>
                             </div>
                             <div class="row">
                                 <div class="form-group mb-3">
-                                    <input type="submit" class="form-control form-control-lg btn btn-outline-primary btn-lg" id="upload_button" value="Upload">
+                                    <input type="submit" class="form-control form-control-lg btn btn-outline-primary btn-lg {{ hideclass }}" id="upload_button" value="Upload">
                                 </div>
                             </div>
                         </form>

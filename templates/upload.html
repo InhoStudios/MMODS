@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Confirmation</title>
+
+    <link rel="shortcut icon" href="{{ url_for('static', filename='assets/phys.jpg') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
+</head>
+<body>
+    <section>
+        <div class="container-fluid">
+            <div class="row justify-content-center mt-5 mb-5 text-center">
+                <h1>Does this information look right?</h1>
+            </div>
+
+            <div class="row justify-content-center">
+                <div class="col-md-10 mt-5 mb-5 text-left">
+                    <div class="row">
+                        <form method="post">
+                            <div class="row mb-5">
+                                <div class="col-md-6">
+                                    <h4 class="mb-3">Diagnosis</h4>
+                                    <div class="form-group mb-3">
+                                        <input type="input" class="form-control form-control-lg" id="search" name="search" placeholder="Diagnosis" value="{{ diagnosis }}" disabled>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <img src="{{ url_for('static', filename='img/' + imgname) }}" class="img-fluid round">
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="form-group mb-3 col-md-6">
+                                    <input type="submit" value="Edit" name="upload" class="form-control form-control-lg btn btn-outline-primary btn-lg">
+                                </div>
+                                <div class="form-group mb-3 col-md-6">
+                                    <input type="submit" value="Confirm" name="upload" class="form-control form-control-lg btn btn-success btn-lg">
+                                </div>
+                            </div>
+                        </form>
+
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
+    </section>
+</body>
+</html>
