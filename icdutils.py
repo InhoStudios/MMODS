@@ -1,6 +1,7 @@
 import credentials
 import requests
 import json
+from spellchecker import SpellChecker
 # import nltk
 
 token_endpoint = "https://icdaccessmanagement.who.int/connect/token"
@@ -23,6 +24,14 @@ def getToken():
 # PRE: Takes a plaintext search query
 # POST: Returns all ICD entities as a json object
 def search(query):
+    spellCheck = SpellChecker()
+    uk = [query]
+    if (" " in query):
+        word_tokens = query.split(" ")
+        uk = spellCheck.unknown(word_tokens)
+    query = ""
+    for word in uk:
+        query += spellCheck.correction(word) + " "
     token = getToken()
     useFlexisearch = 'false'
     flatResults = 'false'

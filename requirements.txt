@@ -16,6 +16,7 @@ MarkupSafe==2.0.1
 memcache==0.8.0
 multidict==5.2.0
 numpy==1.21.3
+pyspellchecker==0.6.2
 redis==3.5.3
 requests==2.26.0
 six==1.16.0
