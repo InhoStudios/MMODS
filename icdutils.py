@@ -29,9 +29,11 @@ def search(query):
     if (" " in query):
         word_tokens = query.split(" ")
         uk = spellCheck.unknown(word_tokens)
-    query = ""
+    squery = ""
     for word in uk:
-        query += spellCheck.correction(word) + " "
+        squery += spellCheck.correction(word) + " "
+    if squery == "":
+        squery = query
     token = getToken()
     useFlexisearch = 'false'
     flatResults = 'false'
@@ -41,7 +43,7 @@ def search(query):
         'Accept-Language': 'en',
         'API-Version': 'v2'
     }
-    url = f'https://id.who.int/icd/entity/search?q={query}&useFlexisearch={useFlexisearch}&flatResults={flatResults}'
+    url = f'https://id.who.int/icd/entity/search?q={squery}&useFlexisearch={useFlexisearch}&flatResults={flatResults}'
 
     r = requests.post(url, headers=headers, verify=False)
 
