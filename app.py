@@ -121,7 +121,7 @@ def upload():
             return redirect(url_for('submit', query = query, hideclass = ""))
         elif postMethod == "Confirm":
             utc_code = imgname.split('.')[0]
-            data = [utc_code, uri, query, 0]
+            data = [utc_code, uri, query, diagnosis, 0]
 
             with open(join(app.static_folder, METADATA_FILE), "a") as f:
                 writer = csv.writer(f)
@@ -152,10 +152,10 @@ def verify():
         uri = data[1]
         query = data[2]
 
-        title = icdutils.getEntityByID(uri)
+        title = data[3]
         results = icdutils.searchGetPairs(query)
 
-        if int(data[3]) == 1:
+        if int(data[4]) == 1:
             title += " ✅"
 
         entry = {
@@ -188,10 +188,12 @@ def verify():
             # TODO: Add diagnosis modification confirmation pop up
             # get data from form
             correctedURI = request.form['results']
+            correctedTitle = icdutils.getEntityByID(correctedURI)
 
             # change URI to new URI from form, change verified to 1
             data[1] = correctedURI
-            data[3] = 1
+            data[3] = correctedTitle
+            data[4] = 1
             metadata[i] = data
 
         # write data to csv

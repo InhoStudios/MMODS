@@ -16,7 +16,7 @@ payload = {
 }
 
 def getToken():
-    r = requests.post(token_endpoint, data=payload, verify=False).json();
+    r = requests.post(token_endpoint, data=payload, verify=False).json()
     token = r['access_token']
     return token
 
