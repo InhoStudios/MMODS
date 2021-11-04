@@ -103,7 +103,6 @@ def confirm():
     return render_template("confirmation.html", confirmation = confirmation, back_url = back_url)
 
 @app.route('/upload', methods=['POST', 'GET'])
-
 def upload():
     imgname = request.args['imgname']
     uri = request.args['uri']
@@ -117,14 +116,9 @@ def upload():
             filePath = join(app.config['UPLOAD_FOLDER'], imgname)
 
             if exists(filePath):
-                print ("File exists at " + filePath)
                 remove(filePath)
-                print ("File deleted")
-            
-            # obtain necessary variables
-            results = icdutils.searchGetPairs(query)
 
-            return redirect(url_for('submit', query = query, results = results, hideclass = ""))
+            return redirect(url_for('submit', query = query, hideclass = ""))
         elif postMethod == "Confirm":
             utc_code = imgname.split('.')[0]
             data = [utc_code, uri, query, 0]
@@ -162,7 +156,7 @@ def verify():
         results = icdutils.searchGetPairs(query)
 
         if int(data[3]) == 1:
-            title += " ✅";
+            title += " ✅"
 
         entry = {
             'id': id,

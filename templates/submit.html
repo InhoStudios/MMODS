@@ -22,16 +22,16 @@
 
                         <form method="post" enctype="multipart/form-data">
                             <div class="row">
-                                <h4 class="mb-3">Search diagnosis</h4>
+                                <h4 class="mb-3">Search ICD-11 (ICDD) Diagnosis</h4>
                                 <div class="form-group mb-3">
-                                    <input type="input" class="form-control form-control-lg" id="search" name="search" placeholder="Search" value="{{ query }}">
+                                    <input type="input" class="form-control form-control-lg" id="search" name="search" placeholder="Search Diagnosis" value="{{ query }}">
                                 </div>
                             </div>
                             <div class="row {{ hideclass }}">
                                 <h4 class="mb-3">Select diagnosis</h4>
                                 <div class="form-group mb-3">
                                     <select class="form-control form-control-lg" name="results" id="results">
-                                        <option value="null">Search diagnosis</option>
+                                        <option value="null">Select diagnosis</option>
                                     {% for result in results %}
                                         <option value="{{ result.id }}">{{ result.title }}</option>
                                     {% endfor %}
