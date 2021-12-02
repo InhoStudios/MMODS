@@ -150,7 +150,6 @@ def upload():
 
 @app.route('/verify', methods=['POST', 'GET'])
 def verify():
-
     try:
         with (open(join(app.static_folder, METADATA_JSON), "r") as f):
             DATA = json.load(f)
@@ -159,9 +158,10 @@ def verify():
     entries = []
 
     for key in DATA.keys():
-        entries.append(DATA[key])
-        if (DATA[key]['verified'] == 1):
-            DATA[key]['title'] += " ✅"
+        entry = DATA[key].copy()
+        if (entry['verified'] == 1):
+            entry['title'] += " ✅"
+        entries.append(entry)
     
     if request.method == "POST":
         reqid = request.form['imgID']
