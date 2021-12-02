@@ -5,9 +5,11 @@ from werkzeug.utils import redirect, secure_filename
 from time import time
 import icdutils
 import csv
+import json
 
 UPLOAD_FOLDER = "./static/img/"
 METADATA_FILE = "meta.csv"
+METADATA_JSON = "meta.json"
 ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'bmp', 'pdf', 'tiff', 'gif'}
 
 app = Flask(__name__)
@@ -76,7 +78,7 @@ def submit():
             if file and allowedFile(file.filename):
                 utc_code = str(round(time() * 1000))
                 uri = request.form['results']
-                fileEnding = file.filename.split('.')[1]
+                fileEnding = file.filename.split('.')[-1]
 
                 filename_str = utc_code + "." + fileEnding
 
@@ -110,6 +112,12 @@ def upload():
     query = request.args['query']
     diagnosis = icdutils.getEntityByID(uri)
 
+    try:
+        with (open(join(app.static_folder, METADATA_JSON), "r") as f):
+            DATA = json.load(f)
+    except:
+        DATA = {}
+
     if request.method == "POST":
         postMethod = request.form["upload"]
         if postMethod == "Edit":
@@ -121,11 +129,19 @@ def upload():
             return redirect(url_for('submit', query = query, hideclass = ""))
         elif postMethod == "Confirm":
             utc_code = imgname.split('.')[0]
-            data = [utc_code, uri, query, diagnosis, 0]
 
-            with open(join(app.static_folder, METADATA_FILE), "a") as f:
-                writer = csv.writer(f)
-                writer.writerow(data)
+            unit = {
+                'id':utc_code,
+                'uri':uri,
+                'file':imgname,
+                'title':diagnosis,
+                'results':icdutils.searchGetPairs(query),
+                'verified':0
+            }
+            DATA[utc_code] = unit
+
+            with (open(join(app.static_folder, METADATA_JSON), "w") as f):
+                json.dump(DATA, f, ensure_ascii=False, indent=4)
             
             confirmation = "Uploaded successfully!"
             return redirect(url_for("confirm", confirmation = confirmation, back_url = back_url))
@@ -135,55 +151,32 @@ def upload():
 @app.route('/verify', methods=['POST', 'GET'])
 def verify():
 
-    imgs = listdir(join(app.static_folder, "img"))
+    try:
+        with (open(join(app.static_folder, METADATA_JSON), "r") as f):
+            DATA = json.load(f)
+    except:
+        DATA = {}
     entries = []
 
-    # load CSV, find file, requery query to show all diagnoses options
-    meta = open(join(app.static_folder, METADATA_FILE), 'r')
-    metadata = list(csv.reader(meta))
-    meta.close()
-
-    for img in imgs:
-        # get basic metadata
-        id = img.split('.')[0]
-
-        i, data = getCorrespondingEntry(metadata, id)
-
-        uri = data[1]
-        query = data[2]
-
-        title = data[3]
-        results = icdutils.searchGetPairs(query)
-
-        if int(data[4]) == 1:
-            title += " ✅"
-
-        entry = {
-            'id': id,
-            'file': img,
-            'title': title,
-            'uri': uri,
-            'results': results
-        }
-        entries.append(entry)
-    
+    for key in DATA.keys():
+        entries.append(DATA[key])
+        if (DATA[key]['verified'] == 1):
+            DATA[key]['title'] += " ✅"
     
     if request.method == "POST":
         reqid = request.form['imgID']
-
-        # get corresponding entry index to insert into
-        i, data = getCorrespondingEntry(metadata, reqid)
+        DATA[reqid]
 
         # get ID from verify button
         postMethod = request.form['verify']
         if postMethod == "Delete":
             # TODO: Add deletion confirmation pop up
-            filePath = join(app.config['UPLOAD_FOLDER'], request.form['filename'])
+            filePath = join(app.config['UPLOAD_FOLDER'], DATA[reqid]['file'])
             if exists(filePath):
                 print ("File exists at " + filePath)
                 remove(filePath)
                 print ("File deleted")
-            metadata.remove(data)
+            del DATA[reqid]
         elif postMethod == "Verify":
             # TODO: Add diagnosis modification confirmation pop up
             # get data from form
@@ -191,15 +184,14 @@ def verify():
             correctedTitle = icdutils.getEntityByID(correctedURI)
 
             # change URI to new URI from form, change verified to 1
-            data[1] = correctedURI
-            data[3] = correctedTitle
-            data[4] = 1
-            metadata[i] = data
+            DATA[reqid]['uri'] = correctedURI
+            DATA[reqid]['title'] = correctedTitle
+            DATA[reqid]['verified'] = 1
 
-        # write data to csv
-        with open(join(app.static_folder, METADATA_FILE), 'w') as f:
-            writer = csv.writer(f)
-            writer.writerows(metadata)
+        # write data to json
+        with (open(join(app.static_folder, METADATA_JSON), "w") as f):
+            json.dump(DATA, f, ensure_ascii=False, indent=4)
+
         return redirect(request.url)
     return render_template("verify.html", entries=entries)
 
