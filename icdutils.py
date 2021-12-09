@@ -67,6 +67,26 @@ def getEntityByID(id):
 
     return title
 
+# PRE: Takes in a valid ICD ID number (numerical ID following ICD uri)
+# POST: Returns description for specific diagnosis
+def getDescriptionByID(id):
+    token = getToken()
+    headers = {
+        'Authorization': 'Bearer ' + token,
+        'Accept': 'application/json',
+        'Accept-Language': 'en', # Perhaps make language toggle-able from a select list
+        'API-Version': 'v2'
+    }
+    url = f'https://id.who.int/icd/entity/{id}'
+    try:
+        r = requests.get(url, headers=headers, verify=False)
+        r_dict = json.loads(r.text)
+        desc = r_dict["definition"]["@value"]
+    except:
+        desc = "No definition found."
+
+    return desc
+
 # PRE: Takes a plaintext search query
 # POST: Returns a list of all diagnoses names
 def searchGetTitles(query):
@@ -105,8 +125,8 @@ def getExactQueryID(query):
         return id
 
 # PRE: Takes a plain text query to send to the ICD-API
-# POST: Returns all search queries as a list of dictionaries containing both the title and the id
-def searchGetPairs(query):
+# POST: Returns all search queries as a list of dictionaries containing the title, the id, and a selected tag
+def searchGetPairs(query, current_uri="null"):
     r_dict = search(query)
     pairs = []
     str_titles = ""
@@ -122,9 +142,13 @@ def searchGetPairs(query):
         titles[i] = titles[i].replace("<em class='found'>", "")
         titles[i] = titles[i].replace("</em>", "")
         ids[i] = ids[i].replace("——","").replace("http://id.who.int/icd/entity/", "")
+        selected = ""
+        if ids[i] == current_uri:
+            selected = "selected"
         id_title_pair = {
             'title': titles[i],
-            'id': ids[i]
+            'id': ids[i],
+            'selected': selected
         }
 
         pairs.append(id_title_pair)

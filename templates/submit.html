@@ -25,18 +25,30 @@
                                 <h4 class="mb-3">Search ICD-11 (ICDD) Diagnosis</h4>
                                 <div class="form-group mb-3">
                                     <input type="input" class="form-control form-control-lg" id="search" name="search" placeholder="Search Diagnosis" value="{{ query }}">
+                                    <input type="submit" class="hidden-passthrough" name="submit" value="Search">
                                 </div>
                             </div>
                             <div class="row {{ hideclass }}">
                                 <h4 class="mb-3">Select diagnosis</h4>
-                                <div class="form-group mb-3">
-                                    <select class="form-control form-control-lg" name="results" id="results">
-                                        <option value="null">Select diagnosis</option>
-                                    {% for result in results %}
-                                        <option value="{{ result.id }}">{{ result.title }}</option>
-                                    {% endfor %}
-                                    </select>
+                                <div class="form-group mb-3 row">
+                                    <div class="col-lg-3">
+                                        <input type="input" class="form-control form-control-lg" id="uri" name="uri" value="Searched: {{ query }}" disabled>
+                                    </div>
+                                    <div class="col-lg-7">
+                                        <select class="form-control form-control-lg" name="results" id="results">
+                                            <option value="null">Select diagnosis</option>
+                                        {% for result in results %}
+                                            <option value="{{ result.id }}" {{ result.selected }}>{{ result.title }}</option>
+                                        {% endfor %}
+                                        </select>
+                                    </div>
+                                    <div class="col-lg-2">
+                                        <input type="submit" class="form-control form-control-lg btn btn-success btn-lg {{ hideclass }}" id="check_btn" value="Check Definition" name="submit">
+                                    </div>
                                 </div>
+                            </div>
+                            <div class="row {{ desc_hide }}">
+                                <p>{{ definition }}</p>
                             </div>
                             <div class="row {{ hideclass }}">
                                 <h4 class="mb-3">Upload your image</h4>
@@ -46,7 +58,7 @@
                             </div>
                             <div class="row">
                                 <div class="form-group mb-3">
-                                    <input type="submit" class="form-control form-control-lg btn btn-outline-primary btn-lg {{ hideclass }}" id="upload_button" value="Upload">
+                                    <input type="submit" class="form-control form-control-lg btn btn-outline-primary btn-lg {{ hideclass }}" id="upload_button" value="Upload" name="submit">
                                 </div>
                             </div>
                         </form>
@@ -58,5 +70,7 @@
 
         </div>
     </section>
+
+    <script src="{{ url_for('static', filename='js/subselect.js') }}"></script>
 </body>
 </html>

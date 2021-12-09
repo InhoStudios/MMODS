@@ -50,6 +50,8 @@ def quiz():
 
 @app.route('/submit', methods=['POST', 'GET'])
 def submit():
+    definition = "No Description Found."
+    desc_hide = "hidden-passthrough"
     back_url = url_for('submit')
     results=[]
     if 'query' in request.args.keys():
@@ -62,8 +64,25 @@ def submit():
         query = ""
         results=[]
         hideclass = "hidden-passthrough"
+
     if request.method == 'POST':
-        if request.form['results'] != "null":
+        submit_method = request.form['submit']
+        if submit_method == "Search":
+            query = request.form['search']
+            if query == "":
+                return redirect(request.url)
+            results = icdutils.searchGetPairs(query)
+            hideclass = ""
+        elif submit_method == "Check Definition":
+            uri = request.form['results']
+            definition = icdutils.getDescriptionByID(uri)
+            desc_hide = ""
+            hideclass = ""
+            query = request.form['search']
+            if query == "":
+                return redirect(request.url)
+            results = icdutils.searchGetPairs(query, current_uri=uri)
+        elif submit_method == "Upload":
             # check for no file
             if 'filename' not in request.files:
                 return redirect(request.url)
@@ -87,14 +106,9 @@ def submit():
 
                 # get exact query and search results
                 query = request.form['search']
-                return redirect(url_for('upload', imgname = filename, uri = uri, back_url = back_url, query = query))
-        else:
-            query = request.form['search']
-            if query == "":
-                return redirect(request.url)
-            results = icdutils.searchGetPairs(query)
-            hideclass = ""
-    return render_template("submit.html", results = results, query = query, hideclass = hideclass)
+                return redirect(url_for('upload', imgname=filename, uri=uri, back_url=back_url, query=query))
+
+    return render_template("submit.html", results=results, query=query, hideclass=hideclass, desc_hide=desc_hide, definition=definition)
 
 @app.route('/confirm', methods=['POST', 'GET'])
 def confirm():
@@ -111,6 +125,7 @@ def upload():
     back_url = request.args['back_url']
     query = request.args['query']
     diagnosis = icdutils.getEntityByID(uri)
+    definition = icdutils.getDescriptionByID(uri)
 
     try:
         with (open(join(app.static_folder, METADATA_JSON), "r") as f):
@@ -146,7 +161,7 @@ def upload():
             confirmation = "Uploaded successfully!"
             return redirect(url_for("confirm", confirmation = confirmation, back_url = back_url))
     
-    return render_template("upload.html", imgname = imgname, diagnosis = diagnosis)
+    return render_template("upload.html", imgname = imgname, diagnosis = diagnosis, definition = definition)
 
 @app.route('/verify', methods=['POST', 'GET'])
 def verify():

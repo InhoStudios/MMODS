@@ -25,6 +25,8 @@
                                     <div class="form-group mb-3">
                                         <input type="input" class="form-control form-control-lg" id="search" name="search" placeholder="Diagnosis" value="{{ diagnosis }}" disabled>
                                     </div>
+                                    <h4 class="mb-3 mt-2">Definition</h4>
+                                    <p>{{ definition }}</p>
                                 </div>
                                 <div class="col-md-6">
                                     <img src="{{ url_for('static', filename='img/' + imgname) }}" class="img-fluid round">
