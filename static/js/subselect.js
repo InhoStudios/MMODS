@@ -6,3 +6,12 @@ diagSelect.onchange = function (e) {
     uriField = document.getElementById("uri");
     uriField.value = "/icd/entity/" + selectedText;
 }
+
+window.onload = function() {
+    var selectedOption = diagSelect[diagSelect.selectedIndex];
+    var selectedText = selectedOption.value;
+    uriField = document.getElementById("uri")
+    if (selectedText != "null") {
+        uriField.value = "/icd/entity/" + selectedText;
+    }
+}
