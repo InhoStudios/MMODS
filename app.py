@@ -23,7 +23,54 @@ def allowedFile(filename):
 # redirects homepage to submission page for convenience
 @app.route('/')
 def home():
-    return redirect('/submit')
+    try:
+        with (open(join(app.static_folder, METADATA_JSON), "r") as f):
+            DATA = json.load(f)
+    except:
+        DATA = {}
+    entries = []
+    max_entries = 6
+    num_entries = 0
+
+    for key in DATA.keys():
+        entry = DATA[key].copy()
+        if (entry['verified'] == 1):
+            if (num_entries >= max_entries):
+                break
+            entries.append(entry)
+            num_entries += 1
+    
+    if request.method == "POST":
+        reqid = request.form['imgID']
+        DATA[reqid]
+
+        # get ID from verify button
+        postMethod = request.form['verify']
+        if postMethod == "Delete":
+            # TODO: Add deletion confirmation pop up
+            filePath = join(app.config['UPLOAD_FOLDER'], DATA[reqid]['file'])
+            if exists(filePath):
+                print ("File exists at " + filePath)
+                remove(filePath)
+                print ("File deleted")
+            del DATA[reqid]
+        elif postMethod == "Verify":
+            # TODO: Add diagnosis modification confirmation pop up
+            # get data from form
+            correctedURI = request.form['results']
+            correctedTitle = icdutils.getEntityByID(correctedURI)
+
+            # change URI to new URI from form, change verified to 1
+            DATA[reqid]['uri'] = correctedURI
+            DATA[reqid]['title'] = correctedTitle
+            DATA[reqid]['verified'] = 1
+
+        # write data to json
+        with (open(join(app.static_folder, METADATA_JSON), "w") as f):
+            json.dump(DATA, f, ensure_ascii=False, indent=4)
+
+        return redirect(request.url)
+    return render_template("index.html", entries=entries)
 
 @app.route('/quiz', methods=['POST', 'GET'])
 def quiz():

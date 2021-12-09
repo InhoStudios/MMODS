@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Verify</title>
+    <title>Home</title>
 
     <link rel="shortcut icon" href="{{ url_for('static', filename='assets/phys.jpg') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap.css') }}">
@@ -39,18 +39,53 @@
         </div>
     </section>
     <section>
-        <div class="container-fluid">
-            <div class="row justify-content-center mt-5 mb-3 text-center">
-                <h1>Images</h1>
-            </div>
+        <div class="container-fluid col-md-11">
 
-            <div class="row justify-content-center">
-                <div class="col-md-10 mb-2 text-left">
+            <div class="row justify-content-left">
+                <div class="col-md-4 mb-2 text-left">
+                    <div class="row justify-content-left mt-5 mb-3 text-left">
+                        <h1>ICD-Database</h1>
+                        <p>[description]</p>
+                    </div>
+                    <div class="row mt-3">
+                        <a class="btn" href="/quiz">
+                            <div class="card card-shadow round text-left">
+                                <div class="card-body">
+                                    <span>/quiz</span>
+                                    <h4>Quiz</h4>
+                                    <p>Take a dermatology quiz!</p>
+                                </div>
+                            </div>
+                        </a>
+                        <a class="btn" href="/submit">
+                            <div class="card card-shadow round text-left">
+                                <div class="card-body">
+                                    <span>/submit</span>
+                                    <h4>Submit an image</h4>
+                                    <p>Want to contribute to the dataset?</p>
+                                </div>
+                            </div>
+                        </a>
+                        <a class="btn" href="/verify">
+                            <div class="card card-shadow round text-left">
+                                <div class="card-body">
+                                    <span>/verify</span>
+                                    <h4>Verify submitted images</h4>
+                                    <p>Verify the diagnoses and metadata on submitted images. Requires login.</p>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+                <div class="col-md-8 mb-2 text-left">
+                    <div class="row justify-content-center mt-5 text-center">
+                        <h3>Verified Images</h3>
+                    </div>
 
-                    <div class="row mt-5">
+                    <div class="row mt-2">
                         
                         {% for entry in entries %}
-                        <div class="col-lg-3 mb-5 mt-2">
+                        <div class="col-lg-4 mb-3 mt-2">
                             <a class="btn" onclick="openOverlay('{{ entry.id }}')">
                                 <div class="card card-shadow round">
                                     <img src="{{ url_for('static', filename='img/' + entry.file) }}" class="img-fluid crop-img round">
@@ -97,12 +132,6 @@
                                                 </div>
                                             </div>
                                             <div class="row">
-                                                <div class="form-group mb-3">
-                                                    <input type="submit" class="form-control form-control-lg btn btn-success btn-lg" id="verify" name="verify" value="Verify">
-                                                </div>
-                                                <div class="form-group mb-3">
-                                                    <input type="submit" class="form-control form-control-lg btn btn-danger btn-lg" id="verify" name="verify" value="Delete">
-                                                </div>
                                                 <div class="form-group mb-3">
                                                     <a class="form-control form-control-lg btn btn-outline-secondary btn-lg" onclick="closeOverlay('{{ entry.id }}')">Cancel</a>
                                                 </div>
