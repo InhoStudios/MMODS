@@ -161,7 +161,7 @@ def upload():
             confirmation = "Uploaded successfully!"
             return redirect(url_for("confirm", confirmation = confirmation, back_url = back_url))
     
-    return render_template("upload.html", imgname = imgname, diagnosis = diagnosis, definition = definition)
+    return render_template("upload.html", imgname=imgname, diagnosis=diagnosis, definition=definition, uri=uri)
 
 @app.route('/verify', methods=['POST', 'GET'])
 def verify():
