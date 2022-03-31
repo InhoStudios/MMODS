@@ -15,9 +15,7 @@ checkboxes.forEach(function(checkbox) {
                 downloadBar.classList.remove("hidden-passthrough");
             }
             var num = enabledSettings.length;
-            var downloadConfirmation = "Download " + num + " image";
-            if (num > 1) downloadConfirmation = downloadConfirmation + "s";
-            downloadConfirmation = downloadConfirmation + "?";
+            var downloadConfirmation = num > 1 ? "Download " + num + " images?" : "Download " + num + " image?";
             downloadBarText.innerText = downloadConfirmation;
             console.log(enabledSettings);
         } else {
