@@ -58,3 +58,8 @@
 .hidden-passthrough {
     display: none;
 }
+
+.download-bar {
+    position: fixed;
+    bottom: 15px;
+}
