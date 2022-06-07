@@ -62,7 +62,7 @@
                                 <div class="card-body">
                                     <span>/submit</span>
                                     <h4>Submit an image</h4>
-                                    <p>Want to contribute to the dataset?</p>
+                                    <p>Want to contribute to the dataset? Click here to upload your images!</p>
                                 </div>
                             </div>
                         </a>
@@ -86,14 +86,17 @@
                         
                         {% for entry in entries %}
                         <div class="col-lg-4 mb-3 mt-2">
-                            <a class="btn" onclick="openOverlay('{{ entry.id }}')">
-                                <div class="card card-shadow round">
+                            <a class="btn">
+                                <div class="card card-shadow round" onclick="openOverlay('{{ entry.id }}')">
                                     <img src="{{ url_for('static', filename='img/' + entry.file) }}" class="img-fluid crop-img round">
                                     <div class="card-body">
                                         <span>http://id.who.int/icd/entity/{{ entry.uri }}</span>
                                         <h4>{{ entry.title }}</h4>
                                         <p></p>
                                     </div>
+                                </div>
+                                <div class="mt-2">
+                                    <input type="checkbox" class="form-check-input" name="imgselect" value="{{ entry.file }}-select">
                                 </div>
                             </a>
                         </div>
@@ -151,7 +154,36 @@
 
         </div>
     </section>
+    <section class="mt-5">
+        <div class="container-fluid download-bar hidden-passthrough" id="downloadbar">
+            <div class="col-lg-12">
+                <div class="card card-shadow round">
+                    <div class="card-body">
+                        <form method="post" enctype="multipart/form-data">
+                            <div class="mt-3 row">
+                                <div class="col-lg-8">
+                                    <h4 class="d-inline-block px-4" id="downloadbartxt"></h4>
+                                    <p class="d-inline-block">Save metadata as </p>
+                                    <input type="radio" class="d-inline-block form-check-input" name="metaformat" value="csv">
+                                    <p class="d-inline-block"><b>.csv</b></p>
+                                    <input type="radio" class="d-inline-block form-check-input" name="metaformat" value="json" checked>
+                                    <p class="d-inline-block"><b>.json</b></p>
+                                </div>
+                                <div class="col-lg-4">
+                                    <input type="submit" class="form-control form-control-lg btn btn-success btn-lg" id="verify" name="verify" value="Download">
+                                </div>
+                            </div>
+                            <div class="hidden-passthrough">
+                                <input type="input" class="form-control form-control-lg" id="filelist" name="filelist" value="">
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
 
     <script src="{{ url_for('static', filename='js/modal.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/downloader.js') }}"></script>
 </body>
 </html>

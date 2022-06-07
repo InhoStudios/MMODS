@@ -1,11 +1,13 @@
 from os.path import join, exists
 from os import listdir, remove
-from flask import Flask, flash, request, render_template, url_for, session
+from flask import Flask, flash, request, render_template, url_for, session, send_file
+from flask_mysqldb import MySQL
 from werkzeug.utils import redirect, secure_filename
+from werkzeug import FileWrapper
 from time import time
 import icdutils
-import csv
-import json
+import csv, json, io
+from sqlhandler import SQLHandler
 
 UPLOAD_FOLDER = "./static/img/"
 METADATA_FILE = "meta.csv"
@@ -15,19 +17,22 @@ ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'bmp', 'pdf', 'tiff', 'gif'}
 app = Flask(__name__)
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
+app.config['MYSQL_HOST'] = 'localhost'
+app.config['MYSQL_USER'] = 'root'
+app.config['MYSQL_PASSWORD'] = 'pul$ar_VS1'
+app.config['MYSQL_DB'] = 'skinimages'
+
+sqlhandler = SQLHandler(app)
+
 # pre: filename is a valid file name with a file extension
 # post: returns if the file is within the accepted files in ALLOWED_EXTENSIONS
 def allowedFile(filename):
     return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
 # redirects homepage to submission page for convenience
-@app.route('/')
+@app.route('/', methods=['POST', 'GET'])
 def home():
-    try:
-        with (open(join(app.static_folder, METADATA_JSON), "r") as f):
-            DATA = json.load(f)
-    except:
-        DATA = {}
+    DATA = sqlhandler.read_from_metadata()
     entries = []
     max_entries = 6
     num_entries = 0
@@ -41,35 +46,29 @@ def home():
             num_entries += 1
     
     if request.method == "POST":
-        reqid = request.form['imgID']
-        DATA[reqid]
 
         # get ID from verify button
-        postMethod = request.form['verify']
-        if postMethod == "Delete":
-            # TODO: Add deletion confirmation pop up
-            filePath = join(app.config['UPLOAD_FOLDER'], DATA[reqid]['file'])
-            if exists(filePath):
-                print ("File exists at " + filePath)
-                remove(filePath)
-                print ("File deleted")
-            del DATA[reqid]
-        elif postMethod == "Verify":
-            # TODO: Add diagnosis modification confirmation pop up
-            # get data from form
-            correctedURI = request.form['results']
-            correctedTitle = icdutils.getEntityByID(correctedURI)
+        post_method = request.form['verify']
+        if post_method == "Download":
+            # get initial variables
+            filesToDownload = request.form['filelist'].split(';')[:-1]
+            metaformat = request.form['metaformat']
 
-            # change URI to new URI from form, change verified to 1
-            DATA[reqid]['uri'] = correctedURI
-            DATA[reqid]['title'] = correctedTitle
-            DATA[reqid]['verified'] = 1
+            # TODO: CREATE ZIP FROM IMAGES TO SEND AS FILE
+            meta = {}
+            for file in filesToDownload:
+                id = file.split('.')[0]
+                meta[id] = DATA[id].copy()
+                del meta[id]['results']
+                print(meta)
+            if metaformat == "csv":
+                pass
+            elif metaformat == "json":
+                metadata_file_path = join(app.static_folder, METADATA_JSON)
+                with (open(metadata_file_path, "w") as f):
+                    json.dump(meta, f, ensure_ascii=False, indent=4)
+                return send_file(metadata_file_path, as_attachment=True)
 
-        # write data to json
-        with (open(join(app.static_folder, METADATA_JSON), "w") as f):
-            json.dump(DATA, f, ensure_ascii=False, indent=4)
-
-        return redirect(request.url)
     return render_template("index.html", entries=entries)
 
 @app.route('/quiz', methods=['POST', 'GET'])
@@ -192,18 +191,19 @@ def upload():
         elif postMethod == "Confirm":
             utc_code = imgname.split('.')[0]
 
+            results = icdutils.searchGetPairs(query)
+
             unit = {
                 'id':utc_code,
                 'uri':uri,
                 'file':imgname,
                 'title':diagnosis,
-                'results':icdutils.searchGetPairs(query),
+                'results':results,
                 'verified':0
             }
             DATA[utc_code] = unit
 
-            with (open(join(app.static_folder, METADATA_JSON), "w") as f):
-                json.dump(DATA, f, ensure_ascii=False, indent=4)
+            sqlhandler.save_into_metadata(unit)
             
             confirmation = "Uploaded successfully!"
             return redirect(url_for("confirm", confirmation = confirmation, back_url = back_url))
@@ -212,11 +212,9 @@ def upload():
 
 @app.route('/verify', methods=['POST', 'GET'])
 def verify():
-    try:
-        with (open(join(app.static_folder, METADATA_JSON), "r") as f):
-            DATA = json.load(f)
-    except:
-        DATA = {}
+
+    DATA = sqlhandler.read_from_metadata()
+
     entries = []
 
     for key in DATA.keys():
@@ -226,20 +224,22 @@ def verify():
         entries.append(entry)
     
     if request.method == "POST":
-        reqid = request.form['imgID']
-        DATA[reqid]
 
         # get ID from verify button
-        postMethod = request.form['verify']
-        if postMethod == "Delete":
+        post_method = request.form['verify']
+        if post_method == "Delete":
+            reqid = request.form['imgID']
             # TODO: Add deletion confirmation pop up
             filePath = join(app.config['UPLOAD_FOLDER'], DATA[reqid]['file'])
             if exists(filePath):
                 print ("File exists at " + filePath)
                 remove(filePath)
                 print ("File deleted")
+            sqlhandler.delete_from_metadata(reqid)
             del DATA[reqid]
-        elif postMethod == "Verify":
+            return redirect(request.url)
+        elif post_method == "Verify":
+            reqid = request.form['imgID']
             # TODO: Add diagnosis modification confirmation pop up
             # get data from form
             correctedURI = request.form['results']
@@ -249,12 +249,34 @@ def verify():
             DATA[reqid]['uri'] = correctedURI
             DATA[reqid]['title'] = correctedTitle
             DATA[reqid]['verified'] = 1
+            sqlhandler.update_image(reqid, correctedURI, correctedTitle)
+            return redirect(request.url)
+        elif post_method == "Download":
+            # get initial variables
+            filesToDownload = request.form['filelist'].split(';')[:-1]
+            metaformat = request.form['metaformat']
 
-        # write data to json
-        with (open(join(app.static_folder, METADATA_JSON), "w") as f):
-            json.dump(DATA, f, ensure_ascii=False, indent=4)
+            # TODO: CREATE ZIP FROM IMAGES TO SEND AS FILE
+            meta = {}
+            for file in filesToDownload:
+                id = file.split('.')[0]
+                meta[id] = DATA[id].copy()
+                del meta[id]['results']
+                print(meta)
+            if metaformat == "csv":
+                print("Downloaded")
+                metafile =  io.BytesIO()
+                json_data = json.dumps(meta, ensure_ascii=False, indent=4, sort_keys=True).encode('utf-8')
+                metafile.write(json_data)
+                print(metafile.getvalue())
+                f = FileWrapper(metafile)
+                return send_file(f, as_attachment=True, download_name="meta.json")
+            elif metaformat == "json":
+                metadata_file_path = join(app.static_folder, METADATA_JSON)
+                with (open(metadata_file_path, "w") as f):
+                    json.dump(meta, f, ensure_ascii=False, indent=4)
+                return send_file(metadata_file_path, as_attachment=True)
 
-        return redirect(request.url)
     return render_template("verify.html", entries=entries)
 
 # Helper function to search CSV for corresponding entry with ID
