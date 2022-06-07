@@ -3,7 +3,7 @@ from os import listdir, remove
 from flask import Flask, flash, request, render_template, url_for, session, send_file
 from flask_mysqldb import MySQL
 from werkzeug.utils import redirect, secure_filename
-from werkzeug import FileWrapper
+import werkzeug
 from time import time
 import icdutils
 import csv, json, io
@@ -269,7 +269,7 @@ def verify():
                 json_data = json.dumps(meta, ensure_ascii=False, indent=4, sort_keys=True).encode('utf-8')
                 metafile.write(json_data)
                 print(metafile.getvalue())
-                f = FileWrapper(metafile)
+                f = werkzeug.wrap_file(metafile)
                 return send_file(f, as_attachment=True, download_name="meta.json")
             elif metaformat == "json":
                 metadata_file_path = join(app.static_folder, METADATA_JSON)
