@@ -1,12 +1,13 @@
 from os.path import join, exists
-from os import listdir, remove
-from flask import Flask, flash, request, render_template, url_for, session, send_file, Response
-from flask_mysqldb import MySQL
-from werkzeug.utils import redirect, secure_filename
-from werkzeug.wsgi import FileWrapper
+from os import remove
 from time import time
+
+from flask import Flask, request, render_template, url_for, send_file
+from werkzeug.utils import redirect, secure_filename
+import json
+
+from ziputils import InMemoryZip
 import icdutils
-import csv, json, io
 from sqlhandler import SQLHandler
 
 UPLOAD_FOLDER = "./static/img/"
@@ -256,36 +257,36 @@ def verify():
             filesToDownload = request.form['filelist'].split(';')[:-1]
             metaformat = request.form['metaformat']
 
-            # TODO: CREATE ZIP FROM IMAGES TO SEND AS FILE
+            # create empty dictionary for metadata
             meta = {}
+
+            # create zip archive for files
+            zf = InMemoryZip()
             for file in filesToDownload:
+                # get metadata and add to metadata dictionary
                 id = file.split('.')[0]
                 meta[id] = DATA[id].copy()
                 del meta[id]['results']
-                print(meta)
+
+                # add images to zip archive
+                filepath = join(app.config['UPLOAD_FOLDER'], file)
+                zf.add_image(filepath)
             if metaformat == "csv":
-                print("Downloaded")
-                metafile = io.BytesIO()
-                json_data = str.encode(json.dumps(meta, ensure_ascii=False, indent=4, sort_keys=True))
-                metafile.write(json_data)
-                print(metafile.getvalue())
-                metafile.seek(0)
-                f = FileWrapper(metafile)
-                headers = {
-                    'Content-Disposition': 'attachment; filename="meta.json"'
-                }
-                return Response(f, mimetype="text/plain", direct_passthrough=True, headers=headers)
+                # create headers
+                meta_csv = "image file,diagnosis,icd-11 code,image id\n"
+                # create csv string
+                for key in meta.keys():
+                    image = meta[key]
+                    meta_csv = meta_csv + "{},{},{},{}\n".format(image['file'], image['title'], str(image['uri']), str(image['id']))
+                # add csv to archive
+                zf.add_file("meta.csv", meta_csv)
             elif metaformat == "json":
-                metafile = io.BytesIO()
-                json_data = str.encode(json.dumps(meta, ensure_ascii=False, indent=4, sort_keys=True))
-                metafile.write(json_data)
-                print(metafile.getvalue())
-                metafile.seek(0)
-                f = FileWrapper(metafile)
-                headers = {
-                    'Content-Disposition': 'attachment; filename="meta.json"'
-                }
-                return Response(f, mimetype="text/plain", direct_passthrough=True, headers=headers)
+                # get metadata as json string
+                meta_str = json.dumps(meta, ensure_ascii=False, indent=4, sort_keys=True)
+                # add csv to archive
+                zf.add_file("meta.json", meta_str)
+            # send complete zip file
+            return send_file(zf.to_byte_stream(), attachment_filename="images.zip", as_attachment=True)
 
     return render_template("verify.html", entries=entries)
 
