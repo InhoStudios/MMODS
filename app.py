@@ -1,9 +1,9 @@
 from os.path import join, exists
 from os import listdir, remove
-from flask import Flask, flash, request, render_template, url_for, session, send_file
+from flask import Flask, flash, request, render_template, url_for, session, send_file, Response
 from flask_mysqldb import MySQL
 from werkzeug.utils import redirect, secure_filename
-import werkzeug
+from werkzeug.wsgi import FileWrapper
 from time import time
 import icdutils
 import csv, json, io
@@ -19,7 +19,7 @@ app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
 app.config['MYSQL_HOST'] = 'localhost'
 app.config['MYSQL_USER'] = 'root'
-app.config['MYSQL_PASSWORD'] = 'pul$ar_VS1'
+app.config['MYSQL_PASSWORD'] = 'wasd8064.MSL'
 app.config['MYSQL_DB'] = 'skinimages'
 
 sqlhandler = SQLHandler(app)
@@ -265,17 +265,27 @@ def verify():
                 print(meta)
             if metaformat == "csv":
                 print("Downloaded")
-                metafile =  io.BytesIO()
-                json_data = json.dumps(meta, ensure_ascii=False, indent=4, sort_keys=True).encode('utf-8')
+                metafile = io.BytesIO()
+                json_data = str.encode(json.dumps(meta, ensure_ascii=False, indent=4, sort_keys=True))
                 metafile.write(json_data)
                 print(metafile.getvalue())
-                f = werkzeug.wrap_file(metafile)
-                return send_file(f, as_attachment=True, download_name="meta.json")
+                metafile.seek(0)
+                f = FileWrapper(metafile)
+                headers = {
+                    'Content-Disposition': 'attachment; filename="meta.json"'
+                }
+                return Response(f, mimetype="text/plain", direct_passthrough=True, headers=headers)
             elif metaformat == "json":
-                metadata_file_path = join(app.static_folder, METADATA_JSON)
-                with (open(metadata_file_path, "w") as f):
-                    json.dump(meta, f, ensure_ascii=False, indent=4)
-                return send_file(metadata_file_path, as_attachment=True)
+                metafile = io.BytesIO()
+                json_data = str.encode(json.dumps(meta, ensure_ascii=False, indent=4, sort_keys=True))
+                metafile.write(json_data)
+                print(metafile.getvalue())
+                metafile.seek(0)
+                f = FileWrapper(metafile)
+                headers = {
+                    'Content-Disposition': 'attachment; filename="meta.json"'
+                }
+                return Response(f, mimetype="text/plain", direct_passthrough=True, headers=headers)
 
     return render_template("verify.html", entries=entries)
 
