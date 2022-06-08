@@ -2,12 +2,13 @@ import credentials
 import requests
 import json
 from spellchecker import SpellChecker
-# import nltk
 
+# Static class that contains helper functions for accessing the ICD-11 API
+
+# icd-11 api access variables
 token_endpoint = "https://icdaccessmanagement.who.int/connect/token"
 scope = "icdapi_access"
 grant_type = "client_credentials"
-
 payload = {
     'client_id': credentials.client_id,
     'client_secret': credentials.client_secret,
@@ -15,7 +16,9 @@ payload = {
     'grant_type': grant_type
 }
 
+# get access token to access icd-11 api
 def getToken():
+    # request token from the token endpoint
     r = requests.post(token_endpoint, data=payload, verify=False).json()
     token = r['access_token']
     return token
@@ -24,16 +27,25 @@ def getToken():
 # PRE: Takes a plaintext search query
 # POST: Returns all ICD entities as a json object
 def search(query):
+    # employ spellcheck in case users misspell diagnosis
     spellCheck = SpellChecker()
+    # convert query into array of characters
     uk = [query]
     if (" " in query):
+        # separate phrase into words
         word_tokens = query.split(" ")
         uk = spellCheck.unknown(word_tokens)
     squery = ""
+    
+    # apply spellcheck to each word
     for word in uk:
         squery += spellCheck.correction(word) + " "
+    
+    # if there were no words to correct, use original query
     if squery == "":
         squery = query
+    
+    # get access token and initialize headers
     token = getToken()
     useFlexisearch = 'false'
     flatResults = 'false'
@@ -45,13 +57,16 @@ def search(query):
     }
     url = f'https://id.who.int/icd/entity/search?q={squery}&useFlexisearch={useFlexisearch}&flatResults={flatResults}'
 
+    # query icd-11 api for specific diagnosis
     r = requests.post(url, headers=headers, verify=False)
 
+    # return data as a json object
     return json.loads(r.text)
 
 # PRE: Takes in a valid ICD ID number (numerical ID following ICD uri)
 # POST: Returns exact disease diagnosis
 def getEntityByID(id):
+    # get access token and request headers
     token = getToken()
     headers = {
         'Authorization': 'Bearer ' + token,
@@ -61,8 +76,11 @@ def getEntityByID(id):
     }
     url = f'https://id.who.int/icd/entity/{id}'
 
+    # submit post request
     r = requests.get(url, headers=headers, verify=False)
     r_dict = json.loads(r.text)
+
+    # get diagnosis title
     title = r_dict["title"]["@value"]
 
     return title
@@ -70,6 +88,7 @@ def getEntityByID(id):
 # PRE: Takes in a valid ICD ID number (numerical ID following ICD uri)
 # POST: Returns description for specific diagnosis
 def getDescriptionByID(id):
+    # get access token and request headers
     token = getToken()
     headers = {
         'Authorization': 'Bearer ' + token,
@@ -78,6 +97,7 @@ def getDescriptionByID(id):
         'API-Version': 'v2'
     }
     url = f'https://id.who.int/icd/entity/{id}'
+    # search for a diagnosis definition: if none found, use default text
     try:
         r = requests.get(url, headers=headers, verify=False)
         r_dict = json.loads(r.text)
@@ -93,6 +113,8 @@ def searchGetTitles(query):
     r_dict = search(query)
     titles = []
     str = ""
+
+    # recurse through list for nested elements
     for entity in r_dict['destinationEntities']:
         str = str + indexDescendants(entity, 1, 'title')
     
@@ -115,6 +137,8 @@ def searchGetIDs(query):
         IDs.append(id)
     return IDs
 
+# PRE: Takes a plaintext search query
+# POST: Returns the exact first result
 def getExactQueryID(query):
     r_dict = search(query)
     id = ""
@@ -157,10 +181,13 @@ def searchGetPairs(query, current_uri="null"):
 # PRE: Takes an entity json object returned from the ICD-API, a level of indentation (nesting), and the key to index
 # POST: Returns a string of all the query results formatted in a nested format
 def indexDescendants(entity, indentationLevel, key):
+    # find values
     entityValue = entity[key]
     returnString = entityValue + "\n"
     indent = "——"
     descendants = entity['descendants']
+
+    # recurse through descendants
     for descendant in descendants:
         returnString = returnString + indent * indentationLevel + indexDescendants(descendant, indentationLevel + 1, key)
     return returnString
