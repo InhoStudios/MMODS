@@ -13,8 +13,6 @@ class SQLHandler:
         """
         self.flaskapp = flaskapp
         self.mysql = MySQL(flaskapp)
-        
-        return self
     
     def save_into_metadata(self, unit):
         """
