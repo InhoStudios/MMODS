@@ -50,22 +50,22 @@
                     <div class="row">
 
                         <form method="post" enctype="multipart/form-data">
-                            <div class="row">
-                                <h4 class="mb-3">Search ICD-11 (ICDD) Diagnosis</h4>
+                            <div class="row mb-5">
+                                <h4 class="mb-3">Search ICD-11 (ICDD) diagnosis</h4>
                                 <div class="form-group mb-3">
                                     <input type="input" class="form-control form-control-lg" id="search" name="search" placeholder="Search Diagnosis" value="{{ query }}">
                                     <input type="submit" class="hidden-passthrough" name="submit" value="Search">
                                 </div>
                             </div>
-                            <div class="row {{ hideclass }}">
-                                <h4 class="mb-3">Select diagnosis</h4>
+                            <div class="row {{ hideclass }} mb-5">
+                                <h4 class="mb-3">Diagnosis information</h4>
                                 <div class="form-group mb-3 row">
                                     <div class="col-lg-3">
                                         <input type="input" class="form-control form-control-lg" id="uri" name="uri" value="Searched: {{ query }}" disabled>
                                     </div>
                                     <div class="col-lg-7">
-                                        <select class="form-control form-control-lg" name="results" id="results">
-                                            <option value="null">Select diagnosis</option>
+                                        <select class="form-control form-control-lg" name="results" id="results" >
+                                            <option value="null" selected disabled hidden>Select diagnosis</option>
                                         {% for result in results %}
                                             <option value="{{ result.id }}" {{ result.selected }}>{{ result.title }}</option>
                                         {% endfor %}
@@ -75,17 +75,101 @@
                                         <input type="submit" class="form-control form-control-lg btn btn-success btn-lg {{ hideclass }}" id="check_btn" value="Check Definition" name="submit">
                                     </div>
                                 </div>
+                                <div class="form-group mb-3 row">
+                                    <div class="col-lg-10">
+                                        <select class="form-control form-control-lg" name="anatomicsite">
+                                            <option value="n/a" selected disabled hidden>Select anatomic site</option>
+                                            <option value="lower extremity">Lower Extremity</option>
+                                            <option value="anterior torso">Anterior Torso</option>
+                                            <option value="posterior torso">Posterior Torso</option>
+                                            <option value="upper extremity">Upper Extremity</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-lg-2">
+                                        <input type="number" class="form-control form-control-lg" id="size" name="size" placeholder="Size (mm)">
+                                    </div>
+                                </div>
+                                <div class="form-group mb-3 row">
+                                    <div class="form-control-lg">
+                                        <label class="col-lg-6">
+                                            Disease Severity:
+                                        </label>
+                                        <label class="col-lg-3" for="benign">
+                                            <input type="radio" class="form-check-input" id="benign" name="presentation" value="benign">
+                                            Benign
+                                        </label>
+                                        <label class="col-lg-2" for="malignant">
+                                            <input type="radio" class="form-check-input" id="malignant" name="presentation" value="malignant">
+                                            Malignant
+                                        </label>
+                                    </div>
+                                </div>
                             </div>
                             <div class="row {{ desc_hide }}">
                                 <p>{{ definition }}</p>
                             </div>
-                            <div class="row {{ hideclass }}">
-                                <h4 class="mb-3">Upload your image</h4>
-                                <div class="form-group mb-3">
-                                    <input type="file" class="form-control form-control-lg}" id="imgUpload" name="filename">
+                            <div class="row {{ hideclass }} mb-5">
+                                <h4 class="mb-3">Patient Information</h4>
+                                <div class="row">
+                                    <div class="form-group mb-3">
+                                        <input type="number" class="form-control form-control-lg" id="age" name="age" placeholder="Age">
+                                    </div>
+                                </div>
+                                <div class="form-group mb-3 row">
+                                    <div class="form-control-lg">
+                                        <label class="col-lg-6">Assigned sex</label>
+                                        <label class="col-lg-3" for="male">
+                                            <input type="radio" class="form-check-input" id="male" name="sex" value="m">
+                                            Male
+                                        </label>
+                                        <label class="col-lg-2" for="female">
+                                            <input type="radio" class="form-check-input" id="female" name="sex" value="f">
+                                            Female
+                                        </label>
+                                    </div>
+                                </div>
+                                <div class="form-group mb-3 row">
+                                    <div class="form-control-lg">
+                                        <label class="col-lg-6">Does the patient have a family history of this condition?</label>
+                                        <label class="col-lg-3" for="histtrue">
+                                            <input type="radio" class="form-check-input" id="histtrue" name="history" value="t">
+                                            Yes
+                                        </label>
+                                        <label class="col-lg-2" for="histfalse">
+                                            <input type="radio" class="form-check-input" id="histfalse" name="history" value="f">
+                                            No
+                                        </label>
+                                    </div>
+                                </div>
+                                <div class="form-group mb-3 row">
+                                    <div class="form-control-lg">
+                                        <label class="col-lg-6" for="easeofdiag">
+                                            Difficulty of Diagnosis
+                                        </label>
+                                        <input class="col-lg-5" type="range" min="1" max="5" value="3" id="easeofdiag" name="easeofdiag">
+                                    </div>
                                 </div>
                             </div>
-                            <div class="row">
+                            <div class="row {{ hideclass }} mb-5">
+                                <h4 class="mb-3">Image upload</h4>
+                                <div class="form-group mb-3">
+                                    <input type="file" class="form-control form-control-lg" id="imgUpload" name="filename" accept="image/*">
+                                </div>
+                                <div class="form-group mb-3 row">
+                                    <div class="form-control-lg">
+                                        <label class="col-lg-6">Image type</label>
+                                        <label class="col-lg-3" for="clinical">
+                                            <input type="radio" class="form-check-input" id="clinical" name="imgtype" value="clinical">
+                                            Clinical
+                                        </label>
+                                        <label class="col-lg-2" for="dermoscopy">
+                                            <input type="radio" class="form-check-input" id="dermoscopy" name="imgtype" value="dermoscopy">
+                                            Dermoscopy
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row mb-5">
                                 <div class="form-group mb-3">
                                     <input type="submit" class="form-control form-control-lg btn btn-outline-primary btn-lg {{ hideclass }}" id="upload_button" value="Upload" name="submit">
                                 </div>
