@@ -77,27 +77,79 @@
                                     </div>
                                     <div class ='col-lg-8'>
                                         <form method="post" enctype="multipart/form-data">
-                                            <div class="row">
-                                                <span>http://id.who.int/icd/entity/{{ entry.uri }}</span>
-                                                <h2>Submitted diagnosis:</h2>
-                                                <h3>{{ entry.title }}</h3>
-                                                <h2>Alternative diagnoses:</h2>
-                                                <div class="form-group mb-3">
-                                                    <select class="form-control form-control-lg" name="results" id="results">
-                                                        <option value="{{entry.uri}}">{{entry.title}}</option>
-                                                    {% for result in entry.results %}
-                                                        <option value="{{result.id}}">{{result.title}}</option>
-                                                    {% endfor %}
-                                                    </select>
+                                            <div class="row mb-3">
+                                                <span>ICD-11 Entity: http://id.who.int/icd/entity/{{ entry.uri }}</span>
+                                            </div>
+                                            <div class="row form-group mb-3">
+                                                <div class="col-lg-6">
+                                                    <label>
+                                                        Diagnosis
+                                                        <input type="input" class="form-control form-control-lg" value="{{ entry.title }}" disabled>
+                                                    </label>
                                                 </div>
-                                                <h2>Image filename:</h2>
-                                                <h4>{{ entry.file }}</h4>
-                                                <div class="hidden-passthrough">
-                                                    <input type="input" class="form-control form-control-lg" id="filename" name="filename" value="{{ entry.file }}">
+                                                <div class="col-lg-6">
+                                                    <label>
+                                                        Alternative Diagnoses
+                                                        <select class="form-control form-control-lg" name="results" id="results">
+                                                            <option value="null" selected disabled hidden>Select diagnosis</option>
+                                                        {% for result in entry.results %}
+                                                            <option value="{{result.id}}">{{result.title}}</option>
+                                                        {% endfor %}
+                                                        </select>
+                                                    </label>
                                                 </div>
-                                                <div class="hidden-passthrough">
-                                                    <input type="input" class="form-control form-control-lg" id="imgID" name="imgID" value="{{ entry.id }}">
+                                            </div>
+                                            <div class="row form-group mb-3">
+                                                <label>
+                                                    Anatomic Site
+                                                    <input type="input" class="form-control form-control-lg" value="{{ entry.title }}" disabled>
+                                                </label>
+                                            </div>
+                                            <div class="row form-group mb-3">
+                                                <div class="col-lg-6">
+                                                    <label>
+                                                        Lesion Size
+                                                        <input type="input" class="form-control form-control-lg" value="{{ entry.title }}mm" disabled>
+                                                    </label>
                                                 </div>
+                                                <div class="col-lg-6">
+                                                    <label>
+                                                        Disease Severity
+                                                        <input type="input" class="form-control form-control-lg" value="{{ entry.title }}" disabled>
+                                                    </label>
+                                                </div>
+                                            </div>
+                                            <div class="row form-group mb-3">
+                                                <div class="col-lg-6">
+                                                    <label>
+                                                        Age
+                                                        <input type="input" class="form-control form-control-lg" value="{{ entry.title }}" disabled>
+                                                    </label>
+                                                </div>
+                                                <div class="col-lg-6">
+                                                    <label>
+                                                        Assigned Sex
+                                                        <input type="input" class="form-control form-control-lg" value="{{ entry.title }}" disabled>
+                                                    </label>
+                                                </div>
+                                            </div>
+                                            <div class="row form-group mb-3">
+                                                <div class="col-lg-6">
+                                                    <label>
+                                                        Image Type
+                                                        <input type="input" class="form-control form-control-lg" value="{{ entry.file }}" disabled>
+                                                    </label>
+                                                </div>
+                                                <div class="col-lg-6">
+                                                    <label>
+                                                        Image Filename
+                                                        <input type="input" class="form-control form-control-lg" value="{{ entry.file }}" disabled>
+                                                    </label>
+                                                </div>
+                                            </div>
+                                            <div class="hidden-passthrough">
+                                                <input type="input" class="form-control form-control-lg" id="filename" name="filename" value="{{ entry.file }}">
+                                                <input type="input" class="form-control form-control-lg" id="imgID" name="imgID" value="{{ entry.id }}">
                                             </div>
                                             <div class="row">
                                                 <div class="form-group mb-3">
