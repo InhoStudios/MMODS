@@ -31,6 +31,50 @@
                                     </div>
                                     <h4 class="mb-3">Definition</h4>
                                     <p>{{ definition }}</p>
+                                    <h4 class="mb-3">Metadata</h4>
+                                    
+                                    <div class="row form-group mb-3">
+                                        <div class="col-lg-6">
+                                            <label class="form-control">
+                                                Anatomic Site
+                                                <input type="input" class="form-control form-control-lg" value="{{site}}" disabled>
+                                            </label>
+                                        </div>
+                                        <div class="col-lg-6">
+                                            <label class="form-control">
+                                                Image Type
+                                                <input type="input" class="form-control form-control-lg" value="{{imgtype}}" disabled>
+                                            </label>
+                                        </div>
+                                    </div>
+                                    <div class="row form-group mb-3">
+                                        <div class="col-lg-6">
+                                            <label class="form-control">
+                                                Lesion Size
+                                                <input type="input" class="form-control form-control-lg" value="{{size}}mm" disabled>
+                                            </label>
+                                        </div>
+                                        <div class="col-lg-6">
+                                            <label class="form-control">
+                                                Disease Severity
+                                                <input type="input" class="form-control form-control-lg" value="{{severity}}" disabled>
+                                            </label>
+                                        </div>
+                                    </div>
+                                    <div class="row form-group mb-3">
+                                        <div class="col-lg-6">
+                                            <label class="form-control">
+                                                Age
+                                                <input type="input" class="form-control form-control-lg" value="{{ age }}" disabled>
+                                            </label>
+                                        </div>
+                                        <div class="col-lg-6">
+                                            <label class="form-control">
+                                                Assigned Sex
+                                                <input type="input" class="form-control form-control-lg" value="{{ sex }}" disabled>
+                                            </label>
+                                        </div>
+                                    </div>
                                 </div>
                                 <div class="col-md-6">
                                     <img src="{{ url_for('static', filename='img/' + imgname) }}" class="img-fluid round">

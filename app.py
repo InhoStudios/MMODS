@@ -206,8 +206,33 @@ def submit():
                 # get exact query and search results
                 query = request.form['search']
 
+                # get metadata
+                site = request.form['anatomicsite']
+                size = request.form['size']
+                severity = request.form['presentation']
+                diffdiag = request.form['easeofdiag']
+                age = request.form['age']
+                sex = request.form['sex']
+                hist = request.form['history']
+                imgtype = request.form['imgtype']
+                print(site, size, severity, diffdiag, age, sex, hist, imgtype)
+
                 # redirect to upload confirmation page
-                return redirect(url_for('upload', imgname=filename, uri=uri, back_url=back_url, query=query))
+                return redirect(url_for(
+                    'upload', 
+                    imgname=filename, 
+                    uri=uri, 
+                    back_url=back_url, 
+                    query=query, 
+                    site=site,
+                    size=size,
+                    severity=severity,
+                    diffdiag=diffdiag,
+                    age=age,
+                    sex=sex,
+                    hist=hist,
+                    imgtype=imgtype
+                ))
     
     return render_template("submit.html", results=results, query=query, hideclass=hideclass, desc_hide=desc_hide, definition=definition)
 
@@ -234,6 +259,16 @@ def upload():
     uri = request.args['uri']
     back_url = request.args['back_url']
     query = request.args['query']
+
+    # get metadata from upload
+    site=request.args['site']
+    size=request.args['size']
+    severity=request.args['severity']
+    diffdiag=request.args['diffdiag']
+    age=request.args['age']
+    sex=request.args['sex']
+    hist=request.args['hist']
+    imgtype=request.args['imgtype']
 
     # get diagnoses and definitions from icd-11 api to show to user
     diagnosis = icdutils.getEntityByID(uri)
@@ -279,7 +314,21 @@ def upload():
             confirmation = "Uploaded successfully!"
             return redirect(url_for("confirm", confirmation = confirmation, back_url = back_url))
     
-    return render_template("upload.html", imgname=imgname, diagnosis=diagnosis, definition=definition, uri=uri)
+    return render_template(
+        "upload.html", 
+        imgname=imgname, 
+        diagnosis=diagnosis, 
+        definition=definition, 
+        uri=uri, 
+        site=site,
+        size=size,
+        severity=severity,
+        diffdiag=diffdiag,
+        age=age,
+        sex=sex,
+        hist=hist,
+        imgtype=imgtype
+    )
 
 # verification / image browser page
 @app.route('/verify', methods=['POST', 'GET'])

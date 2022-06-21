@@ -80,15 +80,12 @@
                                             <div class="row mb-3">
                                                 <span>ICD-11 Entity: http://id.who.int/icd/entity/{{ entry.uri }}</span>
                                             </div>
+                                            <div class="row mb-3">
+                                                <h3>{{ entry.title }}</h3>
+                                            </div>
                                             <div class="row form-group mb-3">
                                                 <div class="col-lg-6">
-                                                    <label>
-                                                        Diagnosis
-                                                        <input type="input" class="form-control form-control-lg" value="{{ entry.title }}" disabled>
-                                                    </label>
-                                                </div>
-                                                <div class="col-lg-6">
-                                                    <label>
+                                                    <label class="form-control">
                                                         Alternative Diagnoses
                                                         <select class="form-control form-control-lg" name="results" id="results">
                                                             <option value="null" selected disabled hidden>Select diagnosis</option>
@@ -98,22 +95,22 @@
                                                         </select>
                                                     </label>
                                                 </div>
-                                            </div>
-                                            <div class="row form-group mb-3">
-                                                <label>
-                                                    Anatomic Site
-                                                    <input type="input" class="form-control form-control-lg" value="{{ entry.title }}" disabled>
-                                                </label>
+                                                <div class="col-lg-6">
+                                                    <label class="form-control">
+                                                        Anatomic Site
+                                                        <input type="input" class="form-control form-control-lg" value="{{ entry.title }}" disabled>
+                                                    </label>
+                                                </div>
                                             </div>
                                             <div class="row form-group mb-3">
                                                 <div class="col-lg-6">
-                                                    <label>
+                                                    <label class="form-control">
                                                         Lesion Size
                                                         <input type="input" class="form-control form-control-lg" value="{{ entry.title }}mm" disabled>
                                                     </label>
                                                 </div>
                                                 <div class="col-lg-6">
-                                                    <label>
+                                                    <label class="form-control">
                                                         Disease Severity
                                                         <input type="input" class="form-control form-control-lg" value="{{ entry.title }}" disabled>
                                                     </label>
@@ -121,13 +118,13 @@
                                             </div>
                                             <div class="row form-group mb-3">
                                                 <div class="col-lg-6">
-                                                    <label>
+                                                    <label class="form-control">
                                                         Age
                                                         <input type="input" class="form-control form-control-lg" value="{{ entry.title }}" disabled>
                                                     </label>
                                                 </div>
                                                 <div class="col-lg-6">
-                                                    <label>
+                                                    <label class="form-control">
                                                         Assigned Sex
                                                         <input type="input" class="form-control form-control-lg" value="{{ entry.title }}" disabled>
                                                     </label>
@@ -135,13 +132,13 @@
                                             </div>
                                             <div class="row form-group mb-3">
                                                 <div class="col-lg-6">
-                                                    <label>
+                                                    <label class="form-control">
                                                         Image Type
                                                         <input type="input" class="form-control form-control-lg" value="{{ entry.file }}" disabled>
                                                     </label>
                                                 </div>
                                                 <div class="col-lg-6">
-                                                    <label>
+                                                    <label class="form-control">
                                                         Image Filename
                                                         <input type="input" class="form-control form-control-lg" value="{{ entry.file }}" disabled>
                                                     </label>
