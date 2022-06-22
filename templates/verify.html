@@ -52,8 +52,8 @@
                         {% for entry in entries %}
                         <div class="col-lg-3 mb-5 mt-2">
                             <a class="btn">
-                                <div class="card card-shadow round" onclick="openOverlay('{{ entry.id }}')">
-                                    <img src="{{ url_for('static', filename='img/' + entry.file) }}" class="img-fluid crop-img round">
+                                <div class="card card-shadow" onclick="openOverlay('{{ entry.id }}')">
+                                    <img src="{{ url_for('static', filename='img/' + entry.file) }}" class="img-fluid crop-img">
                                     <div class="card-body">
                                         <span>http://id.who.int/icd/entity/{{ entry.uri }}</span>
                                         <h4>{{ entry.title }}</h4>
@@ -73,7 +73,7 @@
                                 <span class="close" onclick="closeOverlay('{{ entry.id }}')">&times;</span>
                                 <div class="row">
                                     <div class='col-lg-4'>
-                                        <img src="{{ url_for('static', filename='img/' + entry.file) }}" class="img-fluid round">
+                                        <img src="{{ url_for('static', filename='img/' + entry.file) }}" class="img-fluid">
                                     </div>
                                     <div class ='col-lg-8'>
                                         <form method="post" enctype="multipart/form-data">
@@ -98,7 +98,7 @@
                                                 <div class="col-lg-6">
                                                     <label class="form-control">
                                                         Anatomic Site
-                                                        <input type="input" class="form-control form-control-lg" value="{{ entry.title }}" disabled>
+                                                        <input type="input" class="form-control form-control-lg" value="{{ entry.site }}" disabled>
                                                     </label>
                                                 </div>
                                             </div>
@@ -106,13 +106,13 @@
                                                 <div class="col-lg-6">
                                                     <label class="form-control">
                                                         Lesion Size
-                                                        <input type="input" class="form-control form-control-lg" value="{{ entry.title }}mm" disabled>
+                                                        <input type="input" class="form-control form-control-lg" value="{{ entry.size }}mm" disabled>
                                                     </label>
                                                 </div>
                                                 <div class="col-lg-6">
                                                     <label class="form-control">
                                                         Disease Severity
-                                                        <input type="input" class="form-control form-control-lg" value="{{ entry.title }}" disabled>
+                                                        <input type="input" class="form-control form-control-lg" value="{{ entry.severity }}" disabled>
                                                     </label>
                                                 </div>
                                             </div>
@@ -120,13 +120,13 @@
                                                 <div class="col-lg-6">
                                                     <label class="form-control">
                                                         Age
-                                                        <input type="input" class="form-control form-control-lg" value="{{ entry.title }}" disabled>
+                                                        <input type="input" class="form-control form-control-lg" value="{{ entry.age }}" disabled>
                                                     </label>
                                                 </div>
                                                 <div class="col-lg-6">
                                                     <label class="form-control">
                                                         Assigned Sex
-                                                        <input type="input" class="form-control form-control-lg" value="{{ entry.title }}" disabled>
+                                                        <input type="input" class="form-control form-control-lg" value="{{ entry.sex }}" disabled>
                                                     </label>
                                                 </div>
                                             </div>
@@ -134,7 +134,7 @@
                                                 <div class="col-lg-6">
                                                     <label class="form-control">
                                                         Image Type
-                                                        <input type="input" class="form-control form-control-lg" value="{{ entry.file }}" disabled>
+                                                        <input type="input" class="form-control form-control-lg" value="{{ entry.imgtype }}" disabled>
                                                     </label>
                                                 </div>
                                                 <div class="col-lg-6">
@@ -177,7 +177,7 @@
     <section class="mt-5">
         <div class="container-fluid download-bar hidden-passthrough" id="downloadbar">
             <div class="col-lg-12">
-                <div class="card card-shadow round">
+                <div class="card card-shadow">
                     <div class="card-body">
                         <form method="post" enctype="multipart/form-data">
                             <div class="mt-3 row">

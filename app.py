@@ -80,11 +80,17 @@ def home():
                 zf.add_image(filepath)
             if metaformat == "csv":
                 # create headers
-                meta_csv = "image file,diagnosis,icd-11 code,image id\n"
+                meta_csv = "image file,diagnosis,icd-11 code,image id,anatomic site,size of lesion,disease severity,difficulty of diagnosis,age,sex,family history,image type\n"
                 # create csv string
                 for key in meta.keys():
                     image = meta[key]
-                    meta_csv = meta_csv + "{},{},{},{}\n".format(image['file'], image['title'], str(image['uri']), str(image['id']))
+                    meta_csv = meta_csv + "{},{},{},{},{},{},{},{},{},{},{},{}\n".format(
+                        image['file'], image['title'], 
+                        str(image['uri']), str(image['id']), 
+                        image['site'], str(image['size']), 
+                        image['severity'], image['diffofdiag'],
+                        str(image['age']), image['sex'], 
+                        image['hist'], image['imgtype'])
                 # add csv to archive
                 zf.add_file("meta.csv", meta_csv)
             elif metaformat == "json":
@@ -210,12 +216,13 @@ def submit():
                 site = request.form['anatomicsite']
                 size = request.form['size']
                 severity = request.form['presentation']
-                diffdiag = request.form['easeofdiag']
+                diffofdiag = request.form['easeofdiag']
                 age = request.form['age']
                 sex = request.form['sex']
                 hist = request.form['history']
                 imgtype = request.form['imgtype']
-                print(site, size, severity, diffdiag, age, sex, hist, imgtype)
+                if (imgtype == "other"):
+                    imgtype = request.form['otherimg']
 
                 # redirect to upload confirmation page
                 return redirect(url_for(
@@ -227,7 +234,7 @@ def submit():
                     site=site,
                     size=size,
                     severity=severity,
-                    diffdiag=diffdiag,
+                    diffofdiag=diffofdiag,
                     age=age,
                     sex=sex,
                     hist=hist,
@@ -264,7 +271,7 @@ def upload():
     site=request.args['site']
     size=request.args['size']
     severity=request.args['severity']
-    diffdiag=request.args['diffdiag']
+    diffofdiag=request.args['diffofdiag']
     age=request.args['age']
     sex=request.args['sex']
     hist=request.args['hist']
@@ -304,6 +311,14 @@ def upload():
                 'file':imgname,
                 'title':diagnosis,
                 'results':results,
+                'site':site,
+                'size':size,
+                'severity':severity,
+                'diffofdiag':diffofdiag,
+                'age':age,
+                'sex':sex,
+                'hist':hist,
+                'imgtype':imgtype,
                 'verified':0
             }
 
@@ -323,7 +338,7 @@ def upload():
         site=site,
         size=size,
         severity=severity,
-        diffdiag=diffdiag,
+        diffofdiag=diffofdiag,
         age=age,
         sex=sex,
         hist=hist,
@@ -418,13 +433,18 @@ def verify():
             # choose metadata format
             if metaformat == "csv":
                 # create headers
-                meta_csv = "image file,diagnosis,icd-11 code,image id\n"
-
+                meta_csv = "image file,diagnosis,icd-11 code,image id,anatomic site,size of lesion,disease severity,difficulty of diagnosis,age,sex,family history,image type\n"
                 # create csv string
                 for key in meta.keys():
                     image = meta[key]
-                    meta_csv = meta_csv + "{},{},{},{}\n".format(image['file'], image['title'], str(image['uri']), str(image['id']))
-                
+                    meta_csv = meta_csv + "{},{},{},{},{},{},{},{},{},{},{},{}\n".format(
+                        image['file'], image['title'], 
+                        str(image['uri']), str(image['id']), 
+                        image['site'], str(image['size']), 
+                        image['severity'], image['diffofdiag'],
+                        str(image['age']), image['sex'], 
+                        image['hist'], image['imgtype'])
+
                 # add csv to archive
                 zf.add_file("meta.csv", meta_csv)
             elif metaformat == "json":

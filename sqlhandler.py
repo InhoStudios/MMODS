@@ -32,11 +32,28 @@ class SQLHandler:
 
         # save search results into newly created table
         for result in unit['results']:
-            query = "INSERT INTO img" + unit['id'] + " (id, diagnosis, selected) VALUES ('" + result['id'] + "', '" + result['title'] + "', '" + result['selected'] + "')"
+            query = "INSERT INTO img" + unit['id'] + \
+                " (id, diagnosis, selected) VALUES ('" + \
+                    result['id'] + "', '" + \
+                    result['title'] + "', '" + \
+                    result['selected'] + "')"
             cursor.execute(query)
         
         # save all other metadata
-        query = "INSERT INTO metadata (id, uri, file, title,  verified) VALUES ('" + unit['id'] + "', '" + unit['uri'] + "', '" + unit['file'] + "', '" + unit['title'] + "', " + str(unit['verified']) + ")"
+        query = "INSERT INTO metadata (id, uri, file, title, anatomic_site, size, severity, diff_of_diag, age, sex, history, imgtype, verified) VALUES ('" + \
+            unit['id'] + "', '" + \
+            unit['uri'] + "', '" + \
+            unit['file'] + "', '" + \
+            unit['title'] + "', '" + \
+            unit['site'] + "', '" + \
+            str(unit['size']) + "', '" + \
+            unit['severity'] + "', '" + \
+            str(unit['diffofdiag']) + "', '" + \
+            str(unit['age']) + "', '" + \
+            unit['sex'] + "', '" + \
+            unit['hist'] + "', '" + \
+            unit['imgtype'] + "', '" + \
+            str(unit['verified']) + "')"
         cursor.execute(query)
 
         # commit changes
@@ -89,7 +106,15 @@ class SQLHandler:
                 'file': value[2],
                 'title': value[3],
                 'results': diaglist,
-                'verified': value[4]
+                'site': value[4],
+                'size': value[5],
+                'severity': value[6],
+                'diffofdiag': value[7],
+                'age': value[8],
+                'sex': value[9],
+                'hist': value[10],
+                'imgtype': value[11],
+                'verified': value[12]
             }
 
             # save unit into corresponding key in return dictionary

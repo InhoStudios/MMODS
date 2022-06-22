@@ -82,10 +82,10 @@
                                     <div class="col-lg-10">
                                         <select class="form-control form-control-lg" name="anatomicsite">
                                             <option value="n/a" selected disabled hidden>Select anatomic site</option>
-                                            <option value="lower extremity">Lower Extremity</option>
-                                            <option value="anterior torso">Anterior Torso</option>
-                                            <option value="posterior torso">Posterior Torso</option>
-                                            <option value="upper extremity">Upper Extremity</option>
+                                            <option value="lower-extremity">Lower Extremity</option>
+                                            <option value="anterior-torso">Anterior Torso</option>
+                                            <option value="posterior-torso">Posterior Torso</option>
+                                            <option value="upper-extremity">Upper Extremity</option>
                                         </select>
                                     </div>
                                     <div class="col-lg-2">
@@ -144,11 +144,11 @@
                                     <div class="form-control-lg">
                                         <label class="col-lg-6">Does the patient have a family history of this condition?</label>
                                         <label class="col-lg-3" for="histtrue">
-                                            <input type="radio" class="form-check-input" id="histtrue" name="history" value="t">
+                                            <input type="radio" class="form-check-input" id="histtrue" name="history" value="Y">
                                             Yes
                                         </label>
                                         <label class="col-lg-2" for="histfalse">
-                                            <input type="radio" class="form-check-input" id="histfalse" name="history" value="f">
+                                            <input type="radio" class="form-check-input" id="histfalse" name="history" value="N">
                                             No
                                         </label>
                                     </div>
@@ -185,7 +185,7 @@
                                     </div>
                                     <div class="form-control-lg row">
                                         <div class="col-lg-6 offset-lg-6">
-                                            <input type="input" class="form-control form-control-lg" id="otherimg" name="imgtype" placeholder="other">
+                                            <input type="input" class="form-control form-control-lg hidden-passthrough" id="otherimg" name="otherimg" placeholder="other">
                                         </div>
                                     </div>
                                 </div>
@@ -205,6 +205,6 @@
         </div>
     </section>
 
-    <script src="{{ url_for('static', filename='js/subselect.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/submit.js') }}"></script>
 </body>
 </html>
