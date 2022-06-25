@@ -40,7 +40,7 @@ class SQLHandler:
             cursor.execute(query)
         
         # save all other metadata
-        query = "INSERT INTO metadata (id, uri, file, title, anatomic_site, size, severity, diff_of_diag, age, sex, history, imgtype, verified) VALUES ('" + \
+        query = "INSERT INTO metadata (id, uri, file, title, anatomic_site, size, severity, diff_of_diag, age, sex, history, imgtype, verified, parents) VALUES ('" + \
             unit['id'] + "', '" + \
             unit['uri'] + "', '" + \
             unit['file'] + "', '" + \
@@ -53,7 +53,8 @@ class SQLHandler:
             unit['sex'] + "', '" + \
             unit['hist'] + "', '" + \
             unit['imgtype'] + "', '" + \
-            str(unit['verified']) + "')"
+            str(unit['verified']) + "', '" + \
+            unit['parents'] + "')"
         cursor.execute(query)
 
         # commit changes
@@ -114,7 +115,8 @@ class SQLHandler:
                 'sex': value[9],
                 'hist': value[10],
                 'imgtype': value[11],
-                'verified': value[12]
+                'verified': value[12],
+                'parents': value[13]
             }
 
             # save unit into corresponding key in return dictionary

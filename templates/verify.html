@@ -43,6 +43,12 @@
             <div class="row justify-content-center mt-5 mb-3 text-center">
                 <h1>Images</h1>
             </div>
+            <p>
+                <a href="#entrycard">All images</a>
+                {% for category in categories %}
+                —<a href="#{{ category }}">{{ category }}</a>
+                {% endfor %}
+            </p>
 
             <div class="row justify-content-center">
                 <div class="col-md-10 mb-2 text-left">
@@ -50,7 +56,7 @@
                     <div class="row mt-5">
                         
                         {% for entry in entries %}
-                        <div class="col-lg-3 mb-5 mt-2">
+                        <div class="col-lg-3 mb-5 mt-2 entrycard {{ entry.parents }}">
                             <a class="btn">
                                 <div class="card card-shadow" onclick="openOverlay('{{ entry.id }}')">
                                     <img src="{{ url_for('static', filename='img/' + entry.file) }}" class="img-fluid crop-img">
@@ -203,7 +209,6 @@
         </div>
     </section>
 
-    <script src="{{ url_for('static', filename='js/modal.js') }}"></script>
-    <script src="{{ url_for('static', filename='js/downloader.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/verify.js') }}"></script>
 </body>
 </html>

@@ -17,11 +17,23 @@ payload = {
 }
 
 # get access token to access icd-11 api
+# POST: returns token for client access to ICD-API
 def getToken():
     # request token from the token endpoint
     r = requests.post(token_endpoint, data=payload, verify=False).json()
     token = r['access_token']
     return token
+
+# generates all headers for post request
+# POST: returns headers
+def generateHeaders():
+    token = getToken()
+    return {
+        'Authorization': 'Bearer ' + token,
+        'Accept': 'application/json',
+        'Accept-Language': 'en', # Perhaps make language toggle-able from a select list
+        'API-Version': 'v2'
+    }
 
 # Helper search function
 # PRE: Takes a plaintext search query
@@ -45,16 +57,10 @@ def search(query):
     if squery == "":
         squery = query
     
-    # get access token and initialize headers
-    token = getToken()
-    useFlexisearch = 'false'
+    # initialize headers
+    useFlexisearch = 'true'
     flatResults = 'false'
-    headers = {
-        'Authorization': 'Bearer ' + token,
-        'Accept': 'application/json',
-        'Accept-Language': 'en',
-        'API-Version': 'v2'
-    }
+    headers = generateHeaders()
     url = f'https://id.who.int/icd/entity/search?q={squery}&useFlexisearch={useFlexisearch}&flatResults={flatResults}'
 
     # query icd-11 api for specific diagnosis
@@ -66,14 +72,8 @@ def search(query):
 # PRE: Takes in a valid ICD ID number (numerical ID following ICD uri)
 # POST: Returns exact disease diagnosis
 def getEntityByID(id):
-    # get access token and request headers
-    token = getToken()
-    headers = {
-        'Authorization': 'Bearer ' + token,
-        'Accept': 'application/json',
-        'Accept-Language': 'en', # Perhaps make language toggle-able from a select list
-        'API-Version': 'v2'
-    }
+    # get request headers
+    headers = generateHeaders()
     url = f'https://id.who.int/icd/entity/{id}'
 
     # submit post request
@@ -88,14 +88,8 @@ def getEntityByID(id):
 # PRE: Takes in a valid ICD ID number (numerical ID following ICD uri)
 # POST: Returns description for specific diagnosis
 def getDescriptionByID(id):
-    # get access token and request headers
-    token = getToken()
-    headers = {
-        'Authorization': 'Bearer ' + token,
-        'Accept': 'application/json',
-        'Accept-Language': 'en', # Perhaps make language toggle-able from a select list
-        'API-Version': 'v2'
-    }
+    # get request headers
+    headers = generateHeaders()
     url = f'https://id.who.int/icd/entity/{id}'
     # search for a diagnosis definition: if none found, use default text
     try:
@@ -191,3 +185,30 @@ def indexDescendants(entity, indentationLevel, key):
     for descendant in descendants:
         returnString = returnString + indent * indentationLevel + indexDescendants(descendant, indentationLevel + 1, key)
     return returnString
+    
+class HierarchyManager():
+    def __init__(self):
+        self.categories = set()
+    
+    def getCategoryParent(self, id):
+        # get headers
+        headers = generateHeaders()
+        include="ancestor"
+        url = f'https://id.who.int/icd/entity/{id}?include={include}'
+
+        # find ancestor
+        r = requests.get(url, headers=headers, verify=False)
+        r_dict = json.loads(r.text)
+        parents = r_dict['ancestor']
+        parent_list = str(id)
+        for parent in parents:
+            parent_id = parent.split("/")[-1]
+            if (parent_id != '455013390' and parent_id != '448895267'):
+                # parent_name = getEntityByID(parent_id)
+                self.categories.add(parent_id)
+                parent_list = parent_list + f" {parent_id}"
+        print(parent_list)
+        return parent_list
+
+    def getCategories(self):
+        return self.categories

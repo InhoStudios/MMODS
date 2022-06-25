@@ -39,3 +39,32 @@ function fillPassthrough(imageList) {
     imgPassThrough.value = passthroughString;
     console.log(imgPassThrough.value);
 }
+
+// modal
+function openOverlay(id) {
+    document.getElementById(id).style.display = "block";
+}
+
+function closeOverlay(id) {
+    document.getElementById(id).style.display = "none";
+}
+
+// hashchange for categories
+window.addEventListener('hashchange', showCategories)
+
+function showCategories() {
+    let category = location.hash.substring(1)
+    console.log(category)
+    let cards = document.querySelectorAll('.entrycard')
+    cards.forEach(function(card) {
+        if (card.classList.contains(category)) {
+            if (card.classList.contains('hidden-passthrough')){
+                card.classList.remove('hidden-passthrough')
+            }
+        } else {
+            if (!card.classList.contains('hidden-passthrough')){
+                card.classList.add('hidden-passthrough')
+            }
+        }
+    });
+}

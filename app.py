@@ -28,8 +28,9 @@ app.config['MYSQL_USER'] = 'root'
 app.config['MYSQL_PASSWORD'] = 'wasd8064.MSL'
 app.config['MYSQL_DB'] = 'skinimages'
 
-# create sqlhandler instance
+# create instances
 sqlhandler = SQLHandler(app)
+hierarchy = icdutils.HierarchyManager()
 
 # pre: filename is a valid file name with a file extension
 # post: returns if the file is within the accepted files in ALLOWED_EXTENSIONS
@@ -319,7 +320,8 @@ def upload():
                 'sex':sex,
                 'hist':hist,
                 'imgtype':imgtype,
-                'verified':0
+                'verified':0,
+                'parents':hierarchy.getCategoryParent(uri)
             }
 
             # save into SQL database
@@ -361,6 +363,8 @@ def verify():
             entry['title'] += " ✅"
         entries.append(entry)
     
+    categories = hierarchy.getCategories()
+
     # handle post request
     if request.method == "POST":
 
@@ -457,7 +461,7 @@ def verify():
             # send complete zip file
             return send_file(zf.to_byte_stream(), attachment_filename="images.zip", as_attachment=True)
 
-    return render_template("verify.html", entries=entries)
+    return render_template("verify.html", entries=entries, categories=categories)
 
 # Helper function to search CSV for corresponding entry with ID
 # PRE: Takes metadata as array and valid image ID
