@@ -27,16 +27,18 @@ class SQLHandler:
         cursor = self.mysql.connection.cursor()
 
         # create a table for all the diagnoses results
-        query = "CREATE TABLE img" + unit['id'] + " ( id VARCHAR(50) NOT NULL, diagnosis VARCHAR (150) NOT NULL, selected VARCHAR(10) NOT NULL, PRIMARY KEY (id) )"
-        cursor.execute(query)
+        # query = "CREATE TABLE img" + unit['id'] + " ( id VARCHAR(50) NOT NULL, diagnosis VARCHAR (150) NOT NULL, selected VARCHAR(10) NOT NULL, PRIMARY KEY (id) )"
+        # cursor.execute(query)
 
         # save search results into newly created table
         for result in unit['results']:
-            query = "INSERT INTO img" + unit['id'] + \
-                " (id, diagnosis, selected) VALUES ('" + \
-                    result['id'] + "', '" + \
-                    result['title'] + "', '" + \
-                    result['selected'] + "')"
+            # query = "INSERT INTO img" + unit['id'] + \
+            #     " (id, diagnosis, selected) VALUES ('" + \
+            #         result['id'] + "', '" + \
+            #         result['title'] + "', '" + \
+            #         result['selected'] + "')"
+            # change query to insert into alt_diagnoses
+            query = f"insert into alt_diagnoses (case_id, diagnosis, uri, selected) values ({unit['id']}, {result['title']}, {result['id']}, {result['selected']})"
             cursor.execute(query)
         
         # save all other metadata
@@ -55,6 +57,12 @@ class SQLHandler:
             unit['imgtype'] + "', '" + \
             str(unit['verified']) + "', '" + \
             unit['parents'] + "')"
+        # create and insert into case
+        query = "insert into cases (case_id, reported_diagnosis, uri, age, sex, history, anatomic_site, size, severity) values " + \
+            f"({unit['id']}, {unit['title']}, {unit['uri']}, {str(unit['age'])}, {unit['sex']}, {unit['hist']}, {unit['site']}, {unit['size']}, {unit['severity']});"
+        cursor.execute(query)
+        # save image
+        query = f"insert into image (image_id, filename, case_id, modality) values (default, {unit['file']}, {unit['id']}, {unit['imgtype']});"
         cursor.execute(query)
 
         # commit changes
@@ -75,23 +83,23 @@ class SQLHandler:
         # create empty dictionary
         DATA = {}
 
-        # get data from SQL database
+        # initialize cursor
         cursor = self.mysql.connection.cursor()
-        cursor.execute ('''SELECT * FROM metadata''')
 
-        # get all image metadata units
-        values = cursor.fetchall()
+        # get case data
+        query = "select * from cases;"
+        cursor.execute (query)
+        cases = cursor.fetchall()
 
         # create entry for each image
-        for value in values:
+        for case in cases:
             # get query result table
-            value_table = "img" + value[0]
-            query = "SELECT * FROM " + value_table
+            query = f"select * from alt_diagnoses where alt_diagnoses.case_id = {case[0]};"
             cursor.execute(query)
             results = cursor.fetchall()
-            diaglist = []
 
             # create list of results
+            diaglist = []
             for result in results:
                 kvpair = {
                     'id': result[0],
@@ -99,28 +107,46 @@ class SQLHandler:
                     'selected': result[2]
                 }
                 diaglist.append(kvpair)
-            
+
+            # get image data
+            query = f"select * from image where image.case_id = {case[0]};"
+            cursor.execute (query)
+            image = cursor.fetchall()[0]
+
             # create metadata unit for specific image
             unit = {
-                'id': value[0],
-                'uri': value[1],
-                'file': value[2],
-                'title': value[3],
+                'id': case[0],
+                'uri': case[2],
+                'file': image[1],
+                'title': case[2],
                 'results': diaglist,
-                'site': value[4],
-                'size': value[5],
-                'severity': value[6],
-                'diffofdiag': value[7],
-                'age': value[8],
-                'sex': value[9],
-                'hist': value[10],
-                'imgtype': value[11],
-                'verified': value[12],
-                'parents': value[13]
+                'site': case[6],
+                'size': case[7],
+                'severity': case[8],
+                'diffofdiag': 0,
+                'age': case[3],
+                'sex': case[4],
+                'hist': case[5],
+                'imgtype': image[3],
+                'verified': 0
             }
+            if not (case[11] == 'NULL'):
+                unit['title'] = case[11]
+                unit['verified'] = 1
+            if not (case[12] == 'NULL'):
+                unit['title'] = case[12]
+                unit['verified'] = 1
 
+            # get parents from links
+            query = f"select * from links where links.case_id = {case[0]}"
+            cursor.execute(query)
+            parents = cursor.fetchall()
+            par_str = case[0]
+            for parent in parents:
+                par_str =  " " + par_str + parent[0]
+            unit['parents'] = par_str
             # save unit into corresponding key in return dictionary
-            DATA[value[0]] = unit
+            DATA[case[0]] = unit
         cursor.close()
 
         # return the dictionary
@@ -181,3 +207,9 @@ class SQLHandler:
         cursor.close()
 
         return self
+    
+    def createCategories(self, cat_id):
+        pass
+
+    def getCategories(self):
+        pass

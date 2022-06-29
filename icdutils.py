@@ -204,7 +204,6 @@ class HierarchyManager():
         for parent in parents:
             parent_id = parent.split("/")[-1]
             if (parent_id != '455013390' and parent_id != '448895267'):
-                # parent_name = getEntityByID(parent_id)
                 self.categories.add(parent_id)
                 parent_list = parent_list + f" {parent_id}"
         print(parent_list)
