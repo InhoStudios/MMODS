@@ -13,6 +13,12 @@ class SQLHandler:
         """
         self.flaskapp = flaskapp
         self.mysql = MySQL(flaskapp)
+        try:
+            cursor = self.mysql.connection.cursor()
+            query = f"select * from categories"
+            # load categories
+        except:
+            self.categories = {}
     
     def save_into_metadata(self, unit):
         """
@@ -111,31 +117,34 @@ class SQLHandler:
             # get image data
             query = f"select * from image where image.case_id = {case[0]};"
             cursor.execute (query)
-            image = cursor.fetchall()[0]
+            try:
+                image = cursor.fetchall()[0]
 
-            # create metadata unit for specific image
-            unit = {
-                'id': case[0],
-                'uri': case[2],
-                'file': image[1],
-                'title': case[2],
-                'results': diaglist,
-                'site': case[6],
-                'size': case[7],
-                'severity': case[8],
-                'diffofdiag': 0,
-                'age': case[3],
-                'sex': case[4],
-                'hist': case[5],
-                'imgtype': image[3],
-                'verified': 0
-            }
-            if not (case[11] == 'NULL'):
-                unit['title'] = case[11]
-                unit['verified'] = 1
-            if not (case[12] == 'NULL'):
-                unit['title'] = case[12]
-                unit['verified'] = 1
+                # create metadata unit for specific image
+                unit = {
+                    'id': case[0],
+                    'uri': case[2],
+                    'file': image[1],
+                    'title': case[2],
+                    'results': diaglist,
+                    'site': case[6],
+                    'size': case[7],
+                    'severity': case[8],
+                    'diffofdiag': 0,
+                    'age': case[3],
+                    'sex': case[4],
+                    'hist': case[5],
+                    'imgtype': image[3],
+                    'verified': 0
+                }
+                if not (case[11] == 'NULL'):
+                    unit['title'] = case[11]
+                    unit['verified'] = 1
+                if not (case[12] == 'NULL'):
+                    unit['title'] = case[12]
+                    unit['verified'] = 1
+            except:
+                pass
 
             # get parents from links
             query = f"select * from links where links.case_id = {case[0]}"
@@ -194,8 +203,9 @@ class SQLHandler:
         # create connection
         cursor = self.mysql.connection.cursor()
 
+        # TODO: rewrite deletion code
         # delete entry
-        query = "DELETE FROM metadata WHERE id=" + request_id
+        query = f"delete from cases where case_id = {request_id}"
         cursor.execute(query)
 
         # delete query result list table
@@ -208,8 +218,30 @@ class SQLHandler:
 
         return self
     
-    def createCategories(self, cat_id):
-        pass
+    def add_category(self, cat_id, icd):
+        """
+        Add a disease category to the category table
+
+        Checks if a category exists with a given id. If it does not exist, a new entry is made for that category
+
+        Parameters
+        -----
+        cat_id : str
+            Entity URI of the corresponding ICD-Entity for that category
+        """
+        cursor = self.mysql.connection.cursor()
+        # check if cat_id exists already
+        query = f"select exists(select * from categories where cat_id = {cat_id});"
+        cursor.execute(query)
+        exists = cursor.fetchall()[0][0]
+        if exists == 0:
+            cat_title = icd.getEntityByID(cat_id)
+            query = f"insert into categories(cat_id, cat_title) values ({cat_id}, \"{str(cat_title)}\");"
+            print(query)
+            cursor.execute(query)
+        
+        self.mysql.connection.commit()
+        cursor.close()
 
     def getCategories(self):
         pass

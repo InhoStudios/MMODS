@@ -30,7 +30,7 @@ app.config['MYSQL_DB'] = 'skinimages'
 
 # create instances
 sqlhandler = SQLHandler(app)
-hierarchy = icdutils.HierarchyManager()
+icd = icdutils.ICDManager()
 
 # pre: filename is a valid file name with a file extension
 # post: returns if the file is within the accepted files in ALLOWED_EXTENSIONS
@@ -120,7 +120,7 @@ def quiz():
             return redirect(request.url)
         
         # compile all numerical IDs from icdutils
-        IDs = icdutils.searchGetIDs(query)
+        IDs = icd.searchGetIDs(query)
         confirmID = IDs[0]
         confirmation = "Incorrect"
         if confirmID == '1627987797':
@@ -143,7 +143,7 @@ def submit():
         query = request.args['query']
         if query == "":
             return redirect(request.url)
-        results = icdutils.searchGetPairs(query)
+        results = icd.searchGetPairs(query)
         # show other fields
         hideclass = ""
     else:
@@ -163,7 +163,7 @@ def submit():
             # empty query
             if query == "":
                 return redirect(request.url)
-            results = icdutils.searchGetPairs(query)
+            results = icd.searchGetPairs(query)
             hideclass = ""
 
         # search icd-11 api for diagnosis definition
@@ -171,13 +171,13 @@ def submit():
             uri = request.form['results']
 
             # query icd-11 api
-            definition = icdutils.getDescriptionByID(uri)
+            definition = icd.getDescriptionByID(uri)
             desc_hide = ""
             hideclass = ""
             query = request.form['search']
             if query == "":
                 return redirect(request.url)
-            results = icdutils.searchGetPairs(query, current_uri=uri)
+            results = icd.searchGetPairs(query, current_uri=uri)
 
         # upload image to database
         elif submit_method == "Upload":
@@ -279,8 +279,8 @@ def upload():
     imgtype=request.args['imgtype']
 
     # get diagnoses and definitions from icd-11 api to show to user
-    diagnosis = icdutils.getEntityByID(uri)
-    definition = icdutils.getDescriptionByID(uri)
+    diagnosis = icd.getEntityByID(uri)
+    definition = icd.getDescriptionByID(uri)
 
     # handle post request
     if request.method == "POST":
@@ -303,7 +303,7 @@ def upload():
             utc_code = imgname.split('.')[0]
 
             # get alternative diagnoses to save into database
-            results = icdutils.searchGetPairs(query)
+            results = icd.searchGetPairs(query)
 
             # create dictionary to save into database
             unit = {
@@ -321,7 +321,7 @@ def upload():
                 'hist':hist,
                 'imgtype':imgtype,
                 'verified':0,
-                'parents':hierarchy.getCategoryParent(uri)
+                'parents':""
             }
 
             # save into SQL database
@@ -363,7 +363,7 @@ def verify():
             entry['title'] += " ✅"
         entries.append(entry)
     
-    categories = hierarchy.getCategories()
+    categories = []
 
     # handle post request
     if request.method == "POST":
@@ -401,7 +401,7 @@ def verify():
 
             # get updated metadata from form
             correctedURI = request.form['results']
-            correctedTitle = icdutils.getEntityByID(correctedURI)
+            correctedTitle = icd.getEntityByID(correctedURI)
 
             # change URI to new URI from form, change verified to 1
             DATA[reqid]['uri'] = correctedURI
@@ -462,6 +462,11 @@ def verify():
             return send_file(zf.to_byte_stream(), attachment_filename="images.zip", as_attachment=True)
 
     return render_template("verify.html", entries=entries, categories=categories)
+
+@app.route('/test')
+def test():
+    sqlhandler.add_category("429594438", icd)
+    return redirect(url_for("submit"))
 
 # Helper function to search CSV for corresponding entry with ID
 # PRE: Takes metadata as array and valid image ID
