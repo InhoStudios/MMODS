@@ -24,11 +24,12 @@ class ICDManager:
 
         # set token
         self.refresh_token()
+        return
     
     def use_headers(self):
-        now = int(str(datetime.now(timezone.utc).timestamp()).split('.')[0])
-        if now >= self.expiry:
-            self.refresh_token()
+        # now = int(str(datetime.now(timezone.utc).timestamp()).split('.')[0])
+        # if now >= self.expiry:
+        self.refresh_token()
         return self.headers
 
     def refresh_token(self):
@@ -45,6 +46,7 @@ class ICDManager:
             'Accept-Language': 'en', # Perhaps make language toggle-able from a select list
             'API-Version': 'v2'
         }
+        return
 
     # Helper search function
     # PRE: Takes a plaintext search query
