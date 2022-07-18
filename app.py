@@ -132,7 +132,7 @@ def quiz():
 @app.route('/submit', methods=['POST', 'GET'])
 def submit():
     # initialize default text for fields
-    definition = "No Description Found."
+    definition = "No definition found."
     desc_hide = "hidden-passthrough"
     back_url = url_for('submit')
     # create array of diagnoses results from search
@@ -201,6 +201,7 @@ def submit():
 
                 # get icd-11 disease code
                 uri = request.form['results']
+                definition = icd.getDescriptionByID(uri)
 
                 # get file type
                 fileEnding = file.filename.split('.')[-1]
@@ -230,7 +231,8 @@ def submit():
                     'upload', 
                     imgname=filename, 
                     uri=uri, 
-                    back_url=back_url, 
+                    back_url=back_url,
+                    definition=definition, 
                     query=query, 
                     site=site,
                     size=size,
@@ -267,6 +269,7 @@ def upload():
     uri = request.args['uri']
     back_url = request.args['back_url']
     query = request.args['query']
+    definition = request.args['definition']
 
     # get metadata from upload
     site=request.args['site']
@@ -279,8 +282,7 @@ def upload():
     imgtype=request.args['imgtype']
 
     # get diagnoses and definitions from icd-11 api to show to user
-    diagnosis = icd.getEntityByID(uri)
-    definition = icd.getDescriptionByID(uri)
+    diagnosis = icd.getDiagnosisByID(uri)
 
     # handle post request
     if request.method == "POST":
@@ -325,7 +327,7 @@ def upload():
             }
 
             # save into SQL database
-            sqlhandler.save_into_metadata(unit)
+            sqlhandler.save_into_metadata(unit, icd)
             
             # redirect to confirmation page
             confirmation = "Uploaded successfully!"
@@ -363,7 +365,7 @@ def verify():
             entry['title'] += " ✅"
         entries.append(entry)
     
-    categories = []
+    categories = sqlhandler.get_categories()
 
     # handle post request
     if request.method == "POST":
@@ -401,7 +403,7 @@ def verify():
 
             # get updated metadata from form
             correctedURI = request.form['results']
-            correctedTitle = icd.getEntityByID(correctedURI)
+            correctedTitle = icd.getDiagnosisByID(correctedURI)
 
             # change URI to new URI from form, change verified to 1
             DATA[reqid]['uri'] = correctedURI
@@ -465,7 +467,7 @@ def verify():
 
 @app.route('/test')
 def test():
-    sqlhandler.add_category("429594438", icd)
+    sqlhandler.get_categories()
     return redirect(url_for("submit"))
 
 # Helper function to search CSV for corresponding entry with ID

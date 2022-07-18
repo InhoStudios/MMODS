@@ -13,14 +13,8 @@ class SQLHandler:
         """
         self.flaskapp = flaskapp
         self.mysql = MySQL(flaskapp)
-        try:
-            cursor = self.mysql.connection.cursor()
-            query = f"select * from categories"
-            # load categories
-        except:
-            self.categories = {}
     
-    def save_into_metadata(self, unit):
+    def save_into_metadata(self, unit, icd):
         """
         Saves data into the SQL database. 
 
@@ -31,45 +25,24 @@ class SQLHandler:
         """
         # get a cursor for sql connection
         cursor = self.mysql.connection.cursor()
-
-        # create a table for all the diagnoses results
-        # query = "CREATE TABLE img" + unit['id'] + " ( id VARCHAR(50) NOT NULL, diagnosis VARCHAR (150) NOT NULL, selected VARCHAR(10) NOT NULL, PRIMARY KEY (id) )"
-        # cursor.execute(query)
+        # create and insert into case
+        query = "insert into cases (case_id, reported_diagnosis, uri, age, sex, history, anatomic_site, size, severity) values " + \
+            f"('{unit['id']}', '{unit['title']}', '{unit['uri']}', '{str(unit['age'])}', '{unit['sex']}', '{unit['hist']}', '{unit['site']}', '{unit['size']}', '{unit['severity']}');"
+        cursor.execute(query)
 
         # save search results into newly created table
         for result in unit['results']:
-            # query = "INSERT INTO img" + unit['id'] + \
-            #     " (id, diagnosis, selected) VALUES ('" + \
-            #         result['id'] + "', '" + \
-            #         result['title'] + "', '" + \
-            #         result['selected'] + "')"
-            # change query to insert into alt_diagnoses
-            query = f"insert into alt_diagnoses (case_id, diagnosis, uri, selected) values ({unit['id']}, {result['title']}, {result['id']}, {result['selected']})"
+            query = f"insert into alt_diagnoses (case_id, diagnosis, uri) values ('{unit['id']}', '{result['title']}', '{result['id']}')"
             cursor.execute(query)
-        
-        # save all other metadata
-        query = "INSERT INTO metadata (id, uri, file, title, anatomic_site, size, severity, diff_of_diag, age, sex, history, imgtype, verified, parents) VALUES ('" + \
-            unit['id'] + "', '" + \
-            unit['uri'] + "', '" + \
-            unit['file'] + "', '" + \
-            unit['title'] + "', '" + \
-            unit['site'] + "', '" + \
-            str(unit['size']) + "', '" + \
-            unit['severity'] + "', '" + \
-            str(unit['diffofdiag']) + "', '" + \
-            str(unit['age']) + "', '" + \
-            unit['sex'] + "', '" + \
-            unit['hist'] + "', '" + \
-            unit['imgtype'] + "', '" + \
-            str(unit['verified']) + "', '" + \
-            unit['parents'] + "')"
-        # create and insert into case
-        query = "insert into cases (case_id, reported_diagnosis, uri, age, sex, history, anatomic_site, size, severity) values " + \
-            f"({unit['id']}, {unit['title']}, {unit['uri']}, {str(unit['age'])}, {unit['sex']}, {unit['hist']}, {unit['site']}, {unit['size']}, {unit['severity']});"
-        cursor.execute(query)
+
         # save image
-        query = f"insert into image (image_id, filename, case_id, modality) values (default, {unit['file']}, {unit['id']}, {unit['imgtype']});"
+        query = f"insert into image (image_id, filename, case_id, modality) values (default, '{unit['file']}', '{unit['id']}', '{unit['imgtype']}');"
         cursor.execute(query)
+
+        cats = self.create_categories(unit['uri'], icd)
+        for cat in cats:
+            query = f"insert into links (case_id, cat_id) values ('{unit['id']}','{cat}');"
+            cursor.execute(query)
 
         # commit changes
         self.mysql.connection.commit()
@@ -109,8 +82,7 @@ class SQLHandler:
             for result in results:
                 kvpair = {
                     'id': result[0],
-                    'title': result[1],
-                    'selected': result[2]
+                    'title': result[1]
                 }
                 diaglist.append(kvpair)
 
@@ -125,7 +97,7 @@ class SQLHandler:
                     'id': case[0],
                     'uri': case[2],
                     'file': image[1],
-                    'title': case[2],
+                    'title': case[1],
                     'results': diaglist,
                     'site': case[6],
                     'size': case[7],
@@ -137,10 +109,10 @@ class SQLHandler:
                     'imgtype': image[3],
                     'verified': 0
                 }
-                if not (case[11] == 'NULL'):
+                if not (case[11] == None):
                     unit['title'] = case[11]
                     unit['verified'] = 1
-                if not (case[12] == 'NULL'):
+                if not (case[12] == None):
                     unit['title'] = case[12]
                     unit['verified'] = 1
             except:
@@ -150,10 +122,11 @@ class SQLHandler:
             query = f"select * from links where links.case_id = {case[0]}"
             cursor.execute(query)
             parents = cursor.fetchall()
-            par_str = case[0]
+            par_str = case[2]
             for parent in parents:
-                par_str =  " " + par_str + parent[0]
+                par_str =  par_str + " " + parent[1]
             unit['parents'] = par_str
+            print(unit['parents'])
             # save unit into corresponding key in return dictionary
             DATA[case[0]] = unit
         cursor.close()
@@ -180,7 +153,7 @@ class SQLHandler:
         cursor = self.mysql.connection.cursor()
 
         # update metadata accordingly
-        query = "UPDATE metadata SET uri='" + corrected_uri + "', title='" + corrected_title + "', verified=1 WHERE id=" + request_id
+        query = f"update cases set uri={corrected_uri}, clinician_diagnosis={corrected_title} where id={request_id}"
         cursor.execute(query)
 
         # commit changes
@@ -204,13 +177,29 @@ class SQLHandler:
         cursor = self.mysql.connection.cursor()
 
         # TODO: rewrite deletion code
+
+        # delete query result list table
+        query = f"delete from alt_diagnoses where case_id = {request_id}"
+        cursor.execute(query)
+
+        query = f"delete from links where case_id={request_id}"
+        cursor.execute(query)
+
+        query = f"delete from image where case_id={request_id}"
+        cursor.execute(query)
+
         # delete entry
         query = f"delete from cases where case_id = {request_id}"
         cursor.execute(query)
 
-        # delete query result list table
-        query = "DROP TABLE img" + request_id
-        cursor.execute(query)
+        for category in self.get_categories().keys():
+            query = f'select exists(select * from links where cat_id = {category});'
+            cursor.execute(query)
+
+            exists = cursor.fetchall()[0][0]
+            if exists == 0:
+                query = f'delete from categories where cat_id = {category}'
+                cursor.execute(query)
 
         # commit changes
         self.mysql.connection.commit()
@@ -218,6 +207,28 @@ class SQLHandler:
 
         return self
     
+    def create_categories(self, entity_id, icd):
+        """
+        Get all parent categories of a certain ICD entity
+
+        Parameters:
+        -----
+        entity_id: str
+            ICD-Entity of interest
+        icd: ICDManager
+            ICD object passthrough for API queries
+        """
+        include = "ancestor"
+        entity_info = icd.getEntityByID(entity_id, include=include)
+        ancestors = entity_info['ancestor']
+        category_ids = []
+        for ancestor in ancestors:
+            ancestor_id = ancestor.split('/')[-1]
+            if ancestor_id != '979408586' and ancestor_id != '448895267' and ancestor_id != '455013390' and ancestor_id != '1920852714':
+                category_ids.append(ancestor_id)
+                self.add_category(ancestor_id, icd)
+        return category_ids
+
     def add_category(self, cat_id, icd):
         """
         Add a disease category to the category table
@@ -228,6 +239,8 @@ class SQLHandler:
         -----
         cat_id : str
             Entity URI of the corresponding ICD-Entity for that category
+        icd: ICDManager
+            ICD object passthrough for API queries
         """
         cursor = self.mysql.connection.cursor()
         # check if cat_id exists already
@@ -235,13 +248,30 @@ class SQLHandler:
         cursor.execute(query)
         exists = cursor.fetchall()[0][0]
         if exists == 0:
-            cat_title = icd.getEntityByID(cat_id)
+            cat_title = icd.getDiagnosisByID(cat_id)
             query = f"insert into categories(cat_id, cat_title) values ({cat_id}, \"{str(cat_title)}\");"
-            print(query)
             cursor.execute(query)
         
         self.mysql.connection.commit()
         cursor.close()
 
-    def getCategories(self):
-        pass
+    def get_categories(self):
+        """
+        Get all categories currently stored in the API
+
+        Returns
+        -----
+        categories: dict
+            Dictionary of all the categories with diagnoses names paired with entity ids
+        """
+        cursor = self.mysql.connection.cursor()
+        query = f"select * from categories"
+        cursor.execute(query)
+        cats = cursor.fetchall()
+
+        ret_cats = {}
+        for cat in cats:
+            ret_cats[cat[0]] = cat[1]
+
+        return ret_cats
+

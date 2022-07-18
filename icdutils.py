@@ -27,9 +27,9 @@ class ICDManager:
         return
     
     def use_headers(self):
-        # now = int(str(datetime.now(timezone.utc).timestamp()).split('.')[0])
-        # if now >= self.expiry:
-        self.refresh_token()
+        now = int(str(datetime.now(timezone.utc).timestamp()).split('.')[0])
+        if now >= self.expiry:
+            self.refresh_token()
         return self.headers
 
     def refresh_token(self):
@@ -76,22 +76,25 @@ class ICDManager:
         url = f'https://id.who.int/icd/entity/search?q={squery}&useFlexisearch={useFlexisearch}&flatResults={flatResults}'
 
         # query icd-11 api for specific diagnosis
-        r = requests.post(url, headers=self.use_headers(), verify=False)
+        r = requests.get(url, headers=self.use_headers(), verify=False)
 
         # return data as a json object
         return json.loads(r.text)
 
+    # PRE: Takes in a valid ICD ID
+    # POST: Returns JSON of all entity information
+    def getEntityByID(self, id, include=""):
+        # get entity request url
+        url = f'https://id.who.int/icd/entity/{id}?include={include}'
+        r = requests.get(url, headers=self.use_headers(), verify=False)     
+
+        return json.loads(r.text)
+
+
     # PRE: Takes in a valid ICD ID number (numerical ID following ICD uri)
     # POST: Returns exact disease diagnosis
-    def getEntityByID(self, id):
-        # get request headers
-        url = f'https://id.who.int/icd/entity/{id}'
-
-        # submit post request
-        print(self.headers)
-        r = requests.post(url, headers=self.use_headers(), verify=False)
-        
-        r_dict = json.loads(r.text)
+    def getDiagnosisByID(self, id):
+        r_dict = self.getEntityByID(id)
 
         # get diagnosis title
         title = r_dict["title"]["@value"]
@@ -101,18 +104,12 @@ class ICDManager:
     # PRE: Takes in a valid ICD ID number (numerical ID following ICD uri)
     # POST: Returns description for specific diagnosis
     def getDescriptionByID(self, id):
-        # get request headers
-        url = f'https://id.who.int/icd/entity/{id}'
         # search for a diagnosis definition: if none found, use default text
-        # try:
-        self.refresh_token()
-        print(self.headers, "\n\n\n")
-        r = requests.post(url, headers=self.headers, verify=False)
-        print("found: " + r.text)
-        r_dict = json.loads(r.text)
-        desc = r_dict["definition"]["@value"]
-        # except:
-        #     desc = "No definition found."
+        r_dict = self.getEntityByID(id)
+        try:
+            desc = r_dict["definition"]["@value"]
+        except:
+            desc = "No definition found."
 
         return desc
 
