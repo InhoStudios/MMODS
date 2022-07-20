@@ -51,6 +51,13 @@ class AnatomyMap():
             if site['index'] >= index:
                 break
         return root_site
+    
+    def get_sites_at_level(self, level):
+        sites = []
+        for site in self.anatomic_sites:
+            if site['level'] == level:
+                sites.append(site.copy())
+        return sites
 
     def get_site_by_index(self, index):
         return self.anatomic_sites[index-1]
