@@ -12,6 +12,7 @@ from werkzeug.utils import redirect, secure_filename
 from ziputils import InMemoryZip
 import icdutils
 from sqlhandler import SQLHandler
+from anatomic_site import AnatomyMap
 
 UPLOAD_FOLDER = "./static/img/"
 METADATA_FILE = "meta.csv"
@@ -31,6 +32,7 @@ app.config['MYSQL_DB'] = 'skinimages'
 # create instances
 sqlhandler = SQLHandler(app)
 icd = icdutils.ICDManager()
+amap = AnatomyMap()
 
 # pre: filename is a valid file name with a file extension
 # post: returns if the file is within the accepted files in ALLOWED_EXTENSIONS
@@ -244,7 +246,7 @@ def submit():
                     imgtype=imgtype
                 ))
     
-    return render_template("submit.html", results=results, query=query, hideclass=hideclass, desc_hide=desc_hide, definition=definition)
+    return render_template("submit.html", results=results, query=query, hideclass=hideclass, desc_hide=desc_hide, definition=definition, sites=amap.get_sites_at_level(1))
 
 # confirmation page template
 @app.route('/confirm', methods=['POST', 'GET'])
@@ -272,7 +274,7 @@ def upload():
     definition = request.args['definition']
 
     # get metadata from upload
-    site=request.args['site']
+    site=amap.get_site_by_index(int(request.args['site']))['site']
     size=request.args['size']
     severity=request.args['severity']
     diffofdiag=request.args['diffofdiag']

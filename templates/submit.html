@@ -82,14 +82,9 @@
                                     <div class="col-lg-10">
                                         <select class="form-control form-control-lg" name="anatomicsite">
                                             <option value="n/a" selected disabled hidden>Select anatomic site</option>
-                                            <option value="lower-extremity">Lower Extremity</option>
-                                            <option value="upper-extremity">Upper Extremity</option>
-                                            <option value="anterior-torso">Anterior Torso</option>
-                                            <option value="posterior-torso">Posterior Torso</option>
-                                            <option value="lateral-torso">Lateral Torso</option>
-                                            <option value="head-neck">Head/Neck</option>
-                                            <option value="palms-soles">Palms/Soles</option>
-                                            <option value="oral-genital">Oral/Genital</option>
+                                        {% for site in sites %}
+                                            <option value="{{ site.index }}">{{ site.site }}</option>
+                                        {% endfor %}
                                         </select>
                                     </div>
                                     <div class="col-lg-2">
