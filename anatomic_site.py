@@ -8,6 +8,9 @@ ROOT_URL = 'https://anatomymapper.com/Terms/AMID'
 
 class AnatomyMap():
     def __init__(self):
+        """
+        Create an Anatomy Map
+        """
         self.anatomic_sites = []
         
         src = requests.get(ROOT_URL, headers=HEADERS)
@@ -32,8 +35,25 @@ class AnatomyMap():
                         }
                         self.anatomic_sites.append(item)
                 col_number += 1
-            
+        
+        for site in self.anatomic_sites:
+            site['parent'] = self.get_parent_site(site['index'])
+            site['children'] = self.get_children_sites(site['index'])
+
     def get_parent_site(self, index):
+        """
+        Gets the anatomic site one level above the current one
+        
+        Parameters
+        -----
+        index: int
+            Index of anatomic site to find parent of
+        
+        Returns
+        -----
+        parent_site: dict
+            Dictionary of the parent anatomic site
+        """
         parent_site = "None"
         index_level = self.anatomic_sites[index-1]['level']
         for site in self.anatomic_sites:
@@ -42,6 +62,19 @@ class AnatomyMap():
             if site['index'] >= index:
                 break
         return parent_site
+    
+    def get_children_sites(self, index):
+        children = []
+        index_level = self.anatomic_sites[index-1]['level']
+        reached = False
+        for site in self.anatomic_sites:
+            if site['level'] == index_level+1:
+                reached = True
+                children.append(site)
+            if reached and site['level'] == index_level:
+                break
+        return children
+
     
     def get_root_site(self, index):
         root_site = "None"

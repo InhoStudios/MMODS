@@ -26,22 +26,22 @@ class SQLHandler:
         # get a cursor for sql connection
         cursor = self.mysql.connection.cursor()
         # create and insert into case
-        query = "insert into cases (case_id, reported_diagnosis, uri, age, sex, history, anatomic_site, size, severity) values " + \
+        query = "insert ignore into cases (case_id, reported_diagnosis, uri, age, sex, history, anatomic_site, size, severity) values " + \
             f"('{unit['id']}', '{unit['title']}', '{unit['uri']}', '{str(unit['age'])}', '{unit['sex']}', '{unit['hist']}', '{unit['site']}', '{unit['size']}', '{unit['severity']}');"
         cursor.execute(query)
 
         # save search results into newly created table
         for result in unit['results']:
-            query = f"insert into alt_diagnoses (case_id, diagnosis, uri) values ('{unit['id']}', '{result['title']}', '{result['id']}')"
+            query = f"insert ignore into alt_diagnoses (case_id, diagnosis, uri) values ('{unit['id']}', '{result['title']}', '{result['id']}')"
             cursor.execute(query)
 
         # save image
-        query = f"insert into image (image_id, filename, case_id, modality) values (default, '{unit['file']}', '{unit['id']}', '{unit['imgtype']}');"
+        query = f"insert ignore into image (image_id, filename, case_id, modality) values (default, '{unit['file']}', '{unit['id']}', '{unit['imgtype']}');"
         cursor.execute(query)
 
         cats = self.create_categories(unit['uri'], icd)
         for cat in cats:
-            query = f"insert into links (case_id, cat_id) values ('{unit['id']}','{cat}');"
+            query = f"insert ignore into links (case_id, cat_id) values ('{unit['id']}','{cat}');"
             cursor.execute(query)
 
         # commit changes
@@ -81,7 +81,7 @@ class SQLHandler:
             diaglist = []
             for result in results:
                 kvpair = {
-                    'id': result[0],
+                    'id': result[2],
                     'title': result[1]
                 }
                 diaglist.append(kvpair)
@@ -153,7 +153,7 @@ class SQLHandler:
         cursor = self.mysql.connection.cursor()
 
         # update metadata accordingly
-        query = f"update cases set uri={corrected_uri}, clinician_diagnosis={corrected_title} where id={request_id}"
+        query = f"update cases set uri='{corrected_uri}', clinician_diagnosis='{corrected_title}' where case_id={request_id}"
         cursor.execute(query)
 
         # commit changes
@@ -249,7 +249,7 @@ class SQLHandler:
         exists = cursor.fetchall()[0][0]
         if exists == 0:
             cat_title = icd.getDiagnosisByID(cat_id)
-            query = f"insert into categories(cat_id, cat_title) values ({cat_id}, \"{str(cat_title)}\");"
+            query = f"insert ignore into categories(cat_id, cat_title) values ({cat_id}, \"{str(cat_title)}\");"
             cursor.execute(query)
         
         self.mysql.connection.commit()

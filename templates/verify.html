@@ -100,7 +100,7 @@
                                                     <label class="form-control">
                                                         Alternative Diagnoses
                                                         <select class="form-control form-control-lg" name="results" id="results">
-                                                            <option value="null" selected disabled hidden>Select diagnosis</option>
+                                                            <option value="{{ entry.uri }}" selected>{{ entry.title }}</option>
                                                         {% for result in entry.results %}
                                                             <option value="{{result.id}}">{{result.title}}</option>
                                                         {% endfor %}
