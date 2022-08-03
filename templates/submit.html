@@ -78,18 +78,27 @@
                                 <div class="row {{ desc_hide }}">
                                     <p>{{ definition }}</p>
                                 </div>
+                                <div class="form-group mb-3 row">
+                                    <div class="col-lg-10">
+                                        <input type="input" class="form-control form-control-lg" id="sitetext" name="sitetext" value="Choose anatomic site below" disabled>
+                                        <input type="number" class="form-control form-control-lg" id="anatomicsite" name="anatomicsite" value="" disabled>
+                                    </div>
+                                    <div class="col-lg-2">
+                                        <input type="number" class="form-control form-control-lg" id="size" name="size" placeholder="Size (mm)">
+                                    </div>
+                                </div>
                                 <div class="form-group mb-3 row container-fluid">
                                     <map id="ICDSTmap-en-us" name="ICDSTmap-en-us">
                                         <img class="map" src="{{ url_for('static', filename='assets/small-body-landscape.gif') }}" style="width: 960 !important; height: 859 !important;" usemap="#ICDSTmap-en-us">
-                                        <area shape="poly" coords="215,163,242,164,215,152,216,131,227,104,236,93,233,81,226,81,226,51,215,39,187,31,163,35,146,48,142,71,147,88,140,81,134,88,137,97,143,103,150,120,156,134,152,157,120,169,144,164,177,167,195,167" title="Head and Neck" onclick="addMsg('Head and Neck');">
-                                        <area shape="poly" coords="159,166,174,166,173,173,156,170,137,169,127,167,140,166" title="Right Supraclavicular region" onclick="addMsg('Right Supraclavicular region');">
-                                        <area shape="poly" coords="213,163,246,164,246,168,223,167,197,172,195,167" title="Left Supraclavicular region" onclick="addMsg('Left Supraclavicular region');">
-                                        <area shape="poly" coords="185,167,195,165,198,176,174,176,173,178,175,165" title="Suprasternal notch" onclick="addMsg('Suprasternal notch');">
-                                        <area shape="poly" coords="176,174,172,182,166,177,152,176,138,174,113,176,110,177,113,171,123,169,132,169,152,169" title="Right Clavicular region" onclick="addMsg('Right Clavicular region');">
-                                        <area shape="poly" coords="251,170,251,171,251,177,241,172,217,174,202,177,195,183,196,172,219,168,246,168" title="Left Clavicular region" onclick="addMsg('Left Clavicular region');">
-                                        <area shape="poly" coords="240,173,224,174,213,175,202,177,195,183,195,189,213,187,226,185,246,185,251,184,251,177,251,176" title="Left Infraclavicular region" onclick="addMsg('Left Infraclavicular region');">
-                                        <area shape="poly" coords="171,187,171,201,171,241,171,264,174,273,177,277,189,277,195,271,195,259,195,226,195,208,195,176,176,176" title="Presternal region" onclick="addMsg('Presternal region');">
-                                        <area shape="poly" coords="156,176,140,174,125,174,113,177,110,177,113,187,126,184,146,184,159,185,171,189,172,182,166,177" title="Right Infraclavicular region" onclick="addMsg('Right Infraclavicular region');">
+                                        <area shape="poly" coords="215,163,242,164,215,152,216,131,227,104,236,93,233,81,226,81,226,51,215,39,187,31,163,35,146,48,142,71,147,88,140,81,134,88,137,97,143,103,150,120,156,134,152,157,120,169,144,164,177,167,195,167" title="Head and Neck" onclick="addMsg('Head and Neck', 1);">
+                                        <area shape="poly" coords="159,166,174,166,173,173,156,170,137,169,127,167,140,166" title="Right Supraclavicular region" onclick="addMsg('Right Supraclavicular region', 164);">
+                                        <area shape="poly" coords="213,163,246,164,246,168,223,167,197,172,195,167" title="Left Supraclavicular region" onclick="addMsg('Left Supraclavicular region', 164);">
+                                        <area shape="poly" coords="185,167,195,165,198,176,174,176,173,178,175,165" title="Suprasternal notch" onclick="addMsg('Suprasternal notch', 163);">
+                                        <area shape="poly" coords="176,174,172,182,166,177,152,176,138,174,113,176,110,177,113,171,123,169,132,169,152,169" title="Right Clavicular region" onclick="addMsg('Right Clavicular region', 173);">
+                                        <area shape="poly" coords="251,170,251,171,251,177,241,172,217,174,202,177,195,183,196,172,219,168,246,168" title="Left Clavicular region" onclick="addMsg('Left Clavicular region', 173);">
+                                        <area shape="poly" coords="240,173,224,174,213,175,202,177,195,183,195,189,213,187,226,185,246,185,251,184,251,177,251,176" title="Left Infraclavicular region" onclick="addMsg('Left Infraclavicular region', 174);">
+                                        <area shape="poly" coords="171,187,171,201,171,241,171,264,174,273,177,277,189,277,195,271,195,259,195,226,195,208,195,176,176,176" title="Presternal region" onclick="addMsg('Presternal region', 175);">
+                                        <area shape="poly" coords="156,176,140,174,125,174,113,177,110,177,113,187,126,184,146,184,159,185,171,189,172,182,166,177" title="Right Infraclavicular region" onclick="addMsg('Right Infraclavicular region', 174);">
                                         <area shape="poly" coords="113,187,119,229,133,221,152,221,171,229,171,189,159,185,125,184" title="Right Upper anterior thoracic region" onclick="addMsg('Right Upper anterior thoracic region');">
                                         <area shape="poly" coords="195,189,195,232,214,221,229,221,246,221,251,233,251,184,221,185" title="Left Upper anterior thoracic region" onclick="addMsg('Left Upper anterior thoracic region');">
 
@@ -182,7 +191,7 @@
                                         <area shape="poly" coords="214,736,219,754,220,783,219,767,239,766,256,761,261,775,246,733" title="Left Dorsal surface of midfoot" onclick="addMsg('Left Dorsal surface of midfoot');">
                                         <area shape="poly" coords="219,767,256,761,262,784,232,813" title="Left Dorsal surface of forefoot" onclick="addMsg('Left Dorsal surface of forefoot');">
 
-                                        <area shape="poly" coords="505,170,587,170,575,151,575,137,583,120,592,113,596,96,587,97,585,62,570,45,551,38,527,42,511,60,505,79,505,85,505,94,497,93,497,103,501,113,503,119,511,122,518,152" title="Head and Neck" onclick="addMsg('Head and Neck');">
+                                        <area shape="poly" coords="505,170,587,170,575,151,575,137,583,120,592,113,596,96,587,97,585,62,570,45,551,38,527,42,511,60,505,79,505,85,505,94,497,93,497,103,501,113,503,119,511,122,518,152" title="Head and Neck" onclick="addMsg('Head and Neck', 1);">
                                         <area shape="poly" coords="505,170,492,177,467,187,480,189,495,195,512,206,523,219,529,226,529,170" title="Left Suprascapular region" onclick="addMsg('Left Suprascapular region');">
                                         <area shape="poly" coords="529,170,529,273,544,273,544,170" title="Left Interscapular region" onclick="addMsg('Left Interscapular region');">
                                         <area shape="poly" coords="544,170,544,273,560,273,560,170" title="Right Interscapular region" onclick="addMsg('Right Interscapular region');">
@@ -266,20 +275,71 @@
                                         <area shape="poly" coords="598,716,606,712,608,729,596,729" title="Right Lateral surface of ankle" onclick="addMsg('Right Lateral surface of ankle');">
                                         <area shape="poly" coords="492,736,482,733,476,736,476,742,467,758,457,775,455,791,461,804,472,810,480,820,490,817,495,795,501,770,505,750,503,736" title="Left Plantar surface of heel" onclick="addMsg('Left Plantar surface of heel');">
                                         <area shape="poly" coords="609,729,590,729,577,736,577,748,581,761,585,786,590,809,600,817,613,805,628,791,628,775,610,742" title="Right Plantar surface of heel" onclick="addMsg('Right Plantar surface of heel');">
+
+                                        <area shape="poly" coords="826,152,841,147,854,125,860,85,859,62,841,46,824,40,800,51,791,76,791,103,795,132,809,147" title="Face" onclick="addMsg('Face');">
+                                        <area shape="poly" coords="800,137,801,157,786,161,800,170,814,180,831,180,846,174,855,163,860,158,851,161,851,132,843,146,826,151,809,149" title="Neck" onclick="addMsg('Neck');">
+
+                                        <area shape="poly" coords="775,78,775,46,742,40,740,78" title="Right Forearm" onclick="addMsg('Right Forearm');">
+                                        <area shape="poly" coords="738,79,746,79,750,85,742,94,736,94" title="Right Elbow tip" onclick="addMsg('Right Elbow tip');">
+                                        <area shape="poly" coords="759,79,775,79,770,85,770,94,744,94,750,88,744,79" title="Right Medial condylar surface of elbow" onclick="addMsg('Right Medial condylar surface of elbow');">
+                                        <area shape="poly" coords="744,94,736,94,736,152,741,156" title="Right Posterior surface of upper arm" onclick="addMsg('Right Posterior surface of upper arm');">
+                                        <area shape="poly" coords="741,156,754,162,771,157,779,142,770,94,744,94" title="Right Medial surface of upper arm" onclick="addMsg('Right Medial surface of upper arm');">
+                                        <area shape="poly" coords="733,151,748,158,758,164,763,177,761,189,754,207,744,200,738,182" title="Right Posterior axillary fold" onclick="addMsg('Right Posterior axillary fold');">
+                                        <area shape="poly" coords="779,185,786,162,783,148,778,142,770,162,766,177,775,183" title="Right Anterior axillary fold" onclick="addMsg('Right Anterior axillary fold');">
+                                        <area shape="poly" coords="817,181,814,189,795,181,786,169,786,160,800,171" title="Right Clavicular region" onclick="addMsg('Right Clavicular region');">
+                                        <area shape="poly" coords="783,174,779,185,791,195,814,207,814,195" title="Right Upper anterior thoracic region" onclick="addMsg('Right Upper anterior thoracic region');">
+                                        <area shape="poly" coords="793,198,770,177,763,177,761,189,757,201,754,207,758,219,761,206,771,202" title="Right Axillary tail of breast" onclick="addMsg('Right Axillary tail of breast');">
+                                        <area shape="poly" coords="763,261,757,261,750,246,748,223,740,206,738,183,744,200,754,207,758,221" title="Right Upper lateral thoracic region" onclick="addMsg('Right Upper lateral thoracic region');">
+                                        <area shape="poly" coords="791,229,791,195,766,202,761,208,758,221,758,229,761,240,783,240,786,233" title="Right Upper outer quadrant of breast" onclick="addMsg('Right Upper outer quadrant of breast');">
+                                        <area shape="poly" coords="783,240,761,240,763,261,770,261,778,263,786,264,791,265,791,246,786,246" title="Right Lower outer quadrant of breast" onclick="addMsg('Right Lower outer quadrant of breast');">
+                                        <area shape="poly" coords="791,195,791,229,799,233,801,240,814,240,818,232,818,220,814,208" title="Right Upper inner quadrant of breast" onclick="addMsg('Right Upper inner quadrant of breast');">
+                                        <area shape="poly" coords="800,240,817,239,814,246,816,251,814,262,804,261,791,265,791,246,793,246,799,246" title="Right Lower inner quadrant of breast" onclick="addMsg('Right Lower inner quadrant of breast');">
+                                        <area shape="poly" coords="791,229,800,233,801,244,791,246,784,246,783,240,786,232,791,229,791,235,786,238,787,245,795,238,791,235" title="Right Areola" onclick="addMsg('Right Areola');">
+                                        <area shape="poly" coords="791,235,793,240,786,244,786,238" title="Right Nipple" onclick="addMsg('Right Nipple');">
+                                        <area shape="poly" coords="817,185,814,204,818,233,814,249,814,263,824,268,830,263,831,251,830,238,831,214,834,206,834,185" title="Presternal region" onclick="addMsg('Presternal region');">
+
+                                        <area shape="poly" coords="907,81,901,39,868,44,872,81" title="Left Forearm" onclick="addMsg('Left Forearm');">
+                                        <area shape="poly" coords="901,81,906,81,910,97,905,101,902,101,897,91" title="Left Elbow tip" onclick="addMsg('Left Elbow tip');">
+                                        <area shape="poly" coords="885,81,901,81,897,88,902,101,877,94,876,85,869,81" title="Left Medial condylar surface of elbow" onclick="addMsg('Left Medial condylar surface of elbow');">
+                                        <area shape="poly" coords="868,141,876,152,892,162,905,152,906,101,877,94" title="Left Medial surface of upper arm" onclick="addMsg('Left Medial surface of upper arm');">
+                                        <area shape="poly" coords="912,98,905,101,905,152,916,149" title="Left Posterior surface of upper arm" onclick="addMsg('Left Posterior surface of upper arm');">
+                                        <area shape="poly" coords="868,184,860,159,864,148,869,138,877,160,880,177" title="Left Anterior axillary fold" onclick="addMsg('Left Anterior axillary fold');">
+                                        <area shape="poly" coords="876,152,892,162,881,177,880,177" title="Left Apex of axilla" onclick="addMsg('Left Apex of axilla');">
+                                        <area shape="poly" coords="914,147,891,160,881,175,884,188,890,200,903,192,909,175" title="Left Posterior axillary fold" onclick="addMsg('Left Posterior axillary fold');">
+                                        <area shape="poly" coords="868,184,860,159,864,148,869,138,877,160,880,177" title="Left Anterior axillary fold" onclick="addMsg('Left Anterior axillary fold');">
+                                        <area shape="poly" coords="859,159,860,166,851,182,833,189,833,181,846,176,846,176" title="Left Clavicular region" onclick="addMsg('Left Clavicular region');">
+                                        <area shape="poly" coords="834,195,864,172,868,185,856,195,831,210" title="Left Upper anterior thoracic region" onclick="addMsg('Left Upper anterior thoracic region');">
+                                        <area shape="poly" coords="896,256,883,256,885,243,886,237,886,218,888,199,903,191,910,174,909,199" title="Left Upper lateral thoracic region" onclick="addMsg('Left Upper lateral thoracic region');">
+                                        <area shape="poly" coords="857,197,857,229,850,233,846,240,829,239,829,226,831,210,850,200" title="Left Upper inner quadrant of breast" onclick="addMsg('Left Upper inner quadrant of breast');">
+                                        <area shape="poly" coords="847,240,830,240,833,251,835,259,841,261,847,263,851,263,859,263,859,246,850,246" title="Left Lower inner quadrant of breast" onclick="addMsg('Left Lower inner quadrant of breast');">
+                                        <area shape="poly" coords="858,229,858,198,879,206,884,208,886,215,886,226,886,233,885,240,864,240,862,233" title="Left Upper outer quadrant of breast" onclick="addMsg('Left Upper outer quadrant of breast');">
+                                        <area shape="poly" coords="859,246,859,263,867,261,884,259,885,246,885,240,862,240,862,246" title="Left Lower outer quadrant of breast" onclick="addMsg('Left Lower outer quadrant of breast');">
+                                        <area shape="poly" coords="858,238,860,241,855,245,854,240,855,238,855,229,850,233,847,241,851,246,862,246,862,240,860,233,855,229" title="Left Areola" onclick="addMsg('Left Areola');">
+                                        <area shape="poly" coords="855,235,854,240,855,245,860,241" title="Left Nipple" onclick="addMsg('Left Nipple');">
+
+                                        <area shape="poly" coords="729,312,750,328,736,328,733,338" title="Right Axillary tail of breast" onclick="addMsg('Right Axillary tail of breast');">
+                                        <area shape="poly" coords="729,311,738,318,753,328,791,329,809,350,809,311,782,311,750,311" title="Right Upper anterior thoracic region" onclick="addMsg('Right Upper anterior thoracic region');">
+                                        <area shape="poly" coords="809,311,810,334,809,355,814,379,810,393,820,396,830,401,835,393,834,379,841,355,841,329,841,320,841,311" title="Presternal region" onclick="addMsg('Presternal region');">
+                                        <area shape="poly" coords="841,311,841,354,859,339,877,329,901,328,910,318,919,311,872,311" title="Left Upper anterior thoracic region" onclick="addMsg('Left Upper anterior thoracic region');">
+                                        <area shape="poly" coords="919,339,919,310,901,328,914,328" title="Left Axillary tail of breast" onclick="addMsg('Left Axillary tail of breast');">
+                                        <area shape="poly" coords="759,377,761,328,736,328,732,343,728,368,727,377,729,383,750,383,754,379" title="Right Upper outer quadrant of breast" onclick="addMsg('Right Upper outer quadrant of breast');">
+                                        <area shape="poly" coords="761,328,759,377,766,379,766,383,814,383,814,375,809,348,793,329" title="Right Upper inner quadrant of breast" onclick="addMsg('Right Upper inner quadrant of breast');">
+                                        <area shape="poly" coords="750,383,729,383,733,402,738,408,742,415,754,417,759,417,759,394,754,393" title="Right Lower outer quadrant of breast" onclick="addMsg('Right Lower outer quadrant of breast');">
+                                        <area shape="poly" coords="766,383,810,383,809,402,795,413,783,417,770,419,759,417,759,394,761,394,766,393" title="Right Lower inner quadrant of breast" onclick="addMsg('Right Lower inner quadrant of breast');">
+                                        <area shape="circle" coords="760,388,3" title="Right Nipple" onclick="addMsg('Right Nipple');">
+                                        <area shape="circle" coords="760,388,10" title="Right Areola" onclick="addMsg('Right Areola');">
+                                        <area shape="poly" coords="736,406,736,417,746,421,757,425,766,427,783,427,791,423,801,417,808,412,810,404,814,394,810,393,803,408,786,417,775,419,761,419,750,417" title="Right Inframammary flexure" onclick="addMsg('Right Inframammary flexure')">
+                                        <area shape="poly" coords="736,415,738,438,740,453,740,461,763,461,782,459,804,455,814,452,830,442,830,400,814,394,805,413,786,425,771,429,754,425,742,419" title="Right Lower anterior thoracic region" onclick="addMsg('Right Lower anterior thoracic region');">
+                                        <area shape="poly" coords="889,328,889,377,884,379,881,385,834,383,834,375,843,348,862,332" title="Left Upper inner quadrant of breast" onclick="addMsg('Left Upper inner quadrant of breast');">
+                                        <area shape="poly" coords="889,377,889,328,911,328,921,338,924,356,924,374,922,379,922,385,901,385,897,379" title="Left Upper outer quadrant of breast" onclick="addMsg('Left Upper outer quadrant of breast');">
+                                        <area shape="poly" coords="892,394,892,419,906,415,915,404,921,393,922,385,901,383,897,393" title="Left Lower outer quadrant of breast" onclick="addMsg('Left Lower outer quadrant of breast');">
+                                        <area shape="poly" coords="889,328,889,377,884,379,881,385,834,383,834,375,843,348,862,332" title="Left Upper inner quadrant of breast" onclick="addMsg('Left Upper inner quadrant of breast');">
+                                        <area shape="poly" coords="881,383,835,383,841,400,851,408,860,417,868,419,881,421,892,419,892,394,884,393" title="Left Lower inner quadrant of breast" onclick="addMsg('Left Lower inner quadrant of breast');">
+                                        <area shape="circle" coords="892,388,3"  title="Left Nipple" onclick="addMsg('Left Nipple');">
+                                        <area shape="circle" coords="892,388,10" title="Left Areola" onclick="addMsg('Left Areola');">
+                                        <area shape="poly" coords="914,417,901,425,885,429,864,425,847,417,837,404,834,394,837,393,851,408,860,417,877,423,892,419,910,408,915,406" title="Left Inframammary flexure" onclick="addMsg('Left Inframammary flexure')">
+                                        <area shape="poly" coords="892,459,877,459,860,457,852,457,846,455,835,452,829,442,829,400,835,396,850,417,869,427,897,427,911,417,910,442,910,459" title="Left Lower anterior thoracic region" onclick="addMsg('Left Lower anterior thoracic region');">
                                     </map>
-                                </div>
-                                <div class="form-group mb-3 row">
-                                    <div class="col-lg-10">
-                                        <select class="form-control form-control-lg" name="anatomicsite">
-                                            <option value="n/a" selected disabled hidden>Select anatomic site</option>
-                                        {% for site in sites %}
-                                            <option value="{{ site.index }}">{{ site.site }}</option>
-                                        {% endfor %}
-                                        </select>
-                                    </div>
-                                    <div class="col-lg-2">
-                                        <input type="number" class="form-control form-control-lg" id="size" name="size" placeholder="Size (mm)">
-                                    </div>
                                 </div>
                                 <div class="form-group mb-3 row">
                                     <div class="form-control-lg">
@@ -393,7 +453,7 @@
 
         </div>
         
-    <p id="marker" class="hidden-passthrough" style="position: absolute; z-index: 1 !important; color: red; font-size: 24px">
+    <p id="marker" class="hidden-passthrough" style="position: absolute; z-index: 1 !important; color: red; font-size: 24px; pointer-events: none;">
         X
     </p>
     </section>

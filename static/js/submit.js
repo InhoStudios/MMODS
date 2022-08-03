@@ -33,7 +33,10 @@ imgOtherType.addEventListener('change', function() {
     }
 });
 
-function addMsg(msg) {
+let siteField = document.getElementById("sitetext")
+let siteVal = document.getElementById("anatomicsite")
+
+function addMsg(msg, index) {
     console.log(msg)
     const marker = document.getElementById("marker")
     var e = window.event;
@@ -45,4 +48,6 @@ function addMsg(msg) {
     marker.style.zIndex = 1;
     console.log(posx);
     console.log(posy);
+    siteField.value = msg;
+    siteVal.value = index;
 }
