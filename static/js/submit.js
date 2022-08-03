@@ -32,3 +32,17 @@ imgOtherType.addEventListener('change', function() {
         }
     }
 });
+
+function addMsg(msg) {
+    console.log(msg)
+    const marker = document.getElementById("marker")
+    var e = window.event;
+    var posx = e.pageX - 8;
+    var posy = e.pageY - 20;
+    marker.classList.remove('hidden-passthrough')
+    marker.style.left = posx + "px";
+    marker.style.top = posy + "px";
+    marker.style.zIndex = 1;
+    console.log(posx);
+    console.log(posy);
+}
