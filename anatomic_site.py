@@ -36,9 +36,10 @@ class AnatomyMap():
                         self.anatomic_sites.append(item)
                 col_number += 1
         
-        for site in self.anatomic_sites:
-            site['parent'] = self.get_parent_site(site['index'])
-            site['children'] = self.get_children_sites(site['index'])
+        # for site in self.anatomic_sites:
+        #     site['parent'] = self.get_parent_site(site['index'])
+        #     site['children'] = self.get_children_sites(site['index'])
+        
 
     def get_parent_site(self, index):
         """

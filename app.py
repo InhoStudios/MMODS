@@ -246,7 +246,7 @@ def submit():
                     imgtype=imgtype
                 ))
     
-    return render_template("submit.html", results=results, query=query, hideclass=hideclass, desc_hide=desc_hide, definition=definition, sites=amap.get_sites_at_level(1))
+    return render_template("submit.html", results=results, query=query, hideclass=hideclass, desc_hide=desc_hide, definition=definition)
 
 # confirmation page template
 @app.route('/confirm', methods=['POST', 'GET'])
@@ -274,7 +274,15 @@ def upload():
     definition = request.args['definition']
 
     # get metadata from upload
-    site=amap.get_site_by_index(int(request.args['site']))['site']
+    sites_code=request.args['site']
+    try:
+        sites_list=sites_code.split(".")
+        site=""
+        for a_site in sites_list:
+            site = site + ", " + amap.get_site_by_index(int(a_site))['site']
+        site = site[2:]
+    except:
+        site=amap.get_site_by_index(int(sites_list))['site']
     size=request.args['size']
     severity=request.args['severity']
     diffofdiag=request.args['diffofdiag']
@@ -316,7 +324,7 @@ def upload():
                 'file':imgname,
                 'title':diagnosis,
                 'results':results,
-                'site':site,
+                'site':sites_code,
                 'size':size,
                 'severity':severity,
                 'diffofdiag':diffofdiag,
@@ -484,4 +492,4 @@ def getCorrespondingEntry(data, id):
 
 # main function: run flask app in debugging mode
 if __name__ == "__main__":
-    app.run(debug = True)
+    app.run(host='192.168.1.64', port='9000', debug=True)

@@ -36,18 +36,35 @@ imgOtherType.addEventListener('change', function() {
 let siteField = document.getElementById("sitetext")
 let siteVal = document.getElementById("anatomicsite")
 
-function addMsg(msg, index) {
-    console.log(msg)
-    const marker = document.getElementById("marker")
+function addMsg(event, msg, index) {
+    let sites_text = siteField.value + ", ";
+    let sites_value = siteVal.value + ".";
+    if (!event.shiftKey){
+        sites_text = ""
+        sites_value = ""
+        var previous_markers = document.getElementsByClassName("marker")
+        for (var i = previous_markers.length; i > 0; i--) {
+            previous_markers.item(i - 1).remove();
+        }
+    }
+    sites_text = sites_text + msg;
+    sites_value = sites_value + index.toString();
+    const marker = document.createElement("p");
+    const node = document.createTextNode("X");
+    marker.appendChild(node);
+    marker.classList.add("marker")
+
+    const marker_div = document.getElementById("markers")
+    marker_div.appendChild(marker)
+
     var e = window.event;
     var posx = e.pageX - 8;
     var posy = e.pageY - 20;
-    marker.classList.remove('hidden-passthrough')
     marker.style.left = posx + "px";
     marker.style.top = posy + "px";
     marker.style.zIndex = 1;
     console.log(posx);
     console.log(posy);
-    siteField.value = msg;
-    siteVal.value = index;
+    siteField.value = sites_text;
+    siteVal.value = sites_value;
 }

@@ -62,3 +62,11 @@
     position: fixed;
     bottom: 15px;
 }
+
+.marker {
+    position: absolute;
+    z-index: 1 !important;
+    color: red;
+    font-size: 24px;
+    pointer-events: none;
+}
