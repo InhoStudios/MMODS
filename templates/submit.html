@@ -88,8 +88,44 @@
                                     </div>
                                 </div>
                                 <div class="form-group mb-3 row container-fluid">
-                                    <map id="ICDSTmap-en-us" name="ICDSTmap-en-us">
-                                        <img class="map" src="{{ url_for('static', filename='assets/small-body-landscape.gif') }}" style="width: 960 !important; height: 859 !important;" usemap="#ICDSTmap-en-us">
+                                    <map id="tier-1-body" name="tier-1-body">
+                                        <img class="map" id="tier1map" src="{{ url_for('static', filename='assets/tier-1 body.png') }}" style="width: 361 !important; height: 859 !important;" usemap="#tier-1-body">
+                                        <area shape="poly" coords="181,32,212,39,227,56,226,84,233,81,236,95,227,104,216,130,217,150,226,160,253,171,120,171,148,160,155,148,156,130,145,108,137,97,137,84,145,86,146,52,161,38" title="Head and neck" onclick="openRegion('tier-1-body', 'headneck', 'Head and neck', 1);">
+                                        <area shape="poly" coords="122,171,252,171,257,260,248,301,252,346,261,391,244,422,128,419,113,395,123,344,127,300,117,261" title="Trunk" onclick="openRegion('tier-1-body', 'trunk', 'Trunk', 168);">
+                                        <area shape="poly" coords="128,420,246,420,196,448,189,469,183,469,173,447" title="Anogenital Region" onclick="openRegion('tier-1-body', 'ICDSTmap-en-us', 'Anogenital region', 217);">
+                                        <area shape="poly" coords="252,171,272,178,283,190,291,205,292,219,290,300,294,320,304,350,311,383,325,419,334,424,341,431,355,452,347,454,338,446,334,445,348,477,348,481,345,480,330,464,339,486,339,492,334,491,320,464,326,487,324,493,320,491,311,465,311,482,307,485,303,462,295,439,295,420,259,324" title="Left upper extremity" onclick="openRegion('tier-1-body', 'ICDSTmap-en-us', 'Left upper extremity', 255);">
+                                        <area shape="poly" coords="121,171,100,178,90,190,83,205,81,219,82,300,79,320,69,350,62,383,48,419,40,424,33,431,18,452,26,454,35,446,40,445,25,477,25,481,28,480,43,464,33,486,34,492,38,491,51,464,47,487,50,493,52,491,61,465,62,482,66,485,70,462,78,439,78,420,114,324" title="Right upper extremity" onclick="openRegion('tier-1-body', 'ICDSTmap-en-us', 'Right upper extremity', 255);">
+                                        <area shape="poly" coords="258,404,263,420,265,459,250,525,248,581,247,598,254,661,244,714,248,721,248,737,263,782,252,801,234,812,219,787,219,752,215,728,216,716,207,670,202,608,204,597,199,588,189,469,199,447,245,420" title="Left lower extremity" onclick="openRegion('tier-1-body', 'ICDSTmap-en-us', 'Left lower extremity', 382);">
+                                        <area shape="poly" coords="115,404,109,420,107,459,122,525,124,581,125,598,118,661,128,714,125,721,124,737,110,782,120,801,139,812,153,787,155,752,159,728,156,716,165,670,170,608,169,597,174,588,183,469,173,447,127,420" title="Right lower extremity" onclick="openRegion('tier-1-body', 'ICDSTmap-en-us', 'Right lower extremity', 382);">
+                                    </map>
+
+                                    <map id="headneck" class="hidden-passthrough" name="headneck">
+                                        <img class="map" id="headneckmap" src="{{ url_for('static', filename='assets/head-neck.png') }}" style="width: 354 !important; height: 547 !important;" usemap="#headneck">
+                                        <area shape="poly" coords="179,47,153,49,132,56,107,68,81,89,65,119,51,158,90,106,182,77,270,100,316,162,309,126,289,93,265,71,238,54,209,49" title="Scalp" onclick="openRegion('headneck', 'ICDSTmap-en-us', 'Scalp', 3)">
+                                        <area shape="poly" coords="184,77,91,105,53,157,50,205,57,248,64,325,76,364,100,403,135,431,182,443,227,431,255,402,283,362,295,321,303,245,314,203,315,160,270,100" title="Face" onclick="openRegion('headneck', 'ICDSTmap-en-us', 'Face', 37);">
+                                        <area shape="poly" coords="76,364,99,402,134,431,180,444,228,429,275,375,272,417,280,452,176,530,73,460,83,424" title="Neck" onclick="openRegion('headneck', 'ICDSTmap-en-us', 'Neck', 158);">
+                                        <area shape="poly" coords="34,232,47,230,54,238,60,282,64,328,59,333,49,328,30,309,25,289,21,255,26,241" title="Right external ear" onclick="openRegion('headneck', 'ICDSTmap-en-us', 'Right external ear', 14);">
+                                        <area shape="poly" coords="328,232,314,230,306,238,301,282,297,328,303,333,311,328,330,309,336,289,340,255,336,241" title="Left external ear" onclick="openRegion('headneck', 'ICDSTmap-en-us', 'Left external ear', 14);">
+                                    </map>
+
+                                    <map id="trunk" class="hidden-passthrough" name="trunk">
+                                        <img class="map" id="trunkmap" src="{{ url_for('static', filename='assets/small-body-landscape.gif') }}" style="width: 960 !important; height: 859 !important;" usemap="#trunk">
+                                        <area shape="circle" coords="222,237,31" title="Left breast" onclick="openRegion('trunk', 'breast', 'Left breast', 190);">
+                                        <area shape="circle" coords="859,225,25" title="Left breast" onclick="openRegion('trunk', 'breast', 'Left breast', 190);">
+                                        <area shape="circle" coords="883,376,46" title="Left breast" onclick="openRegion('trunk', 'breast', 'Left breast', 190);">
+                                        <area shape="circle" coords="151,237,31" title="Right breast" onclick="openRegion('trunk', 'breast', 'Right breast', 190);">
+                                        <area shape="circle" coords="793,225,25" title="Right breast" onclick="openRegion('trunk', 'breast', 'Right breast', 190);">
+                                        <area shape="circle" coords="771,376,46" title="Right breast" onclick="openRegion('trunk', 'breast', 'Right breast', 190);">
+                                        <area shape="poly" coords="128,167,245,166,255,171,257,262,248,299,247,320,204,327,186,282,170,326,126,319,126,301,116,261,121,171" title="Thorax" onclick="openRegion('trunk', 'thorax', 'Thorax', 170);">
+                                        <area shape="poly" coords="515,161,582,161,592,174,610,182,607,263,594,332,591,273,576,274,566,260,524,260,513,275,483,278,488,330,472,267,472,186,498,177" title="Thorax" onclick="openRegion('trunk', 'thorax', 'Thorax', 170);">
+                                        <area shape="poly" coords="825,180,856,168,863,174,870,195,883,206,896,208,910,193,897,257,827,261,752,254,740,189,756,209,769,209,782,198,786,174,796,169" title="Thorax" onclick="openRegion('trunk', 'thorax', 'Thorax', 170);">
+                                        <area shape="poly" coords="732,319,921,319,915,329,924,355,926,377,924,394,917,407,914,444,741,444,737,408,729,394,727,372,728,358,738,330" title="Thorax" onclick="openRegion('trunk', 'thorax', 'Thorax', 170);">
+                                        <area shape="poly" coords="126,319,170,326,186,283,203,326,246,319,259,394,243,423,128,423,112,397" title="Abdomen" onclick="openRegion('trunk', 'abdomen', 'Abdomen', 200);">
+                                        <area shape="poly" coords="590,274,596,341,609,402,598,426,548,407,541,410,533,404,475,426,468,400,489,342,483,279,516,275,524,261,565,262,574,274" title="Lumbosacral region" onclick="openRegion('trunk', 'lumbosacral', 'Lumbosacral region', 210);">
+                                    </map>
+                                
+                                    <map id="ICDSTmap-en-us" class="hidden-passthrough" name="ICDSTmap-en-us">
+                                        <img class="map" id="icdstmap" src="{{ url_for('static', filename='assets/small-body-landscape.gif') }}" style="width: 960 !important; height: 859 !important;" usemap="#ICDSTmap-en-us">
                                         <area shape="poly" coords="215,163,242,164,215,152,216,131,227,104,236,93,233,81,226,81,226,51,215,39,187,31,163,35,146,48,142,71,147,88,140,81,134,88,137,97,143,103,150,120,156,134,152,157,120,169,144,164,177,167,195,167" title="Head and Neck" onclick="addMsg(event, 'Head and Neck', 1);">
                                         <area shape="poly" coords="159,166,174,166,173,173,156,170,137,169,127,167,140,166" title="Right Supraclavicular region" onclick="addMsg(event, 'Right Supraclavicular region', 164);">
                                         <area shape="poly" coords="213,163,246,164,246,168,223,167,197,172,195,167" title="Left Supraclavicular region" onclick="addMsg(event, 'Left Supraclavicular region', 164);">
@@ -457,8 +493,6 @@
     </div>
     </section>
 
-    
-    <script src="{{ url_for('static', filename='js/submit.js') }}"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/maphilight/1.4.0/jquery.maphilight.min.js"></script>
     <script type="text/javascript">
@@ -466,5 +500,6 @@
           $('.map').maphilight();
         });
     </script>
+    <script src="{{ url_for('static', filename='js/submit.js') }}"></script>
 </body>
 </html>

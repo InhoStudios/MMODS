@@ -35,6 +35,19 @@ imgOtherType.addEventListener('change', function() {
 
 let siteField = document.getElementById("sitetext")
 let siteVal = document.getElementById("anatomicsite")
+let map = document.getElementById("tier1map")
+
+function openRegion(regionToClose, regionToOpen, anatomicSite, index) {
+    var regionToOpen = document.getElementById(regionToOpen);
+    var regionToClose = document.getElementById(regionToClose);
+    regionToClose.classList.add("hidden-passthrough");
+    if (regionToOpen.classList.contains("hidden-passthrough")) {
+        regionToOpen.classList.remove("hidden-passthrough");
+    }
+    $('.map').maphilight();
+    siteField.value = anatomicSite;
+    siteVal.value = index;
+}
 
 function addMsg(event, msg, index) {
     let sites_text = siteField.value + ", ";
