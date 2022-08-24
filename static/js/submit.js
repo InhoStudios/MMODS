@@ -26,16 +26,15 @@ imgOtherType.addEventListener('change', function() {
             console.log("checked");
         }
     } else {
-        if (!otherImgField.classList.contains("hidden-passthrough")) {
-            otherImgField.classList.add("hidden-passthrough");
-            console.log("unchecked");
-        }
+        otherImgField.classList.add("hidden-passthrough");
+        console.log("unchecked");
     }
 });
 
 let siteField = document.getElementById("sitetext")
 let siteVal = document.getElementById("anatomicsite")
-let map = document.getElementById("tier1map")
+let map = document.getElementById("tier-1-body")
+let resetbtn = document.getElementById("resetbtn")
 
 function openRegion(regionToClose, regionToOpen, anatomicSite, index) {
     var regionToOpen = document.getElementById(regionToOpen);
@@ -47,6 +46,28 @@ function openRegion(regionToClose, regionToOpen, anatomicSite, index) {
     $('.map').maphilight();
     siteField.value = anatomicSite;
     siteVal.value = index;
+
+    if (resetbtn.classList.contains("hidden-passthrough")) {
+        resetbtn.classList.remove("hidden-passthrough");
+    }
+}
+
+function resetMap() {
+    siteField.value = "Choose anatomic site below";
+    siteVal.value = -1;
+    maps = document.getElementsByTagName("map");
+    console.log(maps)
+    for (var i = 0; i < maps.length; i++) {
+        var elem = document.getElementById(maps[i].id);
+        if (!elem.classList.contains("hidden-passthrough")) {
+            elem.classList.add("hidden-passthrough");
+        }
+    }
+    if (map.classList.contains("hidden-passthrough")) {
+        map.classList.remove("hidden-passthrough");
+        $('.map').maphilight();
+    }
+    resetbtn.classList.add("hidden-passthrough");
 }
 
 function addMsg(event, msg, index) {
