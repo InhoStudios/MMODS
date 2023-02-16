@@ -69,7 +69,7 @@ class AnatomyMap():
         index_level = self.anatomic_sites[index-1]['level']
         reached = False
         for site in self.anatomic_sites:
-            if site['level'] == index_level+1:
+            if site['level'] == index_level+1 and site['index'] > index:
                 reached = True
                 children.append(site)
             if reached and site['level'] == index_level:
