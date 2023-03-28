@@ -25,24 +25,34 @@ class SQLHandler:
         """
         # get a cursor for sql connection
         cursor = self.mysql.connection.cursor()
+        # create ICD_entity
+        create_entity_query = "insert ignore into ICD_Entity (entity_id, entity_title) values" + \
+            f"('{unit['uri']}', '{unit['title']}');"
+        cursor.execute(create_entity_query);
+
         # create and insert into case
-        query = "insert ignore into cases (case_id, reported_diagnosis, uri, age, sex, history, anatomic_site, size, severity) values " + \
-            f"('{unit['id']}', '{unit['title']}', '{unit['uri']}', '{str(unit['age'])}', '{unit['sex']}', '{unit['hist']}', '{unit['site']}', '{unit['size']}', '{unit['severity']}');"
-        cursor.execute(query)
+        insert_case_query = "insert ignore into Cases (case_id, age, sex, history, user_selected_entity, size, severity) values " + \
+            f"('{unit['id']}', '{str(unit['age'])}', '{unit['sex']}', '{unit['hist']}', '{unit['uri']}', '{unit['size']}', '{unit['severity']}');"
+        cursor.execute(insert_case_query)
 
         # save search results into newly created table
         for result in unit['results']:
-            query = f"insert ignore into alt_diagnoses (case_id, diagnosis, uri) values ('{unit['id']}', '{result['title']}', '{result['id']}')"
-            cursor.execute(query)
+            create_alt_entity_query = "insert ignore into ICD_Entity (entity_id, entity_title) values" + \
+                f"('{result['id']}', '{result['title']}');"
+            cursor.execute(create_alt_entity_query)
+            create_alt_diag_link_query = "insert ignore into Case_Alt_Diagnoses (case_id, entity_id) values" + \
+                f"('{unit['id']}', '{result['id']}')"
+            cursor.execute(create_alt_diag_link_query)
 
         # save image
-        query = f"insert ignore into image (image_id, filename, case_id, modality) values (default, '{unit['file']}', '{unit['id']}', '{unit['imgtype']}');"
-        cursor.execute(query)
+        insert_image_query = "insert ignore into image (img_id, filename, case_id, modality, clinical_site) values" + \
+            f"(default, '{unit['file']}', '{unit['id']}', '{unit['imgtype']}', '{unit['site']}');"
+        cursor.execute(insert_image_query)
 
         cats = self.create_categories(unit['uri'], icd)
         for cat in cats:
-            query = f"insert ignore into links (case_id, cat_id) values ('{unit['id']}','{cat}');"
-            cursor.execute(query)
+            create_cat_entity_query = f"insert ignore into Case_Categories (case_id, entity_id) values ('{unit['id']}','{cat}');"
+            cursor.execute(create_cat_entity_query)
 
         # commit changes
         self.mysql.connection.commit()
@@ -66,65 +76,66 @@ class SQLHandler:
         cursor = self.mysql.connection.cursor()
 
         # get case data
-        query = "select * from cases;"
-        cursor.execute (query)
+        get_cases_query = "select c.case_id, c.user_selected_entity, i.filename, e.entity_title, i.clinical_site, " + \
+            "c.size, c.severity, c.age, c.sex, c.history, i.modality " + \
+            "from Cases c, ICD_Entity e, Image i " + \
+            "where i.case_id = c.case_id and e.entity_id = c.user_selected_entity;"
+        cursor.execute (get_cases_query)
         cases = cursor.fetchall()
+
 
         # create entry for each image
         for case in cases:
+            # GET ALL ALTERNATIVE DIAGNOSES
             # get query result table
-            query = f"select * from alt_diagnoses where alt_diagnoses.case_id = {case[0]};"
-            cursor.execute(query)
+            get_alternative_diagnoses_query = f"select c.entity_id, e.entity_title from Case_Alt_Diagnoses c, ICD_Entity e where c.case_id = {case[0]} and e.entity_id = c.entity_id;"
+            cursor.execute(get_alternative_diagnoses_query)
             results = cursor.fetchall()
 
             # create list of results
             diaglist = []
             for result in results:
                 kvpair = {
-                    'id': result[2],
+                    'id': result[0],
                     'title': result[1]
                 }
                 diaglist.append(kvpair)
 
             # get image data
-            query = f"select * from image where image.case_id = {case[0]};"
-            cursor.execute (query)
             try:
-                image = cursor.fetchall()[0]
-
                 # create metadata unit for specific image
                 unit = {
                     'id': case[0],
-                    'uri': case[2],
-                    'file': image[1],
-                    'title': case[1],
+                    'uri': case[1],
+                    'file': case[2],
+                    'title': case[3],
                     'results': diaglist,
-                    'site': case[6],
-                    'size': case[7],
-                    'severity': case[8],
+                    'site': case[4],
+                    'size': case[5],
+                    'severity': case[6],
                     'diffofdiag': 0,
-                    'age': case[3],
-                    'sex': case[4],
-                    'hist': case[5],
-                    'imgtype': image[3],
-                    'verified': 0
+                    'age': case[7],
+                    'sex': case[8],
+                    'hist': case[9],
+                    'imgtype': case[10],
+                    'verified': 0,
                 }
-                if not (case[11] == None):
-                    unit['title'] = case[11]
-                    unit['verified'] = 1
-                if not (case[12] == None):
-                    unit['title'] = case[12]
-                    unit['verified'] = 1
+                # if not (case[11] == None):
+                #     unit['clinician_uri'] = case[11]
+                #     unit['clinician_title'] = case[13]
+                #     unit['verified'] = 1
+                # if not (case[12] == None):
+                #     unit['pathologist_uri'] = case[12]
+                #     unit['pathologist_title'] = case[14]
+                #     unit['verified'] = 1
             except:
                 pass
 
             # get parents from links
-            query = f"select * from links where links.case_id = {case[0]}"
+            query = f"select entity_id from Case_Categories where case_id = {case[0]}"
             cursor.execute(query)
             parents = cursor.fetchall()
-            par_str = case[2]
-            for parent in parents:
-                par_str =  par_str + " " + parent[1]
+            par_str =  case[1] + " " + " ".join(str(item[0]) for item in parents)
             unit['parents'] = par_str
             print(unit['parents'])
             # save unit into corresponding key in return dictionary
@@ -134,7 +145,7 @@ class SQLHandler:
         # return the dictionary
         return DATA
     
-    def update_image(self, request_id, corrected_uri, corrected_title):
+    def update_image(self, request_id, corrected_uri):
         """
         Update metadata for an entry
 
@@ -146,14 +157,12 @@ class SQLHandler:
             The ID of the image to edit; taken from the form request
         corrected_uri : str
             The updated ICD-11 code to change for the image
-        corrected_title : str
-            The updated diagnosis to change for the image
         """
         # create mysql connection
         cursor = self.mysql.connection.cursor()
 
         # update metadata accordingly
-        query = f"update cases set uri='{corrected_uri}', clinician_diagnosis='{corrected_title}' where case_id={request_id}"
+        query = f"update cases set clinician_entity='{corrected_uri}' where case_id={request_id}"
         cursor.execute(query)
 
         # commit changes
@@ -178,28 +187,9 @@ class SQLHandler:
 
         # TODO: rewrite deletion code
 
-        # delete query result list table
-        query = f"delete from alt_diagnoses where case_id = {request_id}"
-        cursor.execute(query)
-
-        query = f"delete from links where case_id={request_id}"
-        cursor.execute(query)
-
-        query = f"delete from image where case_id={request_id}"
-        cursor.execute(query)
-
         # delete entry
-        query = f"delete from cases where case_id = {request_id}"
+        query = f"delete from Cases where case_id = {request_id}"
         cursor.execute(query)
-
-        for category in self.get_categories().keys():
-            query = f'select exists(select * from links where cat_id = {category});'
-            cursor.execute(query)
-
-            exists = cursor.fetchall()[0][0]
-            if exists == 0:
-                query = f'delete from categories where cat_id = {category}'
-                cursor.execute(query)
 
         # commit changes
         self.mysql.connection.commit()
@@ -229,7 +219,7 @@ class SQLHandler:
                 self.add_category(ancestor_id, icd)
         return category_ids
 
-    def add_category(self, cat_id, icd):
+    def add_category(self, entity_id, icd):
         """
         Add a disease category to the category table
 
@@ -244,12 +234,12 @@ class SQLHandler:
         """
         cursor = self.mysql.connection.cursor()
         # check if cat_id exists already
-        query = f"select exists(select * from categories where cat_id = {cat_id});"
+        query = f"select exists(select * from ICD_Entity where entity_id = {entity_id});"
         cursor.execute(query)
         exists = cursor.fetchall()[0][0]
         if exists == 0:
-            cat_title = icd.getDiagnosisByID(cat_id)
-            query = f"insert ignore into categories(cat_id, cat_title) values ({cat_id}, \"{str(cat_title)}\");"
+            entity_title = icd.getDiagnosisByID(entity_id)
+            query = f"insert ignore into ICD_Entity (entity_id, entity_title) values ({entity_id}, \"{str(entity_title)}\");"
             cursor.execute(query)
         
         self.mysql.connection.commit()
@@ -265,7 +255,7 @@ class SQLHandler:
             Dictionary of all the categories with diagnoses names paired with entity ids
         """
         cursor = self.mysql.connection.cursor()
-        query = f"select * from categories"
+        query = f"select * from ICD_Entity"
         cursor.execute(query)
         cats = cursor.fetchall()
 

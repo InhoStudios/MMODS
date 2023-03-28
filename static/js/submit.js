@@ -37,16 +37,19 @@ let map = document.getElementById("tier-1-body")
 let resetbtn = document.getElementById("resetbtn")
 
 function openRegion(regionToClose, regionToOpen, anatomicSite, index) {
-    var regionToOpen = document.getElementById(regionToOpen);
-    var regionToClose = document.getElementById(regionToClose);
-    regionToClose.classList.add("hidden-passthrough");
-    if (regionToOpen.classList.contains("hidden-passthrough")) {
-        regionToOpen.classList.remove("hidden-passthrough");
-    }
-    $('.map').maphilight();
     siteField.value = anatomicSite;
     siteVal.value = index;
-
+    try {
+        var regionToOpen = document.getElementById(regionToOpen);
+        var regionToClose = document.getElementById(regionToClose);
+        regionToClose.classList.add("hidden-passthrough");
+        if (regionToOpen.classList.contains("hidden-passthrough")) {
+            regionToOpen.classList.remove("hidden-passthrough");
+        }
+        $('.map').maphilight();
+    } catch(err) {
+        console.log("region not found")
+    }
     if (resetbtn.classList.contains("hidden-passthrough")) {
         resetbtn.classList.remove("hidden-passthrough");
     }
