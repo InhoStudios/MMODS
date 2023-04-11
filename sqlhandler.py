@@ -37,8 +37,9 @@ class SQLHandler:
 
         # save search results into newly created table
         for result in unit['results']:
+            fixed_format_title = result['title'].replace("–", "")
             create_alt_entity_query = "insert ignore into ICD_Entity (entity_id, entity_title) values" + \
-                f"('{result['id']}', '{result['title']}');"
+                f"('{result['id']}', '{fixed_format_title}');"
             cursor.execute(create_alt_entity_query)
             create_alt_diag_link_query = "insert ignore into Case_Alt_Diagnoses (case_id, entity_id) values" + \
                 f"('{unit['id']}', '{result['id']}')"
@@ -188,7 +189,7 @@ class SQLHandler:
         # TODO: rewrite deletion code
 
         # delete entry
-        query = f"delete from Cases where case_id = {request_id}"
+        query = f"delete from Cases where case_id = {request_id} cascade constraints"
         cursor.execute(query)
 
         # commit changes
