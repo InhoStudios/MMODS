@@ -43,6 +43,40 @@
             <div class="row justify-content-center mt-5 mb-3 text-center">
                 <h1>Images</h1>
             </div>
+            <div class="row">
+                <div class="col-lg-8">
+                    <div class="form-control form-control-lg">
+                        <div class="dropdown px-2">
+                            <button class="btn btn-outline-primary">Severity ↓</button>
+                            <div class="dropdown-content">
+                                <a href="#benign">Benign Lesions</a>
+                                <a href="#malignant">Malignant Lesions</a>
+                            </div>
+                        </div>
+                        <div class="dropdown px-2">
+                            <button class="btn btn-outline-primary">Image Type ↓</button>
+                            <div class="dropdown-content">
+                                <a href="#clinical">Clinical</a>
+                                <a href="#dermoscopy">Dermoscopy</a>
+                            </div>
+                        </div>
+                        <div class="dropdown px-2">
+                            <button class="btn btn-outline-primary">ICD Class ↓</button>
+                            <div class="dropdown-content">
+                                <a href="#entrycard">All diagnoses</a>
+                                {% for key in categories.keys() %}
+                                <a href="#{{ key }}">{{ categories[key] }}</a>
+                                {% endfor %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-4">
+                    <form method="post">
+                        <input type="input" class="form-control form-control-lg" placeholder="Search">
+                    </form>
+                </div>
+            </div>
             <p>
                 <a href="#benign">Benign Lesions</a>—
                 <a href="#malignant">Malignant</a>
@@ -51,9 +85,12 @@
                 <a href="#dermoscopy">Dermoscopy Image</a>
                 <br>
                 <a href="#entrycard">All Diagnoses</a>
+                <!--
                 {% for key in categories.keys() %}
-                —<a href="#{{ key }}">{{ categories[key] }}</a>
+                <br>
+                <a href="#{{ key }}">{{ categories[key] }}</a>
                 {% endfor %}
+                -->
             </p>
 
             <div class="row justify-content-center">
