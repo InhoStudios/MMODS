@@ -47,21 +47,21 @@
                 <div class="col-lg-8">
                     <div class="form-control form-control-lg">
                         <div class="dropdown px-2">
-                            <button class="btn btn-outline-primary">Severity ↓</button>
+                            <button class="btn btn-outline-secondary">Severity ↓</button>
                             <div class="dropdown-content">
                                 <a href="#benign">Benign Lesions</a>
                                 <a href="#malignant">Malignant Lesions</a>
                             </div>
                         </div>
                         <div class="dropdown px-2">
-                            <button class="btn btn-outline-primary">Image Type ↓</button>
+                            <button class="btn btn-outline-secondary">Image Type ↓</button>
                             <div class="dropdown-content">
                                 <a href="#clinical">Clinical</a>
                                 <a href="#dermoscopy">Dermoscopy</a>
                             </div>
                         </div>
                         <div class="dropdown px-2">
-                            <button class="btn btn-outline-primary">ICD Class ↓</button>
+                            <button class="btn btn-outline-secondary">ICD Class ↓</button>
                             <div class="dropdown-content">
                                 <a href="#entrycard">All diagnoses</a>
                                 {% for key in categories.keys() %}
@@ -77,21 +77,6 @@
                     </form>
                 </div>
             </div>
-            <p>
-                <a href="#benign">Benign Lesions</a>—
-                <a href="#malignant">Malignant</a>
-                <br>
-                <a href="#clinical">Clinical Image</a>—
-                <a href="#dermoscopy">Dermoscopy Image</a>
-                <br>
-                <a href="#entrycard">All Diagnoses</a>
-                <!--
-                {% for key in categories.keys() %}
-                <br>
-                <a href="#{{ key }}">{{ categories[key] }}</a>
-                {% endfor %}
-                -->
-            </p>
 
             <div class="row justify-content-center">
                 <div class="col-md-10 mb-2 text-left">

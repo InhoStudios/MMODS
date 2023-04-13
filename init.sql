@@ -42,19 +42,19 @@ CREATE TABLE IF NOT EXISTS Image (
     fst_eval_method varchar(150),
     individual_typology_angle varchar(10),
     primary key (img_id),
-    foreign key (case_id) references Cases(case_id)
+    foreign key (case_id) references Cases(case_id) on delete cascade
 );
 
 CREATE TABLE IF NOT EXISTS Case_Categories (
 	case_id varchar(255),
     entity_id varchar(255),
-    foreign key (case_id) references Cases(case_id),
-    foreign key (entity_id) references ICD_Entity(entity_id)
+    foreign key (case_id) references Cases(case_id) on delete cascade,
+    foreign key (entity_id) references ICD_Entity(entity_id) on delete cascade
 );
 
 CREATE TABLE IF NOT EXISTS Case_Alt_Diagnoses (
 	case_id varchar(255),
 	entity_id varchar(255),
-    foreign key (case_id) references Cases(case_id),
-    foreign key (entity_id) references ICD_Entity(entity_id)
+    foreign key (case_id) references Cases(case_id) on delete cascade,
+    foreign key (entity_id) references ICD_Entity(entity_id) on delete cascade
 );

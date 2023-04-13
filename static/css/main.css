@@ -101,3 +101,7 @@
     color: #ffffff;
     background-color: #aaa;
 }
+
+.full-body-map {
+    display: none;
+}

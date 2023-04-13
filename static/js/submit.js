@@ -56,7 +56,7 @@ function openRegion(regionToClose, regionToOpen, anatomicSite, index) {
 }
 
 function resetMap() {
-    siteField.value = "Choose anatomic site below";
+    siteField.value = "Choose anatomic site ↑";
     siteVal.value = -1;
     maps = document.getElementsByTagName("map");
     console.log(maps)
@@ -104,4 +104,29 @@ function addMsg(event, msg, index) {
     console.log(posy);
     siteField.value = sites_text;
     siteVal.value = sites_value;
+}
+
+function showBodyMap() {
+    let element = document.getElementsByClassName("full-body-map")[0]
+    let dropdown = document.getElementById("sitetext")
+    let display = element.style.display;
+    if (display == "none") {
+        $('.map').maphilight();
+        element.style.display = "block"
+        dropdown.value = dropdown.value.replace("↓","↑")
+    } else {
+        element.style.display = "none"
+        dropdown.value = dropdown.value.replace("↑","↓")
+    }
+}
+
+function addImage() {
+    let imageField = document.getElementById("imageuploads")
+    let imageUploadHTML = ' <div class="form-group mb-3 row"> <div class="col-lg-6"> <input type="file" class="form-control form-control-lg" id="imgUpload" name="filename" accept="image/*"> </div> <div class="col-lg-4"> <input type="button" class="form-control form-control-lg" id="sitetext" name="sitetext" value="Choose anatomic site ↓" onclick="showBodyMap()"> <input type="input" class="hidden-passthrough" id="anatomicsite" name="anatomicsite" value=""> </div> <div class="col-lg-2"> <input type="button" class="form-control form-control-lg btn btn-danger" id="remove" name="remove" value="✕"> </div> </div>'
+    imageUploadHTML += '<div class="form-group mb-3 row"> <div class="form-control-lg row"> <div class="col-lg-6"> <label>Image type</label> </div> <div class="col-lg-2"> <label for="clinical"> <input type="radio" class="form-check-input" id="clinical" name="imgtype" value="clinical"> Clinical </label> </div> <div class="col-lg-2"> <label for="dermoscopy"> <input type="radio" class="form-check-input" id="dermoscopy" name="imgtype" value="dermoscopy"> Dermoscopy </label> </div> <div class="col-lg-2"> <label for="other"> <input type="radio" class="form-check-input" id="other" name="imgtype" value="other"> Other </label> </div> </div> <div class="form-control-lg row"> <div class="col-lg-6 offset-lg-6"> <input type="input" class="form-control form-control-lg hidden-passthrough" id="otherimg" name="otherimg" placeholder="other"> </div> </div> </div>'
+    imageField.innerHTML += imageUploadHTML
+}
+
+function deleteField() {
+
 }
