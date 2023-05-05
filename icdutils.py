@@ -170,7 +170,7 @@ class ICDManager:
         for i in range(len(titles)):
             titles[i] = titles[i].replace("<em class='found'>", "")
             titles[i] = titles[i].replace("</em>", "")
-            ids[i] = ids[i].replace("——","").replace("http://id.who.int/icd/entity/", "")
+            ids[i] = ids[i].replace("—","").replace("http://id.who.int/icd/entity/", "")
             selected = ""
             if ids[i] == current_uri:
                 selected = "selected"

@@ -37,7 +37,8 @@ class SQLHandler:
 
         # save search results into newly created table
         for result in unit['results']:
-            fixed_format_title = result['title'].replace("–", "")
+            fixed_format_title = result['title']
+            fixed_format_title = fixed_format_title.replace("—","")
             create_alt_entity_query = "insert ignore into ICD_Entity (entity_id, entity_title) values" + \
                 f"('{result['id']}', '{fixed_format_title}');"
             cursor.execute(create_alt_entity_query)
@@ -189,7 +190,7 @@ class SQLHandler:
         # TODO: rewrite deletion code
 
         # delete entry
-        query = f"delete from Cases where case_id = {request_id} cascade constraints"
+        query = f"delete from Cases where case_id = {request_id}"
         cursor.execute(query)
 
         # commit changes
@@ -256,7 +257,7 @@ class SQLHandler:
             Dictionary of all the categories with diagnoses names paired with entity ids
         """
         cursor = self.mysql.connection.cursor()
-        query = f"select * from ICD_Entity"
+        query = f"select e.entity_id, e.entity_title from icd_entity e, case_categories c where c.entity_id = e.entity_id"
         cursor.execute(query)
         cats = cursor.fetchall()
 
