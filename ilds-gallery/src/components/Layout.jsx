@@ -1,11 +1,14 @@
+import React from "react";
 import Navbar from "./Navbar";
 import { Outlet } from "react-router-dom";
 
-function Layout() {
-    return (
-        <>
-            <Navbar />
-            <Outlet />
-        </>
-    );
+export default class Layout extends React.Component {
+    render() {
+        return (
+            <>
+                <Navbar />
+                <Outlet />
+            </>
+        );
+    }
 }
