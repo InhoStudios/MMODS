@@ -3,5 +3,10 @@ export const ICD = {
     TOKEN_PATH: "/connect/token",
     SCOPE: "icdapi_access",
     GRANT_TYPE: "client_credentials",
+    QUERY_HOST: "id.who.int"
+}
 
+export const METHODS = {
+    GET: "GET",
+    POST: "POST"
 }
