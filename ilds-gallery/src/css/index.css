@@ -11,3 +11,113 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+/* copied in from flask app */
+
+.round {
+  border-radius: 15px
+}
+
+.crop-img{
+  width: 600px;
+  --width: 600px;
+  height: calc(var(--width) * 0.6);
+  object-fit: cover;
+}
+
+.card-shadow {
+  box-shadow: 0 0.2rem 0.2rem rgba(0, 0, 0, 0.15) !important;
+}
+
+.card-shadow:hover {
+  box-shadow: 0 0.5rem 0.5rem rgba(0, 0, 0, 0.15) !important;
+}
+
+/* modal */
+
+.modal {
+  display: none;
+  position: fixed;
+  z-index: 1;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  background-color: rgb(0, 0, 0);
+  background-color: rgba(0, 0, 0, 0.3);
+}
+
+.modal-content {
+  background-color: #fff;
+  margin: 5% auto;
+  padding: 30px;
+  width: 80%;
+}
+
+.close {
+  color: #aaa;
+  float: right;
+  font-size: 30px;
+  font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+  color: black;
+  text-decoration: none;
+  cursor: pointer;
+}
+/* end modal */
+
+.hidden-passthrough {
+  display: none;
+}
+
+.download-bar {
+  position: fixed;
+  bottom: 15px;
+}
+
+.marker {
+  position: absolute;
+  z-index: 1 !important;
+  color: red;
+  font-size: 24px;
+  pointer-events: none;
+}
+
+.dropdown {
+  display: inline-block;
+  position: relative;
+}
+
+.dropdown-content {
+  display: none;
+  position: absolute;
+  width: 100%;
+  overflow: auto;
+  z-index: 9999 !important;
+}
+
+.dropdown:hover .dropdown-content {
+  display: block
+}
+
+.dropdown-content a {
+  display: block;
+  color: #000000;
+  padding: 5px;
+  text-decoration: none;
+  font-size: 12px;
+  background-color: #ffffff;
+}
+
+.dropdown-content a:hover {
+  color: #ffffff;
+  background-color: #aaa;
+}
+
+.full-body-map {
+  display: none;
+}
