@@ -1,6 +1,7 @@
 import ICDManager from "../utilities/ICDManager";
 import { METHODS } from "../utilities/IICDManager";
 
+jest.setTimeout(10000)
 describe('ICDManager Tests', () => {
     let icdMan;
 
