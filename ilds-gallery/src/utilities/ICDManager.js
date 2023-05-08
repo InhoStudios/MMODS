@@ -1,5 +1,5 @@
 import {ICD} from "./IICDManager";
-import https from "https";
+import https from "stream-http";
 
 class ICDManager {
 

@@ -8,10 +8,10 @@ export default class ImageCard extends React.Component {
 
     render() {
         return (
-            <div className="col-lg-4 mb-3 mt-2">
-                <a className="btn">
-                    <div className="card card-shadow" onClick="openOverlay('{{ entry.id }}')">
-                        <img src={this.props.filepath} className="img-fluid crop-img"/>
+            <div className={this.props.colsize + " mb-3 mt-2"}>
+                <button className="btn">
+                    <div className="card card-shadow" onClick={null}>
+                        <img src={this.props.filepath} className="img-fluid crop-img" alt={this.props.title}/>
                             <div className="card-body">
                                 <span>http://id.who.int/icd/entity/{this.props.uri}</span>
                                 <h4>{this.props.title}</h4>
@@ -22,7 +22,7 @@ export default class ImageCard extends React.Component {
                         <input type="checkbox" className="form-check-input" name="imgselect"
                                value="{{ entry.file }}-select" />
                     </div>
-                </a>
+                </button>
             </div>
         )
     }

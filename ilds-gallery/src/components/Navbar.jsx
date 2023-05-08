@@ -17,9 +17,9 @@ export default class Navbar extends React.Component {
                             <li className="nav-item active">
                                 <a className="nav-link" href="/">Home</a>
                             </li>
-                            <li className="nav-item">
-                                <a className="nav-link" href="/quiz">Quiz</a>
-                            </li>
+                            {/*<li className="nav-item">*/}
+                            {/*    <a className="nav-link" href="/quiz">Quiz</a>*/}
+                            {/*</li>*/}
                             <li className="nav-item">
                                 <a className="nav-link" href="/submit">Submit</a>
                             </li>
