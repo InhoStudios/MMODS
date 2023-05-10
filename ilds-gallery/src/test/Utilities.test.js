@@ -1,5 +1,6 @@
 import ICDManager from "../utilities/ICDManager";
-import { METHODS } from "../utilities/IICDManager";
+import { METHODS } from "../utilities/Structures";
+import SQLManager from "../utilities/SQLManager";
 
 jest.setTimeout(10000)
 describe('ICDManager Tests', () => {
@@ -94,5 +95,15 @@ describe('ICDManager Tests', () => {
             expect(res).toHaveProperty("destinationEntities");
         });
     });
+});
 
+describe('MySQL Database Tests', () => {
+    let sqlManager;
+    beforeAll(() => {
+        sqlManager = new SQLManager();
+    });
+
+    it ("should properly construct", () => {
+        expect(sqlManager).toBeDefined();
+    });
 });

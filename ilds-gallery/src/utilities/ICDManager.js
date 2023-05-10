@@ -1,7 +1,7 @@
-import {ICD} from "./IICDManager";
+import {ICD} from "./Structures";
 import https from "https";
 
-class ICDManager {
+export default class ICDManager {
 
     payload;
     token;
@@ -140,7 +140,7 @@ class ICDManager {
 
     }
 
-    formatParams(params) {
+    static formatParams(params) {
         let optionsString = "";
         for (let key in params) {
             let stringFragment = `${key}=${params[key]}&`;
@@ -150,5 +150,3 @@ class ICDManager {
         return optionsString;
     }
 }
-
-export default ICDManager;
