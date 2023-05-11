@@ -1,4 +1,5 @@
 import React from "react";
+import ImageCard from "../components/ImageCard";
 
 export default class Home extends React.Component {
     render() {
@@ -45,6 +46,23 @@ export default class Home extends React.Component {
                         <div className="col-md-8 mb-2 text-left">
                             <div className="row justify-content-center mt-5 text-center">
                                 <h3>Verified Images</h3>
+                                <div className="row mt-2">
+                                    <ImageCard
+                                        filepath={"logo192.png"}
+                                        uri={12345}
+                                        title={"test diagnosis"}
+                                        colsize={"col-lg-4"}/>
+                                    <ImageCard
+                                        filepath={"logo192.png"}
+                                        uri={12345}
+                                        title={"test diagnosis"}
+                                        colsize={"col-lg-4"}/>
+                                    <ImageCard
+                                        filepath={"logo192.png"}
+                                        uri={12345}
+                                        title={"test diagnosis"}
+                                        colsize={"col-lg-4"}/>
+                                </div>
                             </div>
                         </div>
                     </div>
