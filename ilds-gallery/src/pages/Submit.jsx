@@ -3,9 +3,26 @@ import ImageUploadField from "../components/submitComponents/ImageUploadField";
 import PatientInfoField from "../components/submitComponents/PatientInfoField";
 import DiagnosisField from "../components/submitComponents/DiagnosisField";
 
+let searchTimeout = setTimeout(performSearch, 0);
+let queryValue = "";
+function handleQueryUpdate(event) {
+    clearTimeout(searchTimeout)
+    searchTimeout = setTimeout(() => performSearch(event.target.value), 1000);
+}
+
+function performSearch(input) {
+    console.log(input);
+    let uri = document.getElementById("uri");
+    // uri.value = `Searched: ${input}`;
+    queryValue = input;
+}
+
 export default class Submit extends React.Component {
+    searchQuery = "test";
     constructor(props) {
         super(props);
+        // this.timeoutFunc = setTimeout(this.performSearch, 0);
+        this.hideclass = "hidden-passthrough";
     }
 
     render() {
@@ -26,20 +43,21 @@ export default class Submit extends React.Component {
                                         <h4 className="mb-3">Search ICD-11 (ICDD) diagnosis</h4>
                                         <div className="form-group mb-3">
                                             <input type="input" className="form-control form-control-lg" id="search"
-                                                   name="search" placeholder="Search Diagnosis" value="{{ query }}" />
+                                                   name="search" placeholder="Search Diagnosis" value={this.props.query}
+                                                    onChange={handleQueryUpdate}/>
                                             <input type="submit" className="hidden-passthrough" name="submit"
                                                    value="Search" />
                                         </div>
                                     </div>
-                                    <div className="row {{ hideclass }} mb-5">
-                                        <DiagnosisField />
+                                    <div className={`row ${this.hideclass} mb-5`}>
+                                        <DiagnosisField hideclass={this.hideclass} query={queryValue}/>
                                         <PatientInfoField />
                                         <ImageUploadField />
                                     </div>
                                     <div className="row mb-5">
                                         <div className="form-group mb-3">
                                             <input type="submit"
-                                                   className="form-control form-control-lg btn btn-outline-primary btn-lg {{ hideclass }}"
+                                                   className={`form-control form-control-lg btn btn-outline-primary btn-lg ${this.hideclass}`}
                                                    id="upload_button" value="Upload" name="submit" />
                                         </div>
                                     </div>

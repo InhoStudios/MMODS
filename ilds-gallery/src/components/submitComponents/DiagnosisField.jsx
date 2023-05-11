@@ -8,7 +8,7 @@ export default class DiagnosisField extends React.Component {
                 <div className="form-group mb-3 row">
                     <div className="col-lg-3">
                         <input type="input" className="form-control form-control-lg" id="uri"
-                               name="uri" value="Searched: {{ query }}" disabled />
+                               name="uri" value={`Searched: ${this.props.query}`} disabled />
                     </div>
                     <div className="col-lg-7">
                         <select className="form-control form-control-lg" name="results"
@@ -24,7 +24,7 @@ export default class DiagnosisField extends React.Component {
                     </div>
                     <div className="col-lg-2">
                         <input type="submit"
-                               className="form-control form-control-lg btn btn-success btn-lg {{ hideclass }}"
+                               className={`form-control form-control-lg btn btn-success btn-lg ${this.props.hideclass}`}
                                id="check_btn" value="Check Definition" name="submit" />
                     </div>
                 </div>
