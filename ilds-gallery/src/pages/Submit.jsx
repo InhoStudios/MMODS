@@ -10,11 +10,12 @@ function handleQueryUpdate(event) {
     searchTimeout = setTimeout(() => performSearch(event.target.value), 1000);
 }
 
-function performSearch(input) {
+async function performSearch(input) {
     console.log(input);
     let uri = document.getElementById("uri");
-    // uri.value = `Searched: ${input}`;
-    queryValue = input;
+    let token = await fetch("http://localhost:9000");
+    console.log(token);
+    uri.value = `Searched: ${token}`;
 }
 
 export default class Submit extends React.Component {
