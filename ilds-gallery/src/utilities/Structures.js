@@ -27,3 +27,5 @@ export default class Case {
     fitzpatrickType;
     tags;
 }
+
+export const SERVER_ENDPOINT = "http://localhost:9000"

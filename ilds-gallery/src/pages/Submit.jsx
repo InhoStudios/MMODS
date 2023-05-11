@@ -2,28 +2,38 @@ import React from "react";
 import ImageUploadField from "../components/submitComponents/ImageUploadField";
 import PatientInfoField from "../components/submitComponents/PatientInfoField";
 import DiagnosisField from "../components/submitComponents/DiagnosisField";
+import Select from "react-select";
 
-let searchTimeout = setTimeout(performSearch, 0);
-let queryValue = "";
-function handleQueryUpdate(event) {
-    clearTimeout(searchTimeout)
-    searchTimeout = setTimeout(() => performSearch(event.target.value), 1000);
-}
-
-async function performSearch(input) {
-    console.log(input);
-    let uri = document.getElementById("uri");
-    let token = await fetch("http://localhost:9000");
-    console.log(token);
-    uri.value = `Searched: ${token}`;
-}
 
 export default class Submit extends React.Component {
     searchQuery = "test";
     constructor(props) {
         super(props);
         // this.timeoutFunc = setTimeout(this.performSearch, 0);
-        this.hideclass = "hidden-passthrough";
+        this.state = {
+            hideclass: "hidden-passthrough",
+            searchTimeout: setTimeout(this.performSearch, 0),
+            query: "",
+            entities: {},
+            selectedOption: null,
+        }
+    }
+
+    handleQueryUpdate(event) {
+        clearTimeout(this.state.searchTimeout);
+        this.setState({ searchTimeout: setTimeout(() => this.performSearch(event.target.value), 1000) });
+    }
+    
+    async performSearch(input) {
+        console.log(input);
+        let result = await fetch(`http://localhost:9000/search?query=${input}`)
+            .then((data) => data.json())
+            .catch((err) => console.log(err));
+        console.log(result);
+    }
+
+    handleSelectChange(option) {
+        this.setState({ selectedOption: option })
     }
 
     render() {
@@ -43,15 +53,16 @@ export default class Submit extends React.Component {
                                     <div className="row mb-5">
                                         <h4 className="mb-3">Search ICD-11 (ICDD) diagnosis</h4>
                                         <div className="form-group mb-3">
+                                            <Select options={{"":"Search Diagnosis"}} onChange={this.handleSelectChange} className="form-control form-control-lg" id="search" name="search"/>
                                             <input type="input" className="form-control form-control-lg" id="search"
                                                    name="search" placeholder="Search Diagnosis" value={this.props.query}
-                                                    onChange={handleQueryUpdate}/>
+                                                    onChange={this.handleQueryUpdate.bind(this)}/>
                                             <input type="submit" className="hidden-passthrough" name="submit"
                                                    value="Search" />
                                         </div>
                                     </div>
                                     <div className={`row ${this.hideclass} mb-5`}>
-                                        <DiagnosisField hideclass={this.hideclass} query={queryValue}/>
+                                        <DiagnosisField hideclass={this.hideclass} query={this.state.query}/>
                                         <PatientInfoField />
                                         <ImageUploadField />
                                     </div>

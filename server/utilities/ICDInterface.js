@@ -1,4 +1,4 @@
-var { ICD } = require("./Structures");
+var { ICD, METHODS } = require("./Structures");
 let token = "";
 let expiry = 0;
 
@@ -48,6 +48,38 @@ function formatParams(params) {
     return optionsString;
 }
 
+async function headers() {
+    return {
+        "Authorization": `Bearer ${await useToken()}`,
+        "Accept": "application/json",
+        "Accept-Language": "en",
+        "API-Version": "v2"
+    };
+}
+
+async function request(endpoint, params, method) {
+    let reqHeaders = await headers();
+    let path = `${ICD.QUERY_HOST}${endpoint}?${formatParams(params)}`;
+    let options = {
+        method: method,
+        headers: reqHeaders,
+    };
+    return await fetch(path, options)
+        .then(res => res.json())
+        .catch(err => console.log(`Error on ${method} request to ${endpoint} `, err))
+}
+
+async function search(query) {
+    let params = {
+        "q": query,
+        "useFlexisearch": "true",
+        "flatResults": "false"
+    };
+    let endpoint = "/icd/entity/search";
+    return await request(endpoint, params, METHODS.POST)
+}
+
 module.exports = {
     useToken: useToken,
+    search: search,
 };

@@ -4,7 +4,7 @@ const ICD = {
     TOKEN_URL: "https://icdaccessmanagement.who.int/connect/token",
     SCOPE: "icdapi_access",
     GRANT_TYPE: "client_credentials",
-    QUERY_HOST: "id.who.int"
+    QUERY_HOST: "https://id.who.int"
 }
 
 const METHODS = {
