@@ -1,4 +1,4 @@
-const ICD = {
+export const ICD = {
     TOKEN_HOST: "icdaccessmanagement.who.int",
     TOKEN_PATH: "/connect/token",
     TOKEN_URL: "https://icdaccessmanagement.who.int/connect/token",
@@ -7,12 +7,12 @@ const ICD = {
     QUERY_HOST: "id.who.int"
 }
 
-const METHODS = {
+export const METHODS = {
     GET: "GET",
     POST: "POST"
 }
 
-class Case {
+export default class Case {
     caseID;
     age;
     sex;
@@ -27,7 +27,3 @@ class Case {
     fitzpatrickType;
     tags;
 }
-
-module.exports.ICD = ICD;
-module.exports.Case = Case;
-module.exports.METHODS = METHODS;

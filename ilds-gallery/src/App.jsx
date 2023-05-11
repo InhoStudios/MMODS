@@ -7,6 +7,7 @@ import Layout from "./components/Layout";
 import Home from "./pages/Home";
 import Submit from "./pages/Submit";
 import Verify from "./pages/Verify";
+import Test from "./pages/Test";
 export default class App extends React.Component {
     render() {
         return (
@@ -16,6 +17,7 @@ export default class App extends React.Component {
                         <Route index element={<Home/>} />
                         <Route path="submit" element={<Submit/>}/>
                         <Route path="verify" element={<Verify/>} />
+                        <Route path="test" element={<Test/>} />
                     </Route>
                 </Routes>
             </BrowserRouter>

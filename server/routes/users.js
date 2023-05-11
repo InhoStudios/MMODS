@@ -1,9 +1,11 @@
 var express = require('express');
+const icd = require('../utilities/ICDInterface');
 var router = express.Router();
 
 /* GET users listing. */
-router.get('/', function(req, res, next) {
-  res.send('respond with a resource');
+router.get('/', async (req, res, next) => {
+  token = await icd.useToken();
+  res.send(token);
 });
 
 module.exports = router;
