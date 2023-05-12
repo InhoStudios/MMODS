@@ -1,6 +1,8 @@
 import React from "react";
 
 export default class DiagnosisField extends React.Component {
+
+
     render() {
         return (
             <>
@@ -14,6 +16,11 @@ export default class DiagnosisField extends React.Component {
                         <select className="form-control form-control-lg" name="results"
                                 id="results">
                             <option value="null" selected disabled hidden>Select diagnosis</option>
+                            (
+                                this.props.entities.map((entry) => (
+                                    <option value={1}></option>
+                                ));
+                            )
                             {/*{% for result in results %}*/}
                             {/*<option value="{{ result.id }}" {{result.selected}}>{{*/}
                             {/*    result*/}
