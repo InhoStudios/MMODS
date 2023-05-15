@@ -1,4 +1,9 @@
 __pycache__/
 credentials.py
+./credentials.py
 ./.DS_Store
-server/.env
+**/.env
+**/.env.local
+**/.env.development.local
+**/.env.test.local
+**/.env.production.local
