@@ -14,11 +14,6 @@ export default class Submit extends React.Component {
             searchTimeout: setTimeout(this.performSearch, 0),
             query: "",
             entities: [
-                {
-                    title:"Search Diagnosis",
-                    id:"http://id.who.int/icd/entity/null",
-                    definition: "",
-                }
             ],
             selectedOption: {
                 definition:  "",
@@ -27,6 +22,7 @@ export default class Submit extends React.Component {
     }
 
     handleQueryUpdate(event) {
+        event.preventDefault();
         clearTimeout(this.state.searchTimeout);
         this.setState({ searchTimeout: setTimeout(() => this.performSearch(event.target.value, this), 1000) });
     }
@@ -38,8 +34,12 @@ export default class Submit extends React.Component {
         caller.setState({entities: result.destinationEntities, query: input});
     }
 
-    handleSelectChange(option) {
-        this.setState({ selectedOption: option })
+    async handleSelectChange(entry, caller) {
+        let id = entry.id.replace("http://id.who.int/icd/entity/","");
+        let entity = await fetch(`http://localhost:9000/entity?entity_code=${id}`)
+            .then((data) => data.json())
+            .catch((err) => console.log("handleSelectChange()", err));
+        caller.setState({selectedOption: entity});
     }
 
     testFunc(entry) {
@@ -59,7 +59,7 @@ export default class Submit extends React.Component {
 
                             <div className="row">
 
-                                <form method="post" encType="multipart/form-data">
+                                <form method="post" encType="multipart/form-data" onSubmit={(e) => e.preventDefault()}>
                                     <div className="row mb-5">
                                         <h4 className="mb-3">Search ICD-11 (ICDD) diagnosis</h4>
                                         <div className="form-group mb-3 dropdown">
@@ -72,21 +72,21 @@ export default class Submit extends React.Component {
                                                     this.state.entities.map((entry) => (
                                                         <a onClick={(e) => {
                                                             e.preventDefault();
-                                                            this.testFunc(entry);
+                                                            this.handleSelectChange(entry, this);
                                                         }}
                                                         id={
                                                             entry.id.replace("https://id.who.int/icd/entity/")
-                                                        }>{entry.title.replace("<em class='found'>", "").replace("</em>", "")}</a>
+                                                        } dangerouslySetInnerHTML={{__html: entry.title}} />
                                                     ))
                                                 }
                                             </div>
                                             {/* <input type="submit" className="hidden-passthrough" name="submit"
                                                    value="Search" /> */}
                                         </div>
+                                        <p>{this.state.selectedOption.definition["@value"]}</p>
                                     </div>
-                                    <div className="row">
-                                        <p>{this.state.selectedOption.description}</p>
-                                    </div>
+                                </form>
+                                <form method="post" encType="multipart/form-data">
                                     <div className={`row ${this.hideclass} mb-5`}>
                                         <DiagnosisField query={this.state.query} entities={this.state.entities} />
                                         <PatientInfoField />

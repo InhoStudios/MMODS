@@ -37,9 +37,6 @@ export default class DiagnosisField extends React.Component {
                                id="check_btn" value="Check Definition" name="submit" />
                     </div>
                 </div>
-                <div className="row {{ desc_hide }}">
-                    <p>{"definition"}</p>
-                </div>
                 <div className="form-group mb-3 row">
                     <div className="form-control-lg">
                         <label className="col-lg-6">
