@@ -15,11 +15,14 @@ export default class Submit extends React.Component {
             query: "",
             entities: [
                 {
-                    title:"Select Diagnosis",
-                    id:"http://id.who.int/icd/entity/null"
+                    title:"Search Diagnosis",
+                    id:"http://id.who.int/icd/entity/null",
+                    definition: "",
                 }
             ],
-            selectedOption: null,
+            selectedOption: {
+                definition:  "",
+            },
         }
     }
 
@@ -37,6 +40,10 @@ export default class Submit extends React.Component {
 
     handleSelectChange(option) {
         this.setState({ selectedOption: option })
+    }
+
+    testFunc(entry) {
+        console.log(entry);
     }
 
     render() {
@@ -63,13 +70,22 @@ export default class Submit extends React.Component {
                                             <div className="dropdown-content">
                                                 {
                                                     this.state.entities.map((entry) => (
-                                                        <a href={`#${entry.id.replace("http://id.who.int/icd/entity/","")}`}>{entry.title.replace("<em class='found'>", "").replace("</em>", "")}</a>
+                                                        <a onClick={(e) => {
+                                                            e.preventDefault();
+                                                            this.testFunc(entry);
+                                                        }}
+                                                        id={
+                                                            entry.id.replace("https://id.who.int/icd/entity/")
+                                                        }>{entry.title.replace("<em class='found'>", "").replace("</em>", "")}</a>
                                                     ))
                                                 }
                                             </div>
                                             {/* <input type="submit" className="hidden-passthrough" name="submit"
                                                    value="Search" /> */}
                                         </div>
+                                    </div>
+                                    <div className="row">
+                                        <p>{this.state.selectedOption.description}</p>
                                     </div>
                                     <div className={`row ${this.hideclass} mb-5`}>
                                         <DiagnosisField query={this.state.query} entities={this.state.entities} />
