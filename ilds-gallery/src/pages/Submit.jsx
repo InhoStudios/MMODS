@@ -16,7 +16,11 @@ export default class Submit extends React.Component {
             entities: [
             ],
             selectedOption: {
-                definition:  "",
+                "@id":"",
+                "title":{
+                    "@value":"",
+                },
+                "definition":  "",
             },
         }
     }
@@ -24,7 +28,7 @@ export default class Submit extends React.Component {
     handleQueryUpdate(event) {
         event.preventDefault();
         clearTimeout(this.state.searchTimeout);
-        this.setState({ searchTimeout: setTimeout(() => this.performSearch(event.target.value, this), 1000) });
+        this.setState({ searchTimeout: setTimeout(() => this.performSearch(event.target.value, this), 500) });
     }
     
     async performSearch(input, caller) {
@@ -35,6 +39,7 @@ export default class Submit extends React.Component {
     }
 
     async handleSelectChange(entry, caller) {
+        document.querySelectorAll(".search-content").forEach(a => a.style.display = "none");
         let id = entry.id.replace("http://id.who.int/icd/entity/","");
         let entity = await fetch(`http://localhost:9000/entity?entity_code=${id}`)
             .then((data) => data.json())
@@ -60,14 +65,18 @@ export default class Submit extends React.Component {
                             <div className="row">
 
                                 <form method="post" encType="multipart/form-data" onSubmit={(e) => e.preventDefault()}>
-                                    <div className="row mb-5">
+                                    <div className="row mb-3">
                                         <h4 className="mb-3">Search ICD-11 (ICDD) diagnosis</h4>
                                         <div className="form-group mb-3 dropdown">
                                             {/* <Select options={{"":"Search Diagnosis"}} value={null} onChange={this.handleSelectChange} className="form-control form-control-lg" id="search" name="search"/> */}
                                             <input type="input" className="form-control form-control-lg" id="search"
                                                 name="search" placeholder="Search Diagnosis" value={this.props.query}
-                                                    onChange={this.handleQueryUpdate.bind(this)}/>
-                                            <div className="dropdown-content">
+                                                    onChange={this.handleQueryUpdate.bind(this)}
+                                                    onFocus={(e) => {
+                                                        e.preventDefault();
+                                                        document.querySelectorAll(".search-content").forEach(a => a.style.display = "block");
+                                                    }}/>
+                                            <div className="search-content">
                                                 {
                                                     this.state.entities.map((entry) => (
                                                         <a onClick={(e) => {
@@ -83,12 +92,12 @@ export default class Submit extends React.Component {
                                             {/* <input type="submit" className="hidden-passthrough" name="submit"
                                                    value="Search" /> */}
                                         </div>
-                                        <p>{this.state.selectedOption.definition["@value"]}</p>
+                                        {/* <p>{this.state.selectedOption.definition["@value"]}</p> */}
                                     </div>
                                 </form>
                                 <form method="post" encType="multipart/form-data">
                                     <div className={`row ${this.hideclass} mb-5`}>
-                                        <DiagnosisField query={this.state.query} entities={this.state.entities} />
+                                        <DiagnosisField entity={this.state.selectedOption} />
                                         <PatientInfoField />
                                         <ImageUploadField />
                                     </div>
