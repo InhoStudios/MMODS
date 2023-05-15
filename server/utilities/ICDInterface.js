@@ -7,8 +7,6 @@ async function useToken() {
         let tokenObj = await fetchToken();
         token = tokenObj.access_token;
         expiry = new Date().getTime() + tokenObj.expires_in * 1000;
-        console.log(expiry);
-        console.log(token);
     }
     return token;
 }
@@ -20,7 +18,6 @@ async function fetchToken() {
         "grant_type": ICD.GRANT_TYPE,
         "scope": ICD.SCOPE
     });
-    console.log(body);
     const options = {
         method: "POST",
         body: body,
@@ -66,14 +63,14 @@ async function request(endpoint, params, method) {
     };
     return await fetch(path, options)
         .then(res => res.json())
-        .catch(err => console.log(`Error on ${method} request to ${endpoint} `, err))
+        .catch(err => console.log(`Error on ${method} request to ${endpoint}:\n`, err))
 }
 
 async function search(query) {
     let params = {
         "q": query,
-        "useFlexisearch": "true",
-        "flatResults": "false"
+        "useFlexisearch": "false",
+        "flatResults": "false",
     };
     let endpoint = "/icd/entity/search";
     return await request(endpoint, params, METHODS.POST);
