@@ -76,10 +76,19 @@ async function search(query) {
         "flatResults": "false"
     };
     let endpoint = "/icd/entity/search";
-    return await request(endpoint, params, METHODS.POST)
+    return await request(endpoint, params, METHODS.POST);
+}
+
+async function getEntity(id, include) {
+    params = {
+        "include": include,
+    };
+    let endpoint = `/icd/entity/${id}`;
+    return await request(endpoint, params, METHODS.GET);
 }
 
 module.exports = {
     useToken: useToken,
     search: search,
+    getEntity: getEntity,
 };
