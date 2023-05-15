@@ -2,6 +2,9 @@ import React from "react";
 
 export default class DiagnosisField extends React.Component {
 
+    sendDefinition() {
+
+    }
 
     render() {
         return (
@@ -10,17 +13,16 @@ export default class DiagnosisField extends React.Component {
                 <div className="form-group mb-3 row">
                     <div className="col-lg-3">
                         <input type="input" className="form-control form-control-lg" id="uri"
-                               name="uri" value={`Searched: ${this.props.query}`} disabled />
+                               name="uri" value={`Searched: ${this.props.query}`} disabled readOnly/>
                     </div>
                     <div className="col-lg-7">
                         <select className="form-control form-control-lg" name="results"
                                 id="results">
-                            <option value="null" selected disabled hidden>Select diagnosis</option>
-                            (
+                            {
                                 this.props.entities.map((entry) => (
-                                    <option value={1}></option>
-                                ));
-                            )
+                                    <option value={entry.id.replace("http://id.who.int/icd/entity/","")}>{entry.title.replace("<em class='found'>", "").replace("</em>", "")}</option>
+                                ))
+                            }
                             {/*{% for result in results %}*/}
                             {/*<option value="{{ result.id }}" {{result.selected}}>{{*/}
                             {/*    result*/}

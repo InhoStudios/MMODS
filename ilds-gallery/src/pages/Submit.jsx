@@ -4,7 +4,6 @@ import PatientInfoField from "../components/submitComponents/PatientInfoField";
 import DiagnosisField from "../components/submitComponents/DiagnosisField";
 import Select from "react-select";
 
-
 export default class Submit extends React.Component {
     searchQuery = "test";
     constructor(props) {
@@ -14,7 +13,12 @@ export default class Submit extends React.Component {
             hideclass: "hidden-passthrough",
             searchTimeout: setTimeout(this.performSearch, 0),
             query: "",
-            entities: {},
+            entities: [
+                {
+                    title:"Select Diagnosis",
+                    id:"http://id.who.int/icd/entity/null"
+                }
+            ],
             selectedOption: null,
         }
     }
@@ -25,12 +29,10 @@ export default class Submit extends React.Component {
     }
     
     async performSearch(input, caller) {
-        console.log(input);
         let result = await fetch(`http://localhost:9000/search?query=${input}`)
             .then((data) => data.json())
             .catch((err) => console.log(err));
         caller.setState({entities: result.destinationEntities, query: input});
-        console.log(caller.state.destinationEntities);
     }
 
     handleSelectChange(option) {
@@ -53,91 +55,24 @@ export default class Submit extends React.Component {
                                 <form method="post" encType="multipart/form-data">
                                     <div className="row mb-5">
                                         <h4 className="mb-3">Search ICD-11 (ICDD) diagnosis</h4>
-                                        <div className="form-group mb-3">
+                                        <div className="form-group mb-3 dropdown">
                                             {/* <Select options={{"":"Search Diagnosis"}} value={null} onChange={this.handleSelectChange} className="form-control form-control-lg" id="search" name="search"/> */}
                                             <input type="input" className="form-control form-control-lg" id="search"
-                                                   name="search" placeholder="Search Diagnosis" value={this.props.query}
+                                                name="search" placeholder="Search Diagnosis" value={this.props.query}
                                                     onChange={this.handleQueryUpdate.bind(this)}/>
-                                            <input type="submit" className="hidden-passthrough" name="submit"
-                                                   value="Search" />
+                                            <div className="dropdown-content">
+                                                {
+                                                    this.state.entities.map((entry) => (
+                                                        <a href={`#${entry.id.replace("http://id.who.int/icd/entity/","")}`}>{entry.title.replace("<em class='found'>", "").replace("</em>", "")}</a>
+                                                    ))
+                                                }
+                                            </div>
+                                            {/* <input type="submit" className="hidden-passthrough" name="submit"
+                                                   value="Search" /> */}
                                         </div>
                                     </div>
                                     <div className={`row ${this.hideclass} mb-5`}>
-                                        <h4 className="mb-3">Diagnosis information</h4>
-                                        <div className="form-group mb-3 row">
-                                            <div className="col-lg-3">
-                                                <input type="input" className="form-control form-control-lg" id="uri"
-                                                    name="uri" value={`Searched: ${this.state.query}`} disabled />
-                                            </div>
-                                            <div className="col-lg-7">
-                                                <select className="form-control form-control-lg" name="results"
-                                                        id="results">
-                                                    <option value="null" selected disabled hidden>Select diagnosis</option>
-                                                    (
-                                                        {/* Object.values(this.state.entities).map(function (entry) (
-                                                            <option value={entry.id}>{entry.title}</option>
-                                                        )); */}
-                                                    )
-                                                    {/*{% for result in results %}*/}
-                                                    {/*<option value="{{ result.id }}" {{result.selected}}>{{*/}
-                                                    {/*    result*/}
-                                                    {/*    .title*/}
-                                                    {/*}}</option>*/}
-                                                    {/*{% endfor %}*/}
-                                                </select>
-                                            </div>
-                                            <div className="col-lg-2">
-                                                <input type="submit"
-                                                    className={`form-control form-control-lg btn btn-success btn-lg ${this.props.hideclass}`}
-                                                    id="check_btn" value="Check Definition" name="submit" />
-                                            </div>
-                                        </div>
-                                        <div className="row {{ desc_hide }}">
-                                            <p>{"definition"}</p>
-                                        </div>
-                                        <div className="form-group mb-3 row">
-                                            <div className="form-control-lg">
-                                                <label className="col-lg-6">
-                                                    Disease Severity:
-                                                </label>
-                                                <label className="col-lg-3" htmlFor="benign">
-                                                    <input type="radio" className="form-check-input" id="benign"
-                                                        name="presentation" value="benign" />
-                                                    Benign
-                                                </label>
-                                                <label className="col-lg-2" htmlFor="malignant">
-                                                    <input type="radio" className="form-check-input" id="malignant"
-                                                        name="presentation" value="malignant" />
-                                                    Malignant
-                                                </label>
-                                            </div>
-                                        </div>
-                                        <div className="form-group mb-3 row">
-                                            <div className="form-control-lg row">
-                                                <div className="col-lg-6">
-                                                    <label htmlFor="easeofdiag">
-                                                        Difficulty of Diagnosis
-                                                    </label>
-                                                </div>
-                                                <div className="col-lg-6">
-                                                    <input className="form-control-lg col-lg-12" type="range" min="1"
-                                                        max="5" value="3" id="easeofdiag" name="easeofdiag" />
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div className="form-group mb-3 row">
-                                            <div className="form-control-lg row">
-                                                <div className="col-lg-6">
-                                                    <label htmlFor="easeofdiag">
-                                                        Lesion size
-                                                    </label>
-                                                </div>
-                                                <div className="col-lg-6">
-                                                    <input type="number" className="form-control form-control-lg" id="size"
-                                                        name="size" placeholder="Lesion size (mm)" />
-                                                </div>
-                                            </div>
-                                        </div>
+                                        <DiagnosisField query={this.state.query} entities={this.state.entities} />
                                         <PatientInfoField />
                                         <ImageUploadField />
                                     </div>
