@@ -13,35 +13,16 @@ export default class DiagnosisField extends React.Component {
                 <div className="form-group mb-3 row">
                     <div className="col-lg-6">
                         <input type="input" className="form-control form-control-lg" id="uri"
-                               name="uri" value={`${this.props.entity["@id"]}`} disabled readOnly/>
+                               name="uri" value={`${this.props.entity.title["@value"]}`} disabled readOnly/>
                     </div>
                     <div className="col-lg-6">
                         <input type="input" className="form-control form-control-lg" id="uri"
-                               name="uri" value={`${this.props.entity.title["@value"]}`} disabled readOnly/>
-                        {/* <select className="form-control form-control-lg" name="results"
-                                id="results">
-                            {
-                                this.props.entities.map((entry) => (
-                                    <option value={entry.id.replace("http://id.who.int/icd/entity/","")}>{entry.title.replace("<em class='found'>", "").replace("</em>", "")}</option>
-                                ))
-                            } */}
-                            {/*{% for result in results %}*/}
-                            {/*<option value="{{ result.id }}" {{result.selected}}>{{*/}
-                            {/*    result*/}
-                            {/*    .title*/}
-                            {/*}}</option>*/}
-                            {/*{% endfor %}*/}
-                        {/* </select> */}
+                               name="uri" value={`${this.props.entity["@id"]}`} disabled readOnly/>
                     </div>
-                    {/* <div className="col-lg-2">
-                        <input type="submit"
-                               className={`form-control form-control-lg btn btn-success btn-lg ${this.props.hideclass}`}
-                               id="check_btn" value="Check Definition" name="submit" />
-                    </div> */}
                 </div>
                 <div class="row mb-3">
                     <p>{
-                        this.props.entity.definition["@value"] ? this.props.entity.definition["@value"] : ""
+                        this.props.entity?.definition ? this.props.entity.definition["@value"] : ""
                     }</p>
                 </div>
                 <div className="form-group mb-3 row">

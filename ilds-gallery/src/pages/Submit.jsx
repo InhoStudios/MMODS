@@ -28,14 +28,15 @@ export default class Submit extends React.Component {
     handleQueryUpdate(event) {
         event.preventDefault();
         clearTimeout(this.state.searchTimeout);
-        this.setState({ searchTimeout: setTimeout(() => this.performSearch(event.target.value, this), 500) });
+        this.setState({ searchTimeout: setTimeout(() => this.performSearch(event.target.value, this), 300) });
     }
     
     async performSearch(input, caller) {
         let result = await fetch(`http://localhost:9000/search?query=${input}`)
             .then((data) => data.json())
             .catch((err) => console.log(err));
-        caller.setState({entities: result.destinationEntities, query: input});
+        let sortedEntities = result.destinationEntities.sort(this.nestedSort("score"));
+        caller.setState({entities: sortedEntities, query: input});
     }
 
     async handleSelectChange(entry, caller) {
@@ -47,8 +48,8 @@ export default class Submit extends React.Component {
         caller.setState({selectedOption: entity});
     }
 
-    testFunc(entry) {
-        console.log(entry);
+    nestedSort = (prop1) => (e1, e2) => {
+        return (e1[prop1] < e2[prop1]) ? 1 : (e1[prop1] > e2[prop1]) ? -1 : 0;
     }
 
     render() {
