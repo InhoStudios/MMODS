@@ -3,6 +3,7 @@ import ImageUploadField from "../components/submitComponents/ImageUploadField";
 import PatientInfoField from "../components/submitComponents/PatientInfoField";
 import DiagnosisField from "../components/submitComponents/DiagnosisField";
 import Select from "react-select";
+import Case from "../utilities/Structures";
 
 export default class Submit extends React.Component {
     searchQuery = "test";
@@ -22,6 +23,7 @@ export default class Submit extends React.Component {
                 },
                 "definition":  "",
             },
+            case: new Case()
         }
     }
 
@@ -105,10 +107,7 @@ export default class Submit extends React.Component {
                                                     ))
                                                 }
                                             </div>
-                                            {/* <input type="submit" className="hidden-passthrough" name="submit"
-                                                   value="Search" /> */}
                                         </div>
-                                        {/* <p>{this.state.selectedOption.definition["@value"]}</p> */}
                                     </div>
                                 </form>
                                 <form method="post" encType="multipart/form-data">

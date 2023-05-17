@@ -2,10 +2,6 @@ import React from "react";
 
 export default class DiagnosisField extends React.Component {
 
-    sendDefinition() {
-
-    }
-
     render() {
         return (
             <>

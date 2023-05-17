@@ -14,6 +14,7 @@ const METHODS = {
 
 class Case {
     caseID;
+    title;
     age;
     sex;
     history;
@@ -26,6 +27,10 @@ class Case {
     severity;
     fitzpatrickType;
     tags;
+}
+
+class Image {
+    imgtype;
 }
 
 module.exports.ICD = ICD;

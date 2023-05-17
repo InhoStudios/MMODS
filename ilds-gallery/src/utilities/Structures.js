@@ -14,6 +14,7 @@ export const METHODS = {
 
 export default class Case {
     caseID;
+    title;
     age;
     sex;
     history;
