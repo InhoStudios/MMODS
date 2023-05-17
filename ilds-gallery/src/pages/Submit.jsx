@@ -62,7 +62,14 @@ export default class Submit extends React.Component {
         let entity = await fetch(`http://localhost:9000/entity?entity_code=${id}`)
             .then((data) => data.json())
             .catch((err) => console.log("handleSelectChange()", err));
-        caller.setState({selectedOption: entity});
+        let curCase = caller.state.case;
+        let updateCase = {
+            ...curCase
+        };
+        updateCase.title = entity.title["@value"].replace("<em class='found'>","").replace("</em>","");
+        updateCase.userEntity = id;
+        console.log(updateCase);
+        caller.setState({selectedOption: entity, case: updateCase});
     }
 
     nestedSort = (prop1) => (e1, e2) => {
