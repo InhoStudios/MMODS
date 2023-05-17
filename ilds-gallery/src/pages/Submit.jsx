@@ -30,13 +30,28 @@ export default class Submit extends React.Component {
         clearTimeout(this.state.searchTimeout);
         this.setState({ searchTimeout: setTimeout(() => this.performSearch(event.target.value, this), 300) });
     }
-    
+
     async performSearch(input, caller) {
         let result = await fetch(`http://localhost:9000/search?query=${input}`)
             .then((data) => data.json())
             .catch((err) => console.log(err));
         let sortedEntities = result.destinationEntities.sort(this.nestedSort("score"));
-        caller.setState({entities: sortedEntities, query: input});
+        let hierarchicalEntities = []
+        for (let entity of sortedEntities) {
+            hierarchicalEntities = hierarchicalEntities.concat(this.DFSEntities(entity, 0));
+        }
+        caller.setState({entities: hierarchicalEntities, query: input});
+    }
+    
+    DFSEntities(entity, depth) {
+        let entities = [];
+        entity.title = "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;".repeat(depth) + entity.title;
+        entities.push(entity);
+
+        for (let descendant of entity.descendants) {
+            entities = entities.concat(this.DFSEntities(descendant, depth + 1));
+        }
+        return entities;
     }
 
     async handleSelectChange(entry, caller) {
