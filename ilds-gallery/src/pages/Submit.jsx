@@ -146,10 +146,19 @@ export default class Submit extends React.Component {
         this.setState({case: updateCase});
     }
 
-    handleUpload(e) {
+    async handleUpload(e) {
         e.preventDefault();
-        console.log(this.state.case);
-        // TODO: Generate a case_id and upload it
+        console.log(JSON.stringify(this.state.case));
+        let options = {
+            method: "POST",
+            body:JSON.stringify(this.state.case),
+            headers: {
+                "Content-Type":"application/json",
+            }
+        };
+        let result = await fetch(`http://localhost:9000/upload`, options)
+            .then(() => console.log("Post success"))
+            .catch((err) => console.log("handleUpload()", err));
     }
 
     render() {
@@ -220,7 +229,7 @@ export default class Submit extends React.Component {
                                                 id="upload_button" 
                                                 value="Upload" 
                                                 name="submit" 
-                                                onClick={this.handleUpload}
+                                                onClick={this.handleUpload.bind(this)}
                                             />
                                         </div>
                                     </div>
