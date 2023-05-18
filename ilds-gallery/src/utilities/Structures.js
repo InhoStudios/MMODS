@@ -29,4 +29,87 @@ export default class Case {
     tags;
 }
 
-export const SERVER_ENDPOINT = "http://localhost:9000"
+export const SERVER_ENDPOINT = "http://localhost:9000";
+
+export const ANATOMIC_SITES = [
+    {
+        site:"Head",
+        index:2
+    },
+    {
+        site:"Neck",
+        index:158
+    },
+    {
+        site:"Upper trunk",
+        index:169
+    },
+    {
+        site:"Lower trunk",
+        index:199
+    },
+    {
+        site:"Genital region",
+        index:218
+    },
+    {
+        site:"Perigenital region",
+        index:246
+    },
+    {
+        site:"Perianal region",
+        index:250
+    },
+    {
+        site:"Shoulder",
+        index:256
+    },
+    {
+        site:"Axilla",
+        index:260
+    },
+    {
+        site:"Upper arm",
+        index:264
+    },
+    {
+        site:"Elbow",
+        index:269
+    },
+    {
+        site:"Forearm",
+        index:274
+    },
+    {
+        site:"Wrist",
+        index:279
+    },
+    {
+        site:"Hand",
+        index:284
+    },
+    {
+        site:"Buttock",
+        index:383
+    },
+    {
+        site:"Thigh",
+        index:385
+    },
+    {
+        site:"Knee",
+        index:392
+    },
+    {
+        site:"Lower leg",
+        index:397
+    },
+    {
+        site:"Ankle",
+        index:402
+    },
+    {
+        site:"Foot",
+        index:409
+    }
+]

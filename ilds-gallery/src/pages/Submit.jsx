@@ -57,7 +57,7 @@ export default class Submit extends React.Component {
     }
 
     async handleSelectChange(entry, caller) {
-        document.querySelectorAll(".search-content").forEach(a => a.style.display = "none");
+        document.querySelectorAll(".diagnosis-list").forEach(a => a.style.display = "none");
         let id = entry.id.replace("http://id.who.int/icd/entity/","");
         let entity = await fetch(`http://localhost:9000/entity?entity_code=${id}`)
             .then((data) => data.json())
@@ -68,12 +68,52 @@ export default class Submit extends React.Component {
         };
         updateCase.title = entity.title["@value"].replace("<em class='found'>","").replace("</em>","");
         updateCase.userEntity = id;
-        console.log(updateCase);
         caller.setState({selectedOption: entity, case: updateCase});
     }
 
     nestedSort = (prop1) => (e1, e2) => {
         return (e1[prop1] < e2[prop1]) ? 1 : (e1[prop1] > e2[prop1]) ? -1 : 0;
+    }
+
+    handleUpdateSeverity() {
+
+    }
+
+    handleUpdateDod() {
+
+    }
+
+    handleUpdateSize() {
+
+    }
+
+    handleUpdateAge() {
+        
+    }
+
+    handleUpdateSex() {
+
+    }
+
+    handleUpdateHist() {
+
+    }
+
+    handleUpdateImage() {
+
+    }
+
+    handleUpdateImgtype() {
+
+    }
+
+    handleUpdateSite(index) {
+        let curCase = this.state.case;
+        let updateCase = {
+            ...curCase
+        };
+        updateCase.anatomicSite = index;
+        this.setState({case: updateCase});
     }
 
     render() {
@@ -99,9 +139,9 @@ export default class Submit extends React.Component {
                                                     onChange={this.handleQueryUpdate.bind(this)}
                                                     onFocus={(e) => {
                                                         e.preventDefault();
-                                                        document.querySelectorAll(".search-content").forEach(a => a.style.display = "block");
+                                                        document.querySelectorAll(".diagnosis-list").forEach(a => a.style.display = "block");
                                                     }}/>
-                                            <div className="search-content">
+                                            <div className="search-content diagnosis-list">
                                                 {
                                                     this.state.entities.map((entry) => (
                                                         <a onClick={(e) => {
@@ -119,15 +159,36 @@ export default class Submit extends React.Component {
                                 </form>
                                 <form method="post" encType="multipart/form-data">
                                     <div className={`row ${this.hideclass} mb-5`}>
-                                        <DiagnosisField entity={this.state.selectedOption} />
-                                        <PatientInfoField />
-                                        <ImageUploadField />
+                                        <DiagnosisField 
+                                            entity={this.state.selectedOption} 
+                                            updateSeverity={this.handleUpdateSeverity} 
+                                            updateDod={this.handleUpdateDod}
+                                            updateSize={this.handleUpdateSize}
+                                        />
+                                        <PatientInfoField 
+                                            updateAge={this.handleUpdateAge}
+                                            updateSex={this.handleUpdateSex}
+                                            updateHist={this.handleUpdateHist}
+                                        />
+                                        <ImageUploadField 
+                                            updateImage={this.handleUpdateImage}
+                                            updateImgtype={this.handleUpdateImgtype}
+                                            updateSite={this.handleUpdateSite.bind(this)}
+                                        />
                                     </div>
                                     <div className="row mb-5">
                                         <div className="form-group mb-3">
-                                            <input type="submit"
-                                                   className={`form-control form-control-lg btn btn-outline-primary btn-lg ${this.hideclass}`}
-                                                   id="upload_button" value="Upload" name="submit" />
+                                            <input 
+                                                type="submit"
+                                                className={`form-control form-control-lg btn btn-outline-primary btn-lg ${this.hideclass}`}
+                                                id="upload_button" 
+                                                value="Upload" 
+                                                name="submit" 
+                                                onClick={(e) => {
+                                                    e.preventDefault();
+                                                    console.log(this.state.case);
+                                                }}
+                                            />
                                         </div>
                                     </div>
                                 </form>

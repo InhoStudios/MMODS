@@ -140,7 +140,7 @@ code {
   border: 1px solid #86b7fe;
   border-radius: 5px;
   box-shadow: 0 0.2rem 0.2rem rgba(0, 0, 0, 0.15) !important;
-  max-height: 50vh !important;
+  max-height: 40vh !important;
   overflow-y: scroll;
 }
 
