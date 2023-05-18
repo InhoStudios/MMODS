@@ -76,12 +76,7 @@ export default class Submit extends React.Component {
     }
 
     handleUpdateSeverity(e) {
-        let curCase = this.state.case;
-        let updateCase = {
-            ...curCase
-        };
-        updateCase.severity = e.target.value;
-        this.setState({case: updateCase});
+        this.updateCase("severity", e.target.value);
         console.log(`handleUpdateSeverity(${e.target.value})`);
     }
 
@@ -90,42 +85,22 @@ export default class Submit extends React.Component {
     }
 
     handleUpdateSize(e) {
-        let curCase = this.state.case;
-        let updateCase = {
-            ...curCase
-        };
-        updateCase.size = e.target.value;
-        this.setState({case: updateCase});
+        this.updateCase("size", e.target.value);
         console.log(`handleUpdateSize(${e.target.value})`);
     }
 
     handleUpdateAge(e) {
-        let curCase = this.state.case;
-        let updateCase = {
-            ...curCase
-        };
-        updateCase.age = e.target.value;
-        this.setState({case: updateCase});
+        this.updateCase("age", e.target.value);
         console.log(`handleUpdateAge()`);
     }
 
     handleUpdateSex(e) {
-        let curCase = this.state.case;
-        let updateCase = {
-            ...curCase
-        };
-        updateCase.sex = e.target.value;
-        this.setState({case: updateCase});
+        this.updateCase("sex", e.target.value);
         console.log(`handleUpdateSex()`);
     }
 
     handleUpdateHist(e) {
-        let curCase = this.state.case;
-        let updateCase = {
-            ...curCase
-        };
-        updateCase.history = e.target.value;
-        this.setState({case: updateCase});
+        this.updateCase("history", e.target.value);
         console.log(`handleUpdateHist()`);
     }
 
@@ -138,16 +113,13 @@ export default class Submit extends React.Component {
     }
 
     handleUpdateSite(index) {
-        let curCase = this.state.case;
-        let updateCase = {
-            ...curCase
-        };
-        updateCase.anatomicSite = index;
-        this.setState({case: updateCase});
+        this.updateCase("anatomicSite", index);
+        console.log(`handleUpdateSite(${index})`);
     }
 
     async handleUpload(e) {
         e.preventDefault();
+        await this.updateCase("caseID", `${new Date().getTime()}`)
         console.log(JSON.stringify(this.state.case));
         let options = {
             method: "POST",
@@ -159,6 +131,16 @@ export default class Submit extends React.Component {
         let result = await fetch(`http://localhost:9000/upload`, options)
             .then(() => console.log("Post success"))
             .catch((err) => console.log("handleUpload()", err));
+        console.log(result);
+    }
+
+    async updateCase(key, value) {
+        let curCase = this.state.case;
+        let newCase = {
+            ...curCase
+        };
+        newCase[key] = value;
+        return await this.setState({case: newCase});
     }
 
     render() {
