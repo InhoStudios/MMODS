@@ -75,36 +75,66 @@ export default class Submit extends React.Component {
         return (e1[prop1] < e2[prop1]) ? 1 : (e1[prop1] > e2[prop1]) ? -1 : 0;
     }
 
-    handleUpdateSeverity() {
-
+    handleUpdateSeverity(e) {
+        let curCase = this.state.case;
+        let updateCase = {
+            ...curCase
+        };
+        updateCase.severity = e.target.value;
+        this.setState({case: updateCase});
+        console.log(`handleUpdateSeverity(${e.target.value})`);
     }
 
-    handleUpdateDod() {
-
+    handleUpdateDod(e) {
+        console.log(`handleUpdateDod(${e.target.value})`);
     }
 
-    handleUpdateSize() {
-
+    handleUpdateSize(e) {
+        let curCase = this.state.case;
+        let updateCase = {
+            ...curCase
+        };
+        updateCase.size = e.target.value;
+        this.setState({case: updateCase});
+        console.log(`handleUpdateSize(${e.target.value})`);
     }
 
-    handleUpdateAge() {
-        
+    handleUpdateAge(e) {
+        let curCase = this.state.case;
+        let updateCase = {
+            ...curCase
+        };
+        updateCase.age = e.target.value;
+        this.setState({case: updateCase});
+        console.log(`handleUpdateAge()`);
     }
 
-    handleUpdateSex() {
-
+    handleUpdateSex(e) {
+        let curCase = this.state.case;
+        let updateCase = {
+            ...curCase
+        };
+        updateCase.sex = e.target.value;
+        this.setState({case: updateCase});
+        console.log(`handleUpdateSex()`);
     }
 
-    handleUpdateHist() {
-
+    handleUpdateHist(e) {
+        let curCase = this.state.case;
+        let updateCase = {
+            ...curCase
+        };
+        updateCase.history = e.target.value;
+        this.setState({case: updateCase});
+        console.log(`handleUpdateHist()`);
     }
 
     handleUpdateImage() {
-
+        console.log(`handleUpdateImage()`);
     }
 
     handleUpdateImgtype() {
-
+        console.log(`handleUpdateImgtype()`);
     }
 
     handleUpdateSite(index) {
@@ -114,6 +144,12 @@ export default class Submit extends React.Component {
         };
         updateCase.anatomicSite = index;
         this.setState({case: updateCase});
+    }
+
+    handleUpload(e) {
+        e.preventDefault();
+        console.log(this.state.case);
+        // TODO: Generate a case_id and upload it
     }
 
     render() {
@@ -132,7 +168,7 @@ export default class Submit extends React.Component {
                                 <form method="post" encType="multipart/form-data" onSubmit={(e) => e.preventDefault()}>
                                     <div className="row mb-3">
                                         <h4 className="mb-3">Search ICD-11 (ICDD) diagnosis</h4>
-                                        <div className="form-group mb-3 dropdown">
+                                        <div className="form-group dropdown">
                                             {/* <Select options={{"":"Search Diagnosis"}} value={null} onChange={this.handleSelectChange} className="form-control form-control-lg" id="search" name="search"/> */}
                                             <input type="input" className="form-control form-control-lg" id="search"
                                                 name="search" placeholder="Search Diagnosis" value={this.props.query}
@@ -161,18 +197,18 @@ export default class Submit extends React.Component {
                                     <div className={`row ${this.hideclass} mb-5`}>
                                         <DiagnosisField 
                                             entity={this.state.selectedOption} 
-                                            updateSeverity={this.handleUpdateSeverity} 
-                                            updateDod={this.handleUpdateDod}
-                                            updateSize={this.handleUpdateSize}
+                                            updateSeverity={this.handleUpdateSeverity.bind(this)} 
+                                            updateDod={this.handleUpdateDod.bind(this)}
+                                            updateSize={this.handleUpdateSize.bind(this)}
                                         />
                                         <PatientInfoField 
-                                            updateAge={this.handleUpdateAge}
-                                            updateSex={this.handleUpdateSex}
-                                            updateHist={this.handleUpdateHist}
+                                            updateAge={this.handleUpdateAge.bind(this)}
+                                            updateSex={this.handleUpdateSex.bind(this)}
+                                            updateHist={this.handleUpdateHist.bind(this)}
                                         />
                                         <ImageUploadField 
-                                            updateImage={this.handleUpdateImage}
-                                            updateImgtype={this.handleUpdateImgtype}
+                                            updateImage={this.handleUpdateImage.bind(this)}
+                                            updateImgtype={this.handleUpdateImgtype.bind(this)}
                                             updateSite={this.handleUpdateSite.bind(this)}
                                         />
                                     </div>
@@ -184,10 +220,7 @@ export default class Submit extends React.Component {
                                                 id="upload_button" 
                                                 value="Upload" 
                                                 name="submit" 
-                                                onClick={(e) => {
-                                                    e.preventDefault();
-                                                    console.log(this.state.case);
-                                                }}
+                                                onClick={this.handleUpload}
                                             />
                                         </div>
                                     </div>

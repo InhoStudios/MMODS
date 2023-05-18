@@ -33,7 +33,7 @@ export default class ImageUploadFragment extends React.Component {
 
     render() {
         return (
-            <div className="row {{ hideclass }} mb-3" id="imageuploads">
+            <>
                 <h4 className="mb-3">Image upload</h4>
                 <div className="form-group mb-3 row">
                     <div className="col-lg-6">
@@ -76,42 +76,38 @@ export default class ImageUploadFragment extends React.Component {
                                name="anatomicsite" value="" /> */}
                     </div>
                 </div>
-                <div className="form-group mb-3 row">
-                    <div className="form-control-lg row">
-                        <div className="col-lg-6">
-                            <label>Image type</label>
+                <label>
+                    Image type
+                    <div className="form-group mb-3 row">
+                        <div className="form-control-lg">
+                            <div className="form-control-lg form-control" onChange={this.props.updateSeverity}>
+                                <label className="col-lg-4" htmlFor="clinical">
+                                    <input type="radio" className="form-check-input" id="clinical"
+                                        name="imgtype" value="clinical" />
+                                    Benign
+                                </label>
+                                <label className="col-lg-4" htmlFor="dermoscopy">
+                                    <input type="radio" className="form-check-input" id="dermoscopy"
+                                        name="imgtype" value="dermoscopy" />
+                                    Dermoscopy
+                                </label>
+                                <label className="col-lg-4" htmlFor="other">
+                                    <input type="radio" className="form-check-input" id="other"
+                                        name="imgtype" value="other" />
+                                    Other
+                                </label>
+                            </div>
                         </div>
-                        <div className="col-lg-2">
-                            <label htmlFor="clinical">
-                                <input type="radio" className="form-check-input" id="clinical"
-                                       name="imgtype" value="clinical" />
-                                Clinical
-                            </label>
-                        </div>
-                        <div className="col-lg-2">
-                            <label htmlFor="dermoscopy">
-                                <input type="radio" className="form-check-input" id="dermoscopy"
-                                       name="imgtype" value="dermoscopy" />
-                                Dermoscopy
-                            </label>
-                        </div>
-                        <div className="col-lg-2">
-                            <label htmlFor="other">
-                                <input type="radio" className="form-check-input" id="other"
-                                       name="imgtype" value="other" />
-                                Other
-                            </label>
-                        </div>
-                    </div>
-                    <div className="form-control-lg row">
-                        <div className="col-lg-6 offset-lg-6">
-                            <input type="input"
-                                   className="form-control form-control-lg hidden-passthrough"
-                                   id="otherimg" name="otherimg" placeholder="other" />
+                        <div className="form-control-lg row">
+                            <div className="col-lg-12">
+                                <input type="input"
+                                    className="form-control form-control-lg hidden-passthrough"
+                                    id="otherimg" name="otherimg" placeholder="other" />
+                            </div>
                         </div>
                     </div>
-                </div>
-            </div>
+                </label>
+            </>
         )
     }
 }
