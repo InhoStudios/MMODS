@@ -13,8 +13,9 @@ CREATE TABLE IF NOT EXISTS Cases (
     anatomic_site varchar(150),
     size int,
     severity varchar(100),
-    fitzpatric_type int,
-    tags varchar(255),
+    fitzpatrick_type int,
+    ita int,
+    tags varchar(1023),
     primary key (case_id)
 );
 
@@ -34,13 +35,7 @@ CREATE TABLE IF NOT EXISTS Image (
     operator varchar(255),
     image_quality varchar(255),
     illumination varchar(255),
-    distance varchar(255),
-    clinical_site varchar(255),
     color_constancy_applied varchar(150),
-    polarization varchar(50),
-    privacy varchar(50),
-    fst_eval_method varchar(150),
-    individual_typology_angle varchar(10),
     primary key (img_id),
     foreign key (case_id) references Cases(case_id) on delete cascade
 );

@@ -94,7 +94,7 @@ code {
 
 .dropdown-content {
   display: none;
-  /* position: absolute; */
+  position: absolute;
   width: calc(100% - 25px);
   overflow: auto;
   z-index: 9999 !important;

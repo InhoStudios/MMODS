@@ -12,29 +12,27 @@ export default class Verify extends React.Component {
                     </div>
                     <div className="row">
                         <div className="col-lg-8">
-                            <div className="form-control form-control-lg">
-                                <div className="dropdown px-2">
-                                    <button className="btn btn-outline-secondary">Severity ↓</button>
-                                    <div className="dropdown-content">
-                                        <a href="#benign">Benign Lesions</a>
-                                        <a href="#malignant">Malignant Lesions</a>
-                                    </div>
+                            <div className="dropdown px-2">
+                                <button className="btn btn-outline-secondary">Severity ↓</button>
+                                <div className="dropdown-content">
+                                    <a href="#benign">Benign Lesions</a>
+                                    <a href="#malignant">Malignant Lesions</a>
                                 </div>
-                                <div className="dropdown px-2">
-                                    <button className="btn btn-outline-secondary">Image Type ↓</button>
-                                    <div className="dropdown-content">
-                                        <a href="#clinical">Clinical</a>
-                                        <a href="#dermoscopy">Dermoscopy</a>
-                                    </div>
+                            </div>
+                            <div className="dropdown px-2">
+                                <button className="btn btn-outline-secondary">Image Type ↓</button>
+                                <div className="dropdown-content">
+                                    <a href="#clinical">Clinical</a>
+                                    <a href="#dermoscopy">Dermoscopy</a>
                                 </div>
-                                <div className="dropdown px-2">
-                                    <button className="btn btn-outline-secondary">ICD Class ↓</button>
-                                    <div className="dropdown-content">
-                                        <a href="#entrycard">All diagnoses</a>
-                                        {/*{% for key in categories.keys() %}*/}
-                                        {/*<a href="#{{ key }}">{{categories[key]}}</a>*/}
-                                        {/*{% endfor %}*/}
-                                    </div>
+                            </div>
+                            <div className="dropdown px-2">
+                                <button className="btn btn-outline-secondary">ICD Class ↓</button>
+                                <div className="dropdown-content">
+                                    <a href="#entrycard">All diagnoses</a>
+                                    {/*{% for key in categories.keys() %}*/}
+                                    {/*<a href="#{{ key }}">{{categories[key]}}</a>*/}
+                                    {/*{% endfor %}*/}
                                 </div>
                             </div>
                         </div>

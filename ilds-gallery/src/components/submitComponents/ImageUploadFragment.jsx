@@ -76,37 +76,28 @@ export default class ImageUploadFragment extends React.Component {
                                name="anatomicsite" value="" /> */}
                     </div>
                 </div>
-                <label>
-                    Image type
-                    <div className="form-group mb-3 row">
-                        <div className="form-control-lg">
-                            <div className="form-control-lg form-control" onChange={this.props.updateSeverity}>
-                                <label className="col-lg-4" htmlFor="clinical">
-                                    <input type="radio" className="form-check-input" id="clinical"
-                                        name="imgtype" value="clinical" />
-                                    Benign
-                                </label>
-                                <label className="col-lg-4" htmlFor="dermoscopy">
-                                    <input type="radio" className="form-check-input" id="dermoscopy"
-                                        name="imgtype" value="dermoscopy" />
-                                    Dermoscopy
-                                </label>
-                                <label className="col-lg-4" htmlFor="other">
-                                    <input type="radio" className="form-check-input" id="other"
-                                        name="imgtype" value="other" />
-                                    Other
-                                </label>
-                            </div>
-                        </div>
-                        <div className="form-control-lg row">
-                            <div className="col-lg-12">
-                                <input type="input"
-                                    className="form-control form-control-lg hidden-passthrough"
-                                    id="otherimg" name="otherimg" placeholder="other" />
-                            </div>
+                <div className="row mb-3">
+                    <div className="form-group dropdown">
+                        <input type="input" className="form-control form-control-lg" 
+                            id="imgtype" placeholder="Imaging Modality"
+                            value={this.state.modality}
+                            // onChange={this.handleSiteSearchUpdate.bind(this)}
+                            onFocus={(e) => {
+                                e.preventDefault();
+                                document.querySelectorAll(".imodality").forEach(a => a.style.display = "block");
+                            }}
+                            onBlur={(e) => {
+                                e.preventDefault();
+                                document.querySelectorAll(".imodality").forEach(a => a.style.display = "none");
+                            }}
+                        />
+                        <div className="search-content imodality">
+                            <a>Clinical</a>
+                            <a>Dermoscopy</a>
+                            <a>Other</a>
                         </div>
                     </div>
-                </label>
+                </div>
             </>
         )
     }
