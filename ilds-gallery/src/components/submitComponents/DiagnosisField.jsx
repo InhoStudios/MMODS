@@ -15,9 +15,10 @@ export default class DiagnosisField extends React.Component {
                 <h4 className="mb-3">Diagnosis information</h4>
                 <label>
                     Disease Severity
-                    <div className="form-group mb-3 row">
-                        <div className="form-control-lg">
-                            <select class="form-control form-control-lg" name="severity" id="severity">
+                    <div className="row mb-3">
+                        <div className="form-group">
+                            <select class="form-control form-control-lg" name="severity" id="severity"
+                                onChange={this.props.updateSeverity}>
                                 <option value="null" selected disabled hidden>Benign or Malignant</option>
                                 <option value="b">Benign</option>
                                 <option value="m">Malignant</option>
@@ -25,7 +26,7 @@ export default class DiagnosisField extends React.Component {
                         </div>
                     </div>
                 </label>
-                <label>
+                {/* <label>
                     DIfficulty of Diagnosis
                     <div className="form-group mb-3 row">
                         <div className="form-control-lg">
@@ -34,11 +35,11 @@ export default class DiagnosisField extends React.Component {
                                     onChange={this.props.updateDod}/>
                         </div>
                     </div>
-                </label>
+                </label> */}
                 <label htmlFor="size">
                     Lesion Size (mm)
-                    <div className="form-group mb-3 row">
-                        <div className="form-control-lg">
+                    <div className="mb-3 row">
+                        <div className="form-group">
                             <input type="number" className="form-control form-control-lg" id="size"
                                     name="size" placeholder="Lesion size (mm)" 
                                     onChange={this.props.updateSize}/>

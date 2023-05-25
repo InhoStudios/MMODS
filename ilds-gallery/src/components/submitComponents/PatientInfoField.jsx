@@ -7,8 +7,8 @@ export default class PatientInfoField extends React.Component {
                 <h4 className="mb-3">Patient Information</h4>
                 <label htmlFor="age">
                     Age
-                    <div className="form-group mb-3 row">
-                        <div className="form-control-lg">
+                    <div className="mb-3 row">
+                        <div className="form-group">
                             <input type="number" className="form-control form-control-lg" id="age"
                                 name="age" placeholder="Age" 
                                 onChange={this.props.updateAge}/>
@@ -17,9 +17,10 @@ export default class PatientInfoField extends React.Component {
                 </label>
                 <label>
                     Assigned Sex
-                    <div className="form-group mb-3 row">
-                        <div className="form-control-lg">
-                            <select class="form-control form-control-lg" name="severity" id="severity">
+                    <div className="mb-3 row">
+                        <div className="form-group">
+                            <select class="form-control form-control-lg" name="severity" id="severity"
+                                onChange={this.props.updateSex}>
                                 <option value="null" selected disabled hidden>Choose patient declared sex</option>
                                 <option value="f">Female</option>
                                 <option value="m">Male</option>
@@ -29,9 +30,11 @@ export default class PatientInfoField extends React.Component {
                 </label>
                 <label>
                     Does the patient have a family history of this condition?
-                    <div className="form-group mb-3 row">
-                        <div className="form-control-lg">
-                            <select class="form-control form-control-lg" name="severity" id="severity">
+                    <div className="mb-3 row">
+                        <div className="form-group">
+                            <select class="form-control form-control-lg" name="severity" id="severity"
+                                onChange={this.props.updateHist}
+                                onLoad={this.props.updateHist}>
                                 <option value="f" selected>No, the patient does not have a family history of this condition</option>
                                 <option value="t">Yes, the patient has a family history of this condition</option>
                             </select>

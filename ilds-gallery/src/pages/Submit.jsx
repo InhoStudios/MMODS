@@ -125,23 +125,13 @@ export default class Submit extends React.Component {
 
         // TODO: Incorporate this image post into the upload functionality and wrap it into one endpoint
 
+        await this.updateCase("caseID", `${new Date().getTime()}`);
+        console.log(JSON.stringify(this.state.case));
+
         const formData = new FormData();
         formData.append("image", this.state.image);
-        let res = await axios.post("http://localhost:9000/upload_image", formData, {});
-
-        await this.updateCase("caseID", `${new Date().getTime()}`)
-        console.log(JSON.stringify(this.state.case));
-        let options = {
-            method: "POST",
-            body:JSON.stringify(this.state.case),
-            headers: {
-                "Content-Type":"application/json",
-            }
-        };
-        let result = await fetch(`http://localhost:9000/upload`, options)
-            .then(() => console.log("Post success"))
-            .catch((err) => console.log("handleUpload()", err));
-        console.log(result);
+        formData.append("case", JSON.stringify(this.state.case));
+        let res = await axios.post("http://localhost:9000/upload", formData, {});
     }
 
     async updateCase(key, value) {

@@ -25,6 +25,7 @@ async function insert(into, values) {
     let valueHeaders = Object.keys(values).join();
     let valueBody = Object.values(values).join();
     let query = `INSERT IGNORE INTO ${into} (${valueHeaders}) VALUES (${valueBody});`
+    console.log(query);
     return await postQuery(query);
 }
 
