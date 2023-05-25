@@ -31,5 +31,6 @@ async function insert(into, values) {
 
 module.exports = {
     postQuery: postQuery,
-    insert: insert
+    insert: insert,
+    select: select,
 };

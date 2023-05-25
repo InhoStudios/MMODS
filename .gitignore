@@ -8,3 +8,4 @@ flask/credentials.py
 **/.env.test.local
 **/.env.production.local
 **/node_modules/
+server/public/*

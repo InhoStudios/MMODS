@@ -46,12 +46,13 @@ router.post('/', upload.single('image'), async (req, res, next) => {
     let uploadedImage = {
         img_id: `'${imageID}'`,
         filename: `'${req.file.filename}'`,
+        case_id: `'${caseID}'`,
         url: `'${url}'`,
         modality: `'${imageBody.modality}'`,
-        anatomic_site: imageBody.anatomic_site
+        anatomic_site: imageBody.anatomicSite
     }
-    sql.insert("Cases", uploadedCase);
-    sql.insert("Image", uploadedImage);
+    await sql.insert("Cases", uploadedCase);
+    await sql.insert("Image", uploadedImage);
     if (!req.file) {
         console.log("No image received");
         return res.send({

@@ -3,7 +3,7 @@ import ImageUploadField from "../components/submitComponents/ImageUploadField";
 import PatientInfoField from "../components/submitComponents/PatientInfoField";
 import DiagnosisField from "../components/submitComponents/DiagnosisField";
 import axios from "axios";
-import { Case, ImageMetadata } from "../utilities/Structures";
+import { Case, ImageMetadata, SERVER_ENDPOINT } from "../utilities/Structures";
 
 export default class Submit extends React.Component {
     searchQuery = "test";
@@ -26,7 +26,7 @@ export default class Submit extends React.Component {
             case: new Case(),
             image: '',
             metadata: new ImageMetadata(),
-        }
+        };
     }
 
     handleQueryUpdate(event) {
@@ -36,7 +36,7 @@ export default class Submit extends React.Component {
     }
 
     async performSearch(input, caller) {
-        let result = await fetch(`http://localhost:9000/search?query=${input}`)
+        let result = await fetch(`${SERVER_ENDPOINT}/search?query=${input}`)
             .then((data) => data.json())
             .catch((err) => console.log(err));
         let sortedEntities = result.destinationEntities.sort(this.nestedSort("score"));
@@ -61,7 +61,7 @@ export default class Submit extends React.Component {
     async handleSelectChange(entry, caller) {
         document.querySelectorAll(".diagnosis-list").forEach(a => a.style.display = "none");
         let id = entry.id.replace("http://id.who.int/icd/entity/","");
-        let entity = await fetch(`http://localhost:9000/entity?entity_code=${id}`)
+        let entity = await fetch(`${SERVER_ENDPOINT}/entity?entity_code=${id}`)
             .then((data) => data.json())
             .catch((err) => console.log("handleSelectChange()", err));
         let curCase = caller.state.case;
@@ -131,7 +131,7 @@ export default class Submit extends React.Component {
         formData.append("image", this.state.image);
         formData.append("case", JSON.stringify(this.state.case));
         formData.append("imageMetadata", JSON.stringify(this.state.metadata));
-        let res = await axios.post("http://localhost:9000/upload", formData, {});
+        let res = await axios.post(`${SERVER_ENDPOINT}/upload`, formData, {});
     }
 
     async updateCase(key, value) {

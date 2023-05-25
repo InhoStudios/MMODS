@@ -1,7 +1,23 @@
 import React from "react";
 import ImageCard from "../components/ImageCard";
+import { SERVER_ENDPOINT } from "../utilities/Structures";
 
 export default class Verify extends React.Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            images: [],
+        };
+        this.getImagesFromDB();
+    }
+
+    async getImagesFromDB() {
+        let images = await fetch(`${SERVER_ENDPOINT}/get_images`)
+            .then((data) => data.json())
+            .catch((err) => console.log(err));
+        this.setState({images: images});
+    }
+
     render() {
         return (
 
@@ -46,26 +62,15 @@ export default class Verify extends React.Component {
                     <div className="row justify-content-center">
                         <div className="col-md-10 mb-2 text-left">
                             <div className="row mt-5">
-                                <ImageCard
-                                    filepath={"logo192.png"}
-                                    uri={12345}
-                                    title={"test diagnosis"}
-                                    colsize={"col-lg-3"}/>
-                                <ImageCard
-                                    filepath={"logo192.png"}
-                                    uri={12345}
-                                    title={"test diagnosis"}
-                                    colsize={"col-lg-3"}/>
-                                <ImageCard
-                                    filepath={"logo192.png"}
-                                    uri={12345}
-                                    title={"test diagnosis"}
-                                    colsize={"col-lg-3"}/>
-                                <ImageCard
-                                    filepath={"logo192.png"}
-                                    uri={12345}
-                                    title={"test diagnosis"}
-                                    colsize={"col-lg-3"}/>
+                                {
+                                    this.state.images.map((image) => (
+                                        <ImageCard
+                                            filepath={image.url}
+                                            uri={image.user_selected_entity}
+                                            title={"test diagnosis"}
+                                            colsize={"col-lg-3"}/>
+                                    ))
+                                }
                             </div>
                         </div>
                     </div>

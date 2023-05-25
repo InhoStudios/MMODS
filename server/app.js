@@ -13,6 +13,7 @@ var searchRouter = require('./routes/search');
 var entityRouter = require('./routes/entity');
 var sqlRouter = require('./routes/sqldb.js');
 var uploadRouter = require('./routes/upload');
+var imageRouter = require('./routes/get_images');
 
 var app = express();
 
@@ -35,6 +36,7 @@ app.use('/search', searchRouter);
 app.use('/entity', entityRouter);
 app.use('/sqldb', sqlRouter);
 app.use('/upload', uploadRouter);
+app.use('/db_select', imageRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
