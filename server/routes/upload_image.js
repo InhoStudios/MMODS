@@ -1,6 +1,7 @@
 var express = require('express');
 var router = express.Router();
 var multer = require('multer');
+var uuidv4 = require('uuid/v4');
 
 const DIR = "./public/images/"
 
@@ -10,8 +11,8 @@ const storage = multer.diskStorage({
     },
     filename: (req, file, cb) => {
         // TODO: Generate unique filename
-        const fileName = "";
-        cb(null, file.fieldname)
+        const filename = file.originalname.toLowerCase().split(' ').join('-');
+        cb(null, `${uuidv4()}-${filename}`);
     }
 });
 
@@ -28,13 +29,14 @@ var upload = multer({
 });
 
 router.post('/', upload.single('image'), async (req, res, next) => {
-    if (!req.image) {
+    console.log(req.body);
+    if (!req.file) {
         console.log("No image received");
         return res.send({
             success: false
         });
     } else {
-        console.log("Image received");
+        console.log(`Image received: ${req.file.filename}`);
         return res.send({
             success: true
         });

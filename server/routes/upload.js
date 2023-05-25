@@ -14,8 +14,8 @@ router.post('/', async (req, res, next) => {
         anatomic_site: body.anatomicSite,
         severity: body.severity,
     };
-    let response = await sql.insert("Cases", uploadedCase);
-    res.send(response);
+    // let response = await sql.insert("Cases", uploadedCase);
+    res.send("ok");
 });
 
 module.exports = router;

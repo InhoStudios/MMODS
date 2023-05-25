@@ -129,9 +129,6 @@ export default class Submit extends React.Component {
         formData.append("image", this.state.image);
         let res = await axios.post("http://localhost:9000/upload_image", formData, {});
 
-        //
-        return
-
         await this.updateCase("caseID", `${new Date().getTime()}`)
         console.log(JSON.stringify(this.state.case));
         let options = {
