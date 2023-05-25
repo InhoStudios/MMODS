@@ -2,7 +2,7 @@ import React from "react";
 import ImageUploadField from "../components/submitComponents/ImageUploadField";
 import PatientInfoField from "../components/submitComponents/PatientInfoField";
 import DiagnosisField from "../components/submitComponents/DiagnosisField";
-import Select from "react-select";
+import axios from "axios";
 import Case from "../utilities/Structures";
 
 export default class Submit extends React.Component {
@@ -23,7 +23,8 @@ export default class Submit extends React.Component {
                 },
                 "definition":  "",
             },
-            case: new Case()
+            case: new Case(),
+            image: '',
         }
     }
 
@@ -104,8 +105,10 @@ export default class Submit extends React.Component {
         console.log(`handleUpdateHist()`);
     }
 
-    handleUpdateImage() {
+    handleUpdateImage(e) {
         console.log(`handleUpdateImage()`);
+        this.setState({ image: e.target.files[0] });
+        console.log(e.target.files[0])
     }
 
     handleUpdateImgtype() {
@@ -119,6 +122,16 @@ export default class Submit extends React.Component {
 
     async handleUpload(e) {
         e.preventDefault();
+
+        // TODO: Incorporate this image post into the upload functionality and wrap it into one endpoint
+
+        const formData = new FormData();
+        formData.append("image", this.state.image);
+        let res = await axios.post("http://localhost:9000/upload_image", formData, {});
+
+        //
+        return
+
         await this.updateCase("caseID", `${new Date().getTime()}`)
         console.log(JSON.stringify(this.state.case));
         let options = {

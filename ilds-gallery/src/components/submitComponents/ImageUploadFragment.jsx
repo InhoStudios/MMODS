@@ -38,7 +38,8 @@ export default class ImageUploadFragment extends React.Component {
                 <div className="form-group mb-3 row">
                     <div className="col-lg-6">
                         <input type="file" className="form-control form-control-lg"
-                               id="imgUpload" name="filename" accept="image/*" />
+                               id="imgUpload" name="filename" accept="image/*" 
+                               onChange={this.props.updateImage}/>
                     </div>
                     <div className="col-lg-6 dropdown">
                         <input type="input" className="form-control form-control-lg" 
