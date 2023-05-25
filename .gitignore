@@ -1,6 +1,6 @@
 __pycache__/
-credentials.py
-./credentials.py
+flask/credentials.py
+./flask/credentials.py
 ./.DS_Store
 **/.env
 **/.env.local
