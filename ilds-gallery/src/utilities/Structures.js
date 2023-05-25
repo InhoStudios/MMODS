@@ -12,7 +12,7 @@ export const METHODS = {
     POST: "POST"
 }
 
-export default class Case {
+export class Case {
     caseID;
     image;
     title;
@@ -27,7 +27,21 @@ export default class Case {
     size;
     severity;
     fitzpatrickType;
+    ita;
     tags;
+}
+
+export class ImageMetadata {
+    filename;
+    modality;
+    camera;
+    imaging_conditions;
+    anatomicSite;
+    operator;
+    image_quality;
+    illumination;
+    color_constancy_applied;
+    view;
 }
 
 export const SERVER_ENDPOINT = "http://localhost:9000";

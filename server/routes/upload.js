@@ -12,8 +12,8 @@ const storage = multer.diskStorage({
     },
     filename: (req, file, cb) => {
         // TODO: Generate unique filename
-        const filename = file.originalname.toLowerCase().split(' ').join('-');
-        cb(null, `${uuidv4()}-${filename}`);
+        const ext = file.originalname.split(".").slice(-1)[0];
+        cb(null, `${uuidv4()}.${ext}`);
     }
 });
 
@@ -31,18 +31,27 @@ var upload = multer({
 
 router.post('/', upload.single('image'), async (req, res, next) => {
     let caseBody = JSON.parse(req.body.case);
+    let caseID = uuidv4();
     let uploadedCase = {
-        case_id: caseBody.caseID,
+        case_id: `'${caseID}'`,
         age: caseBody.age,
-        sex: caseBody.sex,
-        history: caseBody.history,
+        sex: `'${caseBody.sex}'`,
+        history: caseBody.history == "t" ? 1 : 0,
         user_selected_entity: caseBody.userEntity,
-        anatomic_site: caseBody.anatomicSite,
-        severity: caseBody.severity,
+        severity: `'${caseBody.severity}'`
     };
+    let imageBody = JSON.parse(req.body.imageMetadata);
+    let imageID = uuidv4();
+    let url = `${req.protocol}://${req.hostname}:9000/${req.file.path}`
+    let uploadedImage = {
+        img_id: `'${imageID}'`,
+        filename: `'${req.file.filename}'`,
+        url: `'${url}'`,
+        modality: `'${imageBody.modality}'`,
+        anatomic_site: imageBody.anatomic_site
+    }
     sql.insert("Cases", uploadedCase);
-    console.log(caseBody);
-    console.log(uploadedCase);
+    sql.insert("Image", uploadedImage);
     if (!req.file) {
         console.log("No image received");
         return res.send({

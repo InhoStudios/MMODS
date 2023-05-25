@@ -36,6 +36,7 @@ CREATE TABLE IF NOT EXISTS Image (
     image_quality varchar(255),
     illumination varchar(255),
     color_constancy_applied varchar(150),
+    view int,
 
     resolved boolean,
     detectability float,

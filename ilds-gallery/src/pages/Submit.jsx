@@ -3,7 +3,7 @@ import ImageUploadField from "../components/submitComponents/ImageUploadField";
 import PatientInfoField from "../components/submitComponents/PatientInfoField";
 import DiagnosisField from "../components/submitComponents/DiagnosisField";
 import axios from "axios";
-import Case from "../utilities/Structures";
+import { Case, ImageMetadata } from "../utilities/Structures";
 
 export default class Submit extends React.Component {
     searchQuery = "test";
@@ -25,6 +25,7 @@ export default class Submit extends React.Component {
             },
             case: new Case(),
             image: '',
+            metadata: new ImageMetadata(),
         }
     }
 
@@ -111,12 +112,13 @@ export default class Submit extends React.Component {
         console.log(e.target.files[0])
     }
 
-    handleUpdateImgtype() {
+    handleUpdateImgtype(type) {
         console.log(`handleUpdateImgtype()`);
+        this.updateImageMetadata("modality", type);
     }
 
     handleUpdateSite(index) {
-        this.updateCase("anatomicSite", index);
+        this.updateImageMetadata("anatomicSite", index);
         console.log(`handleUpdateSite(${index})`);
     }
 
@@ -125,12 +127,10 @@ export default class Submit extends React.Component {
 
         // TODO: Incorporate this image post into the upload functionality and wrap it into one endpoint
 
-        await this.updateCase("caseID", `${new Date().getTime()}`);
-        console.log(JSON.stringify(this.state.case));
-
         const formData = new FormData();
         formData.append("image", this.state.image);
         formData.append("case", JSON.stringify(this.state.case));
+        formData.append("imageMetadata", JSON.stringify(this.state.metadata));
         let res = await axios.post("http://localhost:9000/upload", formData, {});
     }
 
@@ -141,6 +141,15 @@ export default class Submit extends React.Component {
         };
         newCase[key] = value;
         return await this.setState({case: newCase});
+    }
+
+    async updateImageMetadata(key, value) {
+        let curImgMetadata = this.state.metadata;
+        let newImgMetadata = {
+            ...curImgMetadata
+        };
+        newImgMetadata[key] = value;
+        return await this.setState({metadata: newImgMetadata})
     }
 
     render() {

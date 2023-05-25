@@ -6,7 +6,8 @@ export default class ImageUploadFragment extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            anatomic: null
+            anatomic: null,
+            modality: null
         }
     }
 
@@ -29,6 +30,27 @@ export default class ImageUploadFragment extends React.Component {
         this.setState({anatomic: site.site});
         document.querySelectorAll(".asites").forEach(a => a.style.display = "none");
         this.props.updateSite(site.index);
+    }
+
+    handleImageTypeInput(e) {
+        e.preventDefault();
+        let val = e.target.value;
+        this.setState({modality: val})
+        document.querySelectorAll(".std-type").forEach(a => {
+            let txt = a.textContent || a.innerText;
+            if (txt.toLowerCase().indexOf(val.toLowerCase()) > -1) {
+                a.style.display = "block";
+            } else {
+                a.style.display = "none";
+            }
+        })
+        this.props.updateImgtype(val);
+    }
+
+    handleUpdateImgType(val) {
+        this.setState({modality: val});
+        document.querySelectorAll(".itype").forEach(a => a.style.display = "none");
+        this.props.updateImgtype(val);
     }
 
     render() {
@@ -82,7 +104,7 @@ export default class ImageUploadFragment extends React.Component {
                         <input type="input" className="form-control form-control-lg" 
                             id="imgtype" placeholder="Imaging Modality"
                             value={this.state.modality}
-                            // onChange={this.handleSiteSearchUpdate.bind(this)}
+                            onChange={this.handleImageTypeInput.bind(this)}
                             onFocus={(e) => {
                                 e.preventDefault();
                                 document.querySelectorAll(".imodality").forEach(a => a.style.display = "block");
@@ -93,9 +115,21 @@ export default class ImageUploadFragment extends React.Component {
                             }}
                         />
                         <div className="search-content imodality">
-                            <a>Clinical</a>
-                            <a>Dermoscopy</a>
-                            <a>Other</a>
+                            <a className="itype std-type"
+                            onMouseDown={(e) => {
+                                e.preventDefault();
+                                this.handleUpdateImgType("Clinical");
+                            }}>
+                                    Clinical
+                            </a>
+                            <a className="itype std-type"
+                            onMouseDown={(e) => {
+                                e.preventDefault();
+                                this.handleUpdateImgType("Dermoscopy");
+                            }}>
+                                    Dermoscopy
+                            </a>
+                            <a className="itype">Other</a>
                         </div>
                     </div>
                 </div>
