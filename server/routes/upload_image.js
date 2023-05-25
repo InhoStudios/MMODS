@@ -36,7 +36,7 @@ router.post('/', upload.single('image'), async (req, res, next) => {
             success: false
         });
     } else {
-        console.log(`Image received: ${req.file.filename}`);
+        console.log(`Image received: ${req.file.filename}\nImage hosted at ${req.protocol}://${req.host}:9000/${req.file.path}`);
         return res.send({
             success: true
         });
