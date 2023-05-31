@@ -156,14 +156,29 @@ export default class Submit extends React.Component {
 
     async handleUpload(e) {
         e.preventDefault();
-
-        // TODO: Incorporate this image post into the upload functionality and wrap it into one endpoint
-
+        if (!this.checkCase()) {
+            alert("One or more fields are empty\n Please double check before resubmitting");
+            return;
+        }
         const formData = new FormData();
         formData.append("image", this.state.image);
         formData.append("case", JSON.stringify(this.state.case));
         formData.append("imageMetadata", JSON.stringify(this.state.metadata));
         let res = await axios.post(`${SERVER_ENDPOINT}/upload`, formData, {});
+    }
+
+    checkCase() {
+        try {
+            return (
+                this.case.age != undefined &&
+                this.case.sex != undefined &&
+                this.case.history != undefined &&
+                this.case.userEntity != undefined &&
+                this.case.severity != undefined
+            )
+        } catch (TypeError) {
+            return false;
+        }
     }
 
     async updateCase(key, value) {

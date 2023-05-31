@@ -12,7 +12,7 @@ export default class Verify extends React.Component {
     }
 
     async getImagesFromDB() {
-        let images = await fetch(`${SERVER_ENDPOINT}/db_select?values=i.img_id, i.case_id, i.url, i.modality, c.user_selected_entity&from=Image i, Cases c&where=c.case_id=i.case_id`)
+        let images = await fetch(`${SERVER_ENDPOINT}/db_select?values=i.img_id, i.case_id, i.url, i.modality, c.user_selected_entity, e.entity_title&from=Image i, Cases c, ICD_Entity e&where=c.case_id=i.case_id and e.entity_id=c.user_selected_entity`)
             .then((data) => data.json())
             .catch((err) => console.log(err));
         this.setState({images: images});
@@ -67,7 +67,7 @@ export default class Verify extends React.Component {
                                         <ImageCard
                                             filepath={image.url}
                                             uri={image.user_selected_entity}
-                                            title={"test diagnosis"}
+                                            title={image.entity_title}
                                             colsize={"col-lg-3"}/>
                                     ))
                                 }

@@ -38,7 +38,7 @@ app.use('/entity', entityRouter);
 app.use('/sqldb', sqlRouter);
 app.use('/upload', uploadRouter);
 app.use('/db_select', selectRouter);
-app.use('/db_insert', insertRouter);
+app.use('/db_insert', insertRouter)
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
