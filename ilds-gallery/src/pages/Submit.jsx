@@ -45,6 +45,38 @@ export default class Submit extends React.Component {
             hierarchicalEntities = hierarchicalEntities.concat(this.DFSEntities(entity, 0));
         }
         caller.setState({entities: hierarchicalEntities, query: input});
+        this.uploadICDEntities(hierarchicalEntities);
+    }
+
+    async uploadICDEntities(entities) {
+        // TODO: Filter through entities
+        // TODO: Create key-value pair of entity-code and entity-title
+        // TODO: Submit post request to Express server
+        let formData = new FormData();
+
+        let entityPairs = [];
+        
+        for (let fullEntity of entities) {
+            let entity = {
+                entity_title: `'${fullEntity.title
+                    .replace("<em class='found'>","")
+                    .replace("</em>","")
+                    .replace(/\&nbsp;/g,"")}'`,
+                entity_id: `'${fullEntity.id.replace("http://id.who.int/icd/entity/","")}'`
+            };
+            entityPairs.push(entity)
+        }
+
+        formData.append("into", "ICD_Entity");
+        formData.append("values", JSON.stringify(entityPairs));
+        let data = {
+            "into": "ICD_Entity",
+            "values": entityPairs
+        };
+
+        console.log(data);
+
+        await axios.post(`${SERVER_ENDPOINT}/db_insert`, data, {})
     }
     
     DFSEntities(entity, depth) {

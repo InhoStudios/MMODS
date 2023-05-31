@@ -29,8 +29,21 @@ async function insert(into, values) {
     return await postQuery(query);
 }
 
+async function insertArray(into, values) {
+    let valueHeaders = Object.keys(values[0]).join();
+    let valuesArr = []
+    for (let value of values) {
+        let valueBody = Object.values(value).join();
+        valuesArr.push(`(${valueBody})`);
+    }
+    let query = `INSERT IGNORE INTO ${into} (${valueHeaders}) VALUES ${valuesArr.join()};`
+    console.log(query);
+    return await postQuery(query);
+}
+
 module.exports = {
     postQuery: postQuery,
     insert: insert,
+    insertArray: insertArray,
     select: select,
 };

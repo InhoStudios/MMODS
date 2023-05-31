@@ -14,6 +14,7 @@ var entityRouter = require('./routes/entity');
 var sqlRouter = require('./routes/sqldb.js');
 var uploadRouter = require('./routes/upload');
 var selectRouter = require('./routes/db_select');
+var insertRouter = require('./routes/db_insert');
 
 var app = express();
 
@@ -37,6 +38,7 @@ app.use('/entity', entityRouter);
 app.use('/sqldb', sqlRouter);
 app.use('/upload', uploadRouter);
 app.use('/db_select', selectRouter);
+app.use('/db_insert', insertRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
