@@ -26,19 +26,19 @@ export default class FilterBar extends React.Component {
                     <div className="dropdown px-2">
                         <button className="btn btn-outline-secondary">Severity ↓</button>
                         <div className="dropdown-content">
-                            <a className="px-2">
+                            <a className="pe-3">
                                 <label>
                                     <input type="checkbox" className="mx-2" value="All"></input>
                                     All
                                 </label>
                             </a>
-                            <a className="px-2">
+                            <a className="pe-3">
                                 <label>
                                     <input type="checkbox" className="mx-2" value="Benign"></input>
                                     Benign
                                 </label>
                             </a>
-                            <a className="px-2">
+                            <a className="pe-3">
                                 <label>
                                     <input type="checkbox" className="mx-2" value="Malignant"></input>
                                     Malignant
@@ -49,13 +49,13 @@ export default class FilterBar extends React.Component {
                     <div className="dropdown px-2">
                         <button className="btn btn-outline-secondary">Image Capture Method ↓</button>
                         <div className="dropdown-content">
-                            <a className="px-2">
+                            <a className="pe-3">
                                 <label>
                                     <input type="checkbox" className="mx-2" value="Clinical"></input>
                                     Clinical
                                 </label>
                             </a>
-                            <a className="px-2">
+                            <a className="pe-3">
                                 <label>
                                     <input type="checkbox" className="mx-2" value="Clinical"></input>
                                     Dermoscopy
@@ -66,7 +66,7 @@ export default class FilterBar extends React.Component {
                     <div className="dropdown px-2">
                         <button className="btn btn-outline-secondary">ICD Entity Classification ↓</button>
                         <div className="dropdown-content">
-                            <a className="px-2">
+                            <a className="pe-3">
                                 <label>
                                     <input type="checkbox" className="mx-2" value="Clinical"></input>
                                     All diagnoses
@@ -74,7 +74,7 @@ export default class FilterBar extends React.Component {
                             </a>
                             {
                                 this.state.icd_entities.map((entity) => (
-                                <a className="px-2">
+                                <a className="pe-3">
                                     <label>
                                         <input type="checkbox" className="mx-2" value="Clinical"></input>
                                         {entity.entity_title}
