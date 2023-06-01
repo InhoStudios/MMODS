@@ -9,14 +9,20 @@ export default class Home extends React.Component {
         this.state = {
             images: [],
         };
-        this.getImagesFromDB();
     }
 
     async getImagesFromDB() {
         let images = await fetch(`${SERVER_ENDPOINT}/db_select?values=i.img_id, i.case_id, i.url, i.modality, c.user_selected_entity, e.entity_title&from=Image i, Cases c, ICD_Entity e&where=c.case_id=i.case_id and e.entity_id=c.user_selected_entity`)
             .then((data) => data.json())
             .catch((err) => console.log(err));
-        this.setState({images: images});
+        if (images !== undefined) {
+            this.setState({images: images});
+        }
+    }
+
+    componentDidMount() {
+        this.getImagesFromDB();
+        console.log(this.state.images);
     }
 
     render() {

@@ -45,7 +45,8 @@ export class ImageMetadata {
     view;
 }
 
-export const SERVER_ENDPOINT = `http://${process.env.EXP_IP}:${process.env.EXP_PORT}`;
+// export const SERVER_ENDPOINT = `http://${process.env.EXP_IP}:${process.env.EXP_PORT}`;
+export const SERVER_ENDPOINT = `http://localhost:9000`;
 
 export const ANATOMIC_SITES = [
     {
