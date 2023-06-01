@@ -25,10 +25,10 @@ export default class Home extends React.Component {
             <section>
                 <div className="container-fluid col-md-11">
                     <div className="row justify-content-left">
-                        <div className="col-md-4 mb-2 text-left">
+                        <div className="col-md-3 mb-2 text-left">
                             <div className="row justify-content-left mt-5 mb-3 text-left">
-                                <h1>ILDS Gallery</h1>
-                                <p>Research and educational database of dermatology images. Hosted privately by @InhoStudios.</p>
+                                <h1>Gallery</h1>
+                                <p>Research and educational database of dermatology images. Built by <a href="https://github.com/InhoStudios/ICD-11-Interface">@InhoStudios</a>.</p>
                             </div>
                             <div className="row mt-3">
                                 {/* <a className="btn" href="/quiz">
@@ -60,7 +60,7 @@ export default class Home extends React.Component {
                                 </a>
                             </div>
                         </div>
-                        <div className="col-lg-8 mb-2 text-left">
+                        <div className="col-lg-9 mb-2 text-left">
                             <div className="row justify-content-center mt-5 text-center">
                                 <h3>Verified Images</h3>
                             </div>

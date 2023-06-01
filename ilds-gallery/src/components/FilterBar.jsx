@@ -47,7 +47,7 @@ export default class FilterBar extends React.Component {
                         </div>
                     </div>
                     <div className="dropdown px-2">
-                        <button className="btn btn-outline-secondary">Image Type ↓</button>
+                        <button className="btn btn-outline-secondary">Image Capture Method ↓</button>
                         <div className="dropdown-content">
                             <a className="px-2">
                                 <label>
