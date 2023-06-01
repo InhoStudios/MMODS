@@ -1,6 +1,7 @@
 import React from "react";
 import ImageCard from "../components/ImageCard";
 import { SERVER_ENDPOINT } from "../utilities/Structures";
+import FilterBar from "../components/FilterBar";
 
 export default class Home extends React.Component {
     constructor(props) {
@@ -17,6 +18,7 @@ export default class Home extends React.Component {
             .catch((err) => console.log(err));
         this.setState({images: images});
     }
+
     render() {
 
         return (
@@ -26,10 +28,10 @@ export default class Home extends React.Component {
                         <div className="col-md-4 mb-2 text-left">
                             <div className="row justify-content-left mt-5 mb-3 text-left">
                                 <h1>ILDS Gallery</h1>
-                                <p>[description]</p>
+                                <p>Research and educational database of dermatology images. Hosted privately by @InhoStudios.</p>
                             </div>
                             <div className="row mt-3">
-                                <a className="btn" href="/quiz">
+                                {/* <a className="btn" href="/quiz">
                                     <div className="card card-shadow text-left">
                                         <div className="card-body">
                                             <span>/quiz</span>
@@ -37,7 +39,7 @@ export default class Home extends React.Component {
                                             <p>Take a dermatology quiz!</p>
                                         </div>
                                     </div>
-                                </a>
+                                </a> */}
                                 <a className="btn" href="/submit">
                                     <div className="card card-shadow text-left">
                                         <div className="card-body">
@@ -58,20 +60,21 @@ export default class Home extends React.Component {
                                 </a>
                             </div>
                         </div>
-                        <div className="col-md-8 mb-2 text-left">
+                        <div className="col-lg-8 mb-2 text-left">
                             <div className="row justify-content-center mt-5 text-center">
                                 <h3>Verified Images</h3>
-                                <div className="row mt-2">
-                                    {
-                                        this.state.images.map((image) => (
-                                            <ImageCard
-                                                filepath={image.url}
-                                                uri={image.user_selected_entity}
-                                                title={image.entity_title}
-                                                colsize={"col-lg-4"}/>
-                                        ))
-                                    }
-                                </div>
+                            </div>
+                            <FilterBar />
+                            <div className="row mt-2">
+                                {
+                                    this.state.images.map((image) => (
+                                        <ImageCard
+                                            filepath={image.url}
+                                            uri={image.user_selected_entity}
+                                            title={image.entity_title}
+                                            colsize={"col-lg-4"}/>
+                                    ))
+                                }
                             </div>
                         </div>
                     </div>
