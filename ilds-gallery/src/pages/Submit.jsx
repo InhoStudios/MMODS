@@ -45,13 +45,9 @@ export default class Submit extends React.Component {
             hierarchicalEntities = hierarchicalEntities.concat(this.DFSEntities(entity, 0));
         }
         caller.setState({entities: hierarchicalEntities, query: input});
-        this.uploadICDEntities(hierarchicalEntities);
     }
 
     async uploadICDEntities(entities) {
-        // TODO: Filter through entities
-        // TODO: Create key-value pair of entity-code and entity-title
-        // TODO: Submit post request to Express server
         let formData = new FormData();
 
         let entityPairs = [];
@@ -76,7 +72,7 @@ export default class Submit extends React.Component {
 
         console.log(data);
 
-        await axios.post(`${SERVER_ENDPOINT}/db_insert`, data, {})
+        return await axios.post(`${SERVER_ENDPOINT}/db_insert`, data, {});
     }
     
     DFSEntities(entity, depth) {
@@ -97,12 +93,15 @@ export default class Submit extends React.Component {
             .then((data) => data.json())
             .catch((err) => console.log("handleSelectChange()", err));
         // TODO: Get ancestor IDs and append to case_categories
+        console.log(entity);
         let curCase = caller.state.case;
         let updateCase = {
             ...curCase
         };
         updateCase.title = entity.title["@value"].replace("<em class='found'>","").replace("</em>","");
         updateCase.userEntity = id;
+        updateCase.ancestors = entity.ancestor;
+        console.log(entity.ancestor);
         caller.setState({selectedOption: entity, case: updateCase});
     }
 
@@ -157,6 +156,7 @@ export default class Submit extends React.Component {
 
     async handleUpload(e) {
         e.preventDefault();
+        console.log(this.checkCase());
         if (!this.checkCase()) {
             alert("One or more fields are empty\n Please double check before resubmitting");
             return;
@@ -165,19 +165,22 @@ export default class Submit extends React.Component {
         formData.append("image", this.state.image);
         formData.append("case", JSON.stringify(this.state.case));
         formData.append("imageMetadata", JSON.stringify(this.state.metadata));
-        let res = await axios.post(`${SERVER_ENDPOINT}/upload`, formData, {});
+        await this.uploadICDEntities(this.state.entities);
+        await axios.post(`${SERVER_ENDPOINT}/upload`, formData, {});
+        return;
     }
 
     checkCase() {
         try {
             return (
-                this.case.age != undefined &&
-                this.case.sex != undefined &&
-                this.case.history != undefined &&
-                this.case.userEntity != undefined &&
-                this.case.severity != undefined
+                this.state.case.age !== undefined &&
+                this.state.case.sex !== undefined &&
+                this.state.case.history !== undefined &&
+                this.state.case.userEntity !== undefined &&
+                this.state.case.severity !== undefined
             )
-        } catch (TypeError) {
+        } catch (error) { 
+            console.error(error);
             return false;
         }
     }
