@@ -10,9 +10,9 @@ flask/credentials.py
 **/.env.production.local
 
 server/public/*
-./server/node_modules
-./server/node_modules/
-./server/node_modules/*
+server/node_modules
+server/node_modules/
+server/node_modules/*
 
 **/node_modules
 **/node_modules/
