@@ -93,9 +93,10 @@ export default class Submit extends React.Component {
     async handleSelectChange(entry, caller) {
         document.querySelectorAll(".diagnosis-list").forEach(a => a.style.display = "none");
         let id = entry.id.replace("http://id.who.int/icd/entity/","");
-        let entity = await fetch(`${SERVER_ENDPOINT}/entity?entity_code=${id}`)
+        let entity = await fetch(`${SERVER_ENDPOINT}/entity?entity_code=${id}&include=ancestor`)
             .then((data) => data.json())
             .catch((err) => console.log("handleSelectChange()", err));
+        // TODO: Get ancestor IDs and append to case_categories
         let curCase = caller.state.case;
         let updateCase = {
             ...curCase

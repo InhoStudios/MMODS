@@ -57,11 +57,45 @@ export default class ImageUploadFragment extends React.Component {
         return (
             <>
                 <h4 className="mb-3">Image upload</h4>
+                <div className="row mb-3">
+                    <div className="form-group">
+                            <input type="file" className="form-control form-control-lg"
+                                id="imgUpload" name="filename" accept="image/*" 
+                                onChange={this.props.updateImage}/>
+                    </div>
+                </div>
                 <div className="form-group mb-3 row">
-                    <div className="col-lg-6">
-                        <input type="file" className="form-control form-control-lg"
-                               id="imgUpload" name="filename" accept="image/*" 
-                               onChange={this.props.updateImage}/>
+                    <div className="col-lg-6 dropdown">
+                        <input type="input" className="form-control form-control-lg" 
+                            id="imgtype" placeholder="Imaging Modality"
+                            value={this.state.modality}
+                            onChange={this.handleImageTypeInput.bind(this)}
+                            onFocus={(e) => {
+                                e.preventDefault();
+                                document.querySelectorAll(".imodality").forEach(a => a.style.display = "block");
+                            }}
+                            onBlur={(e) => {
+                                e.preventDefault();
+                                document.querySelectorAll(".imodality").forEach(a => a.style.display = "none");
+                            }}
+                        />
+                        <div className="search-content imodality">
+                            <a className="itype std-type"
+                            onMouseDown={(e) => {
+                                e.preventDefault();
+                                this.handleUpdateImgType("Clinical");
+                            }}>
+                                    Clinical
+                            </a>
+                            <a className="itype std-type"
+                            onMouseDown={(e) => {
+                                e.preventDefault();
+                                this.handleUpdateImgType("Dermoscopy");
+                            }}>
+                                    Dermoscopy
+                            </a>
+                            <a className="itype">Other</a>
+                        </div>
                     </div>
                     <div className="col-lg-6 dropdown">
                         <input type="input" className="form-control form-control-lg" 
@@ -97,40 +131,6 @@ export default class ImageUploadFragment extends React.Component {
                                onClick="showBodyMap()" />
                         <input type="input" className="hidden-passthrough" id="anatomicsite"
                                name="anatomicsite" value="" /> */}
-                    </div>
-                </div>
-                <div className="row mb-3">
-                    <div className="form-group dropdown">
-                        <input type="input" className="form-control form-control-lg" 
-                            id="imgtype" placeholder="Imaging Modality"
-                            value={this.state.modality}
-                            onChange={this.handleImageTypeInput.bind(this)}
-                            onFocus={(e) => {
-                                e.preventDefault();
-                                document.querySelectorAll(".imodality").forEach(a => a.style.display = "block");
-                            }}
-                            onBlur={(e) => {
-                                e.preventDefault();
-                                document.querySelectorAll(".imodality").forEach(a => a.style.display = "none");
-                            }}
-                        />
-                        <div className="search-content imodality">
-                            <a className="itype std-type"
-                            onMouseDown={(e) => {
-                                e.preventDefault();
-                                this.handleUpdateImgType("Clinical");
-                            }}>
-                                    Clinical
-                            </a>
-                            <a className="itype std-type"
-                            onMouseDown={(e) => {
-                                e.preventDefault();
-                                this.handleUpdateImgType("Dermoscopy");
-                            }}>
-                                    Dermoscopy
-                            </a>
-                            <a className="itype">Other</a>
-                        </div>
                     </div>
                 </div>
             </>
