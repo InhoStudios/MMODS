@@ -220,7 +220,7 @@ export default class Submit extends React.Component {
 
                     <div className="row justify-content-center">
                         <div className="col-md-10 mb-2 text-left">
-                            <div className="row mb-5">
+                            <div className="row mb-3">
                                 <ImageUploadField 
                                     updateImage={this.handleUpdateImage.bind(this)}
                                     updateImgtype={this.handleUpdateImgtype.bind(this)}
@@ -235,13 +235,13 @@ export default class Submit extends React.Component {
                                         <form method="post" encType="multipart/form-data" onSubmit={(e) => e.preventDefault()}>
                                             <div className="row mb-3">
                                                 {/* <h4 className="mb-3">Search ICD-11 (ICDD) diagnosis</h4> */}
-                                                <h4 className="mb-3">Diagnosis information</h4>
+                                                <h4 className="mb-4">Diagnosis information</h4>
                                                 <div className="form-group dropdown">
                                                     <label htmlFor="search">
                                                         Search diagnosis
                                                     </label>
                                                         <input type="input" className="form-control form-control-lg" id="search"
-                                                            name="search" placeholder="Search Diagnosis" value={this.props.query}
+                                                            name="search" placeholder="Search Diagnosis ↓" value={this.props.query}
                                                                 onChange={this.handleQueryUpdate.bind(this)}
                                                                 onFocus={(e) => {
                                                                     e.preventDefault();
@@ -294,7 +294,7 @@ export default class Submit extends React.Component {
                                             updateHist={this.handleUpdateHist.bind(this)}
                                         />
                                     </div> */}
-                                        <div className="form-group mb-3">
+                                        <div className="form-group mt-5 mb-3">
                                             <input 
                                                 type="submit"
                                                 className={`form-control form-control-lg btn btn-outline-primary btn-lg ${this.hideclass}`}

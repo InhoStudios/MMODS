@@ -69,7 +69,7 @@ export default class ImageUploadFragment extends React.Component {
                 <div className="form-group mb-3 row">
                     <div className="col-lg-6 dropdown">
                         <input type="input" className="form-control form-control-lg" 
-                            id="imgtype" placeholder="Imaging Modality"
+                            id="imgtype" placeholder="Imaging Modality ↓"
                             value={this.state.modality}
                             onChange={this.handleImageTypeInput.bind(this)}
                             onFocus={(e) => {

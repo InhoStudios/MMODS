@@ -17,8 +17,9 @@ export default class DiagnosisField extends React.Component {
                     <div className="row mb-3">
                         <div className="form-group">
                             <select class="form-control form-control-lg" name="severity" id="severity"
-                                onChange={this.props.updateSeverity}>
-                                <option value="null" selected disabled hidden>Benign or Malignant</option>
+                                onChange={this.props.updateSeverity}
+                                required>
+                                <option value="" selected disabled hidden>Benign or Malignant ↓</option>
                                 <option value="b">Benign</option>
                                 <option value="m">Malignant</option>
                             </select>

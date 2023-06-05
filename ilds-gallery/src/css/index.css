@@ -157,3 +157,8 @@ code {
   color: #ffffff;
   background-color: #aaa;
 }
+
+select:invalid {
+  color: #6c757d;
+  opacity: 1;
+}
