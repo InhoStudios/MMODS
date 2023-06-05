@@ -10,7 +10,7 @@ export default class PatientInfoField extends React.Component {
                     <div className="mb-3 row">
                         <div className="form-group">
                             <input type="number" className="form-control form-control-lg" id="age"
-                                name="age" placeholder="Age" 
+                                name="age" placeholder="Age" min="0"
                                 onChange={this.props.updateAge}/>
                         </div>
                     </div>

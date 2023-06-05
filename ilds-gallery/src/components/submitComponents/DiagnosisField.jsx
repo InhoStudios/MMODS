@@ -41,7 +41,7 @@ export default class DiagnosisField extends React.Component {
                     <div className="mb-3 row">
                         <div className="form-group">
                             <input type="number" className="form-control form-control-lg" id="size"
-                                    name="size" placeholder="Lesion size (mm)" 
+                                    name="size" placeholder="Lesion size (mm)" min="0"
                                     onChange={this.props.updateSize}/>
                         </div>
                     </div>
