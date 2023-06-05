@@ -1,5 +1,6 @@
 var express = require("express");
 const sql = require("../utilities/SQLInterface");
+const AdmZip = require("adm-zip");
 var router = express.Router();
 
 router.get('/', async (req, res, next) => {
@@ -9,7 +10,28 @@ router.get('/', async (req, res, next) => {
 
 router.get('/download', async(req, res, next) => {
     let results = await getImagesFromRequest(req);
-    res.send("image zip");
+    try {
+        let zip = AdmZip();
+        for (let image of results) {
+            zip.addLocalFile(`./public/images/${image.filename}`, `/images/`);
+        }
+        zip.addFile("metadata.json", Buffer.from(JSON.stringify(results)));
+        let zipFileContents = zip.toBuffer();
+
+        const fileName = "images.zip";
+        const fileType = "application/zip";
+
+        res.writeHead(200, {
+            'Content-Disposition': `attachment; filename="${fileName}"`,
+            'Content-Type': fileType,
+        });
+        return res.end(zipFileContents);
+    } catch (e) {
+        console.error("err::/image/download, ", e);
+        return res.send({
+            success: false
+        });
+    }
 });
 
 async function getImagesFromRequest(req) {
