@@ -24,6 +24,30 @@ export default class FilterBar extends React.Component {
             <div className="row">
                 <div className="col-lg-8">
                     <div className="dropdown px-2">
+                        <button className="btn btn-outline-secondary">ICD Entity Classification ↓</button>
+                        <div className="dropdown-content">
+                            <a className="pe-3">
+                                <label>
+                                    <input type="checkbox" className="mx-2" value="Clinical"></input>
+                                    All diagnoses
+                                </label>
+                            </a>
+                            {
+                                this.state.icd_entities.map((entity) => (
+                                <a className="pe-3">
+                                    <label>
+                                        <input type="checkbox" className="mx-2" value="Clinical"></input>
+                                        {entity.entity_title}
+                                    </label>
+                                </a>
+                                ))
+                            }
+                            {/*{% for key in categories.keys() %}*/}
+                            {/*<a href="#{{ key }}">{{categories[key]}}</a>*/}
+                            {/*{% endfor %}*/}
+                        </div>
+                    </div>
+                    <div className="dropdown px-2">
                         <button className="btn btn-outline-secondary">Severity ↓</button>
                         <div className="dropdown-content">
                             <a className="pe-3">
@@ -61,30 +85,6 @@ export default class FilterBar extends React.Component {
                                     Dermoscopy
                                 </label>
                             </a>
-                        </div>
-                    </div>
-                    <div className="dropdown px-2">
-                        <button className="btn btn-outline-secondary">ICD Entity Classification ↓</button>
-                        <div className="dropdown-content">
-                            <a className="pe-3">
-                                <label>
-                                    <input type="checkbox" className="mx-2" value="Clinical"></input>
-                                    All diagnoses
-                                </label>
-                            </a>
-                            {
-                                this.state.icd_entities.map((entity) => (
-                                <a className="pe-3">
-                                    <label>
-                                        <input type="checkbox" className="mx-2" value="Clinical"></input>
-                                        {entity.entity_title}
-                                    </label>
-                                </a>
-                                ))
-                            }
-                            {/*{% for key in categories.keys() %}*/}
-                            {/*<a href="#{{ key }}">{{categories[key]}}</a>*/}
-                            {/*{% endfor %}*/}
                         </div>
                     </div>
                 </div>
