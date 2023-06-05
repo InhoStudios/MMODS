@@ -5,14 +5,13 @@ export default class DiagnosisField extends React.Component {
     render() {
         return (
             <>
-                <div class="row">
+                <div class="hidden-passthrough" id="entityDefinition">
                     <h5>{this.props.entity.title["@value"]}</h5>
                     <h6>{this.props.entity["@id"]}</h6>
                     <p>{
                         this.props.entity?.definition ? this.props.entity.definition["@value"] : ""
                     }</p>
                 </div>
-                <h4 className="mb-3">Diagnosis information</h4>
                 <label>
                     Disease Severity
                     <div className="row mb-3">

@@ -21,10 +21,13 @@ export default class Submit extends React.Component {
                 "title":{
                     "@value":"",
                 },
-                "definition":  "",
+                "definition":  {
+                    "@value": ""
+                },
             },
             case: new Case(),
             image: '',
+            image_file: "",
             metadata: new ImageMetadata(),
         };
     }
@@ -103,6 +106,9 @@ export default class Submit extends React.Component {
         updateCase.ancestors = entity.ancestor;
         console.log(entity.ancestor);
         caller.setState({selectedOption: entity, case: updateCase});
+
+        let definitionField = document.getElementById("entityDefinition");
+        definitionField.style.display = "block";
     }
 
     nestedSort = (prop1) => (e1, e2) => {
@@ -140,8 +146,9 @@ export default class Submit extends React.Component {
 
     handleUpdateImage(e) {
         console.log(`handleUpdateImage()`);
-        this.setState({ image: e.target.files[0] });
-        console.log(e.target.files[0])
+        let fileURL = URL.createObjectURL(e.target.files[0]);
+        this.setState({ image: e.target.files[0], image_file: fileURL });
+        console.log(e.target.files[0]);
     }
 
     handleUpdateImgtype(type) {
@@ -213,39 +220,68 @@ export default class Submit extends React.Component {
 
                     <div className="row justify-content-center">
                         <div className="col-md-10 mb-2 text-left">
+                            <div className="row mb-5">
+                                <ImageUploadField 
+                                    updateImage={this.handleUpdateImage.bind(this)}
+                                    updateImgtype={this.handleUpdateImgtype.bind(this)}
+                                    updateSite={this.handleUpdateSite.bind(this)}
+                                    imageFile={this.state.image_file}
+                                />
+                            </div>
 
-                            <div className="row">
-
-                                <form method="post" encType="multipart/form-data" onSubmit={(e) => e.preventDefault()}>
-                                    <div className="row mb-3">
-                                        <h4 className="mb-3">Search ICD-11 (ICDD) diagnosis</h4>
-                                        <div className="form-group dropdown">
-                                            {/* <Select options={{"":"Search Diagnosis"}} value={null} onChange={this.handleSelectChange} className="form-control form-control-lg" id="search" name="search"/> */}
-                                            <input type="input" className="form-control form-control-lg" id="search"
-                                                name="search" placeholder="Search Diagnosis" value={this.props.query}
-                                                    onChange={this.handleQueryUpdate.bind(this)}
-                                                    onFocus={(e) => {
-                                                        e.preventDefault();
-                                                        document.querySelectorAll(".diagnosis-list").forEach(a => a.style.display = "block");
-                                                    }}/>
-                                            <div className="search-content diagnosis-list">
-                                                {
-                                                    this.state.entities.map((entry) => (
-                                                        <a onClick={(e) => {
-                                                            e.preventDefault();
-                                                            this.handleSelectChange(entry, this);
-                                                        }}
-                                                        id={
-                                                            entry.id.replace("https://id.who.int/icd/entity/")
-                                                        } dangerouslySetInnerHTML={{__html: entry.title}} />
-                                                    ))
-                                                }
+                            <div className="row mb-5">
+                                <div className="col-lg-6">
+                                    <div className="row">
+                                        <form method="post" encType="multipart/form-data" onSubmit={(e) => e.preventDefault()}>
+                                            <div className="row mb-3">
+                                                {/* <h4 className="mb-3">Search ICD-11 (ICDD) diagnosis</h4> */}
+                                                <h4 className="mb-3">Diagnosis information</h4>
+                                                <div className="form-group dropdown">
+                                                    <label htmlFor="search">
+                                                        Search diagnosis
+                                                    </label>
+                                                        <input type="input" className="form-control form-control-lg" id="search"
+                                                            name="search" placeholder="Search Diagnosis" value={this.props.query}
+                                                                onChange={this.handleQueryUpdate.bind(this)}
+                                                                onFocus={(e) => {
+                                                                    e.preventDefault();
+                                                                    document.querySelectorAll(".diagnosis-list").forEach(a => a.style.display = "block");
+                                                                }}/>
+                                                        <div className="search-content diagnosis-list">
+                                                            {
+                                                                this.state.entities.map((entry) => (
+                                                                    <a onClick={(e) => {
+                                                                        e.preventDefault();
+                                                                        this.handleSelectChange(entry, this);
+                                                                    }}
+                                                                    id={
+                                                                        entry.id.replace("https://id.who.int/icd/entity/")
+                                                                    } dangerouslySetInnerHTML={{__html: entry.title}} />
+                                                                ))
+                                                            }
+                                                        </div>
+                                                </div>
                                             </div>
-                                        </div>
+                                        </form>
+                                        <DiagnosisField 
+                                            entity={this.state.selectedOption} 
+                                            updateSeverity={this.handleUpdateSeverity.bind(this)} 
+                                            updateDod={this.handleUpdateDod.bind(this)}
+                                            updateSize={this.handleUpdateSize.bind(this)}
+                                        />
                                     </div>
-                                </form>
+                                </div>
+                                <div className="col-lg-6">
+                                    <div className="row">
+                                        <PatientInfoField 
+                                            updateAge={this.handleUpdateAge.bind(this)}
+                                            updateSex={this.handleUpdateSex.bind(this)}
+                                            updateHist={this.handleUpdateHist.bind(this)}
+                                        />
+                                    </div>
+                                </div>
                                 <form method="post" encType="multipart/form-data">
-                                    <div className={`row ${this.hideclass} mb-5`}>
+                                    {/* <div className={`row ${this.hideclass} mb-5`}>
                                         <DiagnosisField 
                                             entity={this.state.selectedOption} 
                                             updateSeverity={this.handleUpdateSeverity.bind(this)} 
@@ -257,13 +293,7 @@ export default class Submit extends React.Component {
                                             updateSex={this.handleUpdateSex.bind(this)}
                                             updateHist={this.handleUpdateHist.bind(this)}
                                         />
-                                        <ImageUploadField 
-                                            updateImage={this.handleUpdateImage.bind(this)}
-                                            updateImgtype={this.handleUpdateImgtype.bind(this)}
-                                            updateSite={this.handleUpdateSite.bind(this)}
-                                        />
-                                    </div>
-                                    <div className="row mb-5">
+                                    </div> */}
                                         <div className="form-group mb-3">
                                             <input 
                                                 type="submit"
@@ -274,9 +304,8 @@ export default class Submit extends React.Component {
                                                 onClick={this.handleUpload.bind(this)}
                                             />
                                         </div>
-                                    </div>
-                                </form>
-                            </div>
+                                    </form>
+                                </div>
                         </div>
                     </div>
                 </div>

@@ -6,10 +6,12 @@ export default class ImageUploadField extends React.Component {
     render() {
         return (
             <div>
+                <h4 className="mb-1">Image upload</h4>
                 <ImageUploadFragment 
                     updateSite={this.props.updateSite} 
                     updateImage={this.props.updateImage}
                     updateImgtype={this.props.updateImgtype}
+                    imageFile={this.props.imageFile}
                 />
                 {/* <div className="form-group mb-3">
                     <input type="button"

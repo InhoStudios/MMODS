@@ -56,7 +56,9 @@ export default class ImageUploadFragment extends React.Component {
     render() {
         return (
             <>
-                <h4 className="mb-3">Image upload</h4>
+                <div className="text-center mb-3">
+                    <img src={this.props.imageFile}/>
+                </div>
                 <div className="row mb-3">
                     <div className="form-group">
                             <input type="file" className="form-control form-control-lg"
