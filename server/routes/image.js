@@ -51,11 +51,11 @@ async function getImagesFromRequest(req) {
     let max_age = req.query.max_age ? `c.age<=${req.query.max_age}` : "true";
     // TODO: body site from image
     let site = req.query.site ? `i.anatomic_site=${req.query.site}` : "true";
-    let query = `select c.case_id, i.img_id, c.user_selected_entity, i.anatomic_site, i.filename, i.url, 
+    let query = `select c.case_id, i.img_id, e.entity_title, c.user_selected_entity, i.anatomic_site, i.filename, i.url, 
         c.age, c.sex, c.history, c.size, c.severity, c.fitzpatrick_type, c.tags, i.modality,
         i.view
-        from Cases c, Image i
-        where i.case_id=c.case_id and ${entityCode} and ${view} and ${severity} and ${modality} 
+        from Cases c, Image i, ICD_Entity e
+        where i.case_id=c.case_id and e.entity_id=c.user_selected_entity and ${entityCode} and ${view} and ${severity} and ${modality} 
         and ${sex} and ${min_age} and ${max_age} and ${site};
         `;
     let results = await sql.postQuery(query);
