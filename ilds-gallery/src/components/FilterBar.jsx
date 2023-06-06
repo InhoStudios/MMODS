@@ -13,16 +13,28 @@ export default class FilterBar extends React.Component {
     }
 
     async getEntitiesFromDB() {
-        let entities = await fetch(`${SERVER_ENDPOINT}/db_select?values=distinct e.entity_title, e.entity_id&from=ICD_Entity e, Cases c&where=c.user_selected_entity=e.entity_id`)
+        let entities = await fetch(`${SERVER_ENDPOINT}/db_select?values=distinct e.entity_title, e.entity_id&from=ICD_Entity e, Case_Categories c&where=c.entity_id=e.entity_id`)
             .then((data) => data.json())
             .catch((err) => console.log(err));
         this.setState({icd_entities: entities});
     }
 
+    handleUpdateImageType() {
+
+    }
+
+    handleUpdateSeverity() {
+
+    }
+    
+    handleUpdateDiagnosisList(e) {
+        console.log(e.target.value);
+    }
+
     render() {
         return (
             <div className="row">
-                <div className="col-lg-8">
+                <div className="col-lg-8 mb-3">
                     <div className="dropdown px-2">
                         <button className="btn btn-outline-secondary">ICD Entity Classification ↓</button>
                         <div className="dropdown-content">
@@ -36,7 +48,7 @@ export default class FilterBar extends React.Component {
                                 this.state.icd_entities.map((entity) => (
                                 <a className="pe-3">
                                     <label>
-                                        <input type="checkbox" className="mx-2" value="Clinical"></input>
+                                        <input type="checkbox" className="mx-2" value={entity.entity_id} name="diagnoses" onChange={this.handleUpdateDiagnosisList}></input>
                                         {entity.entity_title}
                                     </label>
                                 </a>
@@ -52,19 +64,19 @@ export default class FilterBar extends React.Component {
                         <div className="dropdown-content">
                             <a className="pe-3">
                                 <label>
-                                    <input type="checkbox" className="mx-2" value="All"></input>
+                                    <input type="radio" name="severity" className="mx-2" value="All"></input>
                                     All
                                 </label>
                             </a>
                             <a className="pe-3">
                                 <label>
-                                    <input type="checkbox" className="mx-2" value="Benign"></input>
+                                    <input type="radio" name="severity" className="mx-2" value="Benign"></input>
                                     Benign
                                 </label>
                             </a>
                             <a className="pe-3">
                                 <label>
-                                    <input type="checkbox" className="mx-2" value="Malignant"></input>
+                                    <input type="radio" name="severity" className="mx-2" value="Malignant"></input>
                                     Malignant
                                 </label>
                             </a>
@@ -88,7 +100,7 @@ export default class FilterBar extends React.Component {
                         </div>
                     </div>
                 </div>
-                <div className="col-lg-4">
+                <div className="col-lg-4 mb-3">
                     <form method="post">
                         <input type="input" className="form-control form-control-lg" placeholder="Search" />
                     </form>

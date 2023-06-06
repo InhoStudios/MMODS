@@ -52,7 +52,44 @@ code {
   background-color: #fff;
   margin: 5% auto;
   padding: 30px;
-  width: 80%;
+  width:60%;
+}
+
+.overlay-wrapper {
+  position: relative;
+  width: 100%;
+}
+
+.open-modal {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 100%;
+  width: 100%;
+  opacity: 0;
+  transition: .3s ease;
+  background-color: rgba(50, 50, 50, 0.2);
+}
+
+.overlay-wrapper:hover .open-modal {
+  opacity: 1;
+}
+
+.icon {
+  color: #eee;
+  font-size: 50px;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  -ms-transform: translate(-50%, -50%);
+  text-align: center;
+}
+
+.icon:hover {
+  color: #fff;
 }
 
 .close {

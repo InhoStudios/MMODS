@@ -1,4 +1,7 @@
 import React from "react";
+import Modal from "./Modal";
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faExpandAlt } from '@fortawesome/free-solid-svg-icons'
 
 export default class ImageCard extends React.Component {
     constructor(props) {
@@ -6,23 +9,45 @@ export default class ImageCard extends React.Component {
         this.props = props;
     }
 
+    openModal(id) {
+        document.getElementById(id).style.display="block";
+    }
+
+    closeModal(id) {
+        document.getElementById(id).style.display="none";
+    }
+
     render() {
         return (
-            <div className={this.props.colsize + " mb-3 mt-2"}>
-                <button className="btn">
-                    <div className="card card-shadow" onClick={null}>
-                        <img src={this.props.filepath} className="img-fluid crop-img" alt={this.props.title}/>
+            <div>
+                <div className={this.props.colsize + " mb-3 mt-2"}>
+                    <button className="btn">
+                        <label>
+                        <div className="card card-shadow" onClick={null}>
+                            <div className="overlay-wrapper">
+                                <img src={this.props.image.url} className="img-fluid crop-img" alt={this.props.image.entity_title}/>
+                                <div className="open-modal">
+                                    <a className="icon" onClick={(e) => {
+                                        e.preventDefault();
+                                        this.openModal(this.props.image.img_id);
+                                    }}>
+                                        <FontAwesomeIcon icon={faExpandAlt} />
+                                    </a>
+                                </div>
+                            </div>
                             <div className="card-body">
-                                <span>http://id.who.int/icd/entity/{this.props.uri}</span>
-                                <h4>{this.props.title}</h4>
+                                <span>http://id.who.int/icd/entity/{this.props.image.user_selected_entity}</span>
+                                <h4>{this.props.image.entity_title}</h4>
                                 <p></p>
                             </div>
-                    </div>
-                    <div className="mt-2">
+                        </div>
                         <input type="checkbox" className="form-check-input" name="imgselect"
-                               value="{{ entry.file }}-select" />
-                    </div>
-                </button>
+                            value="-select" />
+                        </label>
+                    </button>
+
+                </div>
+                <Modal image={this.props.image} closeModal={this.closeModal}></Modal>
             </div>
         )
     }
