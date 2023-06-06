@@ -12,7 +12,7 @@ export default class Home extends React.Component {
     }
 
     async getImagesFromDB() {
-        let images = await fetch(`${SERVER_ENDPOINT}/db_select?values=i.img_id, i.case_id, i.url, i.modality, i.anatomic_site, c.user_selected_entity, e.entity_title&from=Image i, Cases c, ICD_Entity e&where=c.case_id=i.case_id and e.entity_id=c.user_selected_entity`)
+        let images = await fetch(`${SERVER_ENDPOINT}/image`)
             .then((data) => data.json())
             .catch((err) => console.log(err));
         if (images !== undefined) {
