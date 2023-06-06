@@ -33,7 +33,7 @@ export default class Home extends React.Component {
                     <div className="row justify-content-left">
                         <div className="col-md-3 mb-2 text-left">
                             <div className="row justify-content-left mt-5 mb-3 text-left">
-                                <h1>Gallery</h1>
+                                <h1>The Gallery</h1>
                                 <p>Research and educational database of dermatology images. Built by <a href="https://github.com/InhoStudios/ICD-11-Interface">@InhoStudios</a>.</p>
                             </div>
                             <div className="row mt-3">

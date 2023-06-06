@@ -12,8 +12,8 @@ export default class App extends React.Component {
         return (
             <BrowserRouter>
                 <Routes>
+                    <Route index element={<Home/>} />
                     <Route path="/" element={<Layout />}>
-                        <Route index element={<Home/>} />
                         <Route path="submit" element={<Submit/>}/>
                         <Route path="verify" element={<Verify/>} />
                     </Route>
