@@ -2,6 +2,7 @@ import React from "react";
 import ImageCard from "../components/ImageCard";
 import { SERVER_ENDPOINT } from "../utilities/Structures";
 import FilterBar from "../components/FilterBar";
+import DownloadBar from "../components/DownloadBar";
 
 export default class Home extends React.Component {
     constructor(props) {

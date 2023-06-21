@@ -19,8 +19,8 @@ code {
 }
 
 .crop-img{
-  width: 600px;
-  --width: 600px;
+  width: 33vw !important;
+  --width: 33vw !important;
   height: calc(var(--width) * 0.6);
   object-fit: cover;
 }
@@ -89,6 +89,7 @@ code {
 }
 
 .icon:hover {
+  cursor: pointer !important;
   color: #fff;
 }
 

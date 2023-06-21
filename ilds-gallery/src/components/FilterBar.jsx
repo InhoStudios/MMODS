@@ -34,7 +34,10 @@ export default class FilterBar extends React.Component {
     render() {
         return (
             <div className="row">
-                <div className="col-lg-8 mb-3">
+                <div className="col-lg-3 mb-3">
+                    <input type="input" className="form-control" placeholder="Search" />
+                </div>
+                <div className="col-lg-9 mb-3">
                     <div className="dropdown px-2">
                         <button className="btn btn-outline-secondary">ICD Entity Classification ↓</button>
                         <div className="dropdown-content">
@@ -99,11 +102,6 @@ export default class FilterBar extends React.Component {
                             </a>
                         </div>
                     </div>
-                </div>
-                <div className="col-lg-4 mb-3">
-                    <form method="post">
-                        <input type="input" className="form-control form-control-lg" placeholder="Search" />
-                    </form>
                 </div>
             </div>
         )
