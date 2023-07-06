@@ -1,6 +1,21 @@
 import React from "react";
+import { SERVER_ENDPOINT } from "../utilities/Structures";
 
 export default class DownloadBar extends React.Component {
+
+    async download(e) {
+        e.preventDefault()
+        // let images = await fetch(`${SERVER_ENDPOINT}/image/download`)
+        //     .then((data) => {
+        //         var a = document.createElement("a");
+        //         a.href = `${SERVER_ENDPOINT}/image/download`;
+        //         a.download = "FILENAME";
+        //         a.click();
+        //     });
+        // window.open(`${SERVER_ENDPOINT}/image/download`)
+        return await fetch(`${SERVER_ENDPOINT}/image/download`)
+    }
+
     render() {
         return (
             <section className="mt-5">
@@ -19,7 +34,11 @@ export default class DownloadBar extends React.Component {
                                             <p className="d-inline-block"><b>.json</b></p>
                                         </div>
                                         <div className="col-lg-4">
-                                            <input type="submit" className="form-control form-control-lg btn btn-success btn-lg" id="verify" name="verify" value="Download" />
+                                            <input type="submit" className="form-control form-control-lg btn btn-success btn-lg" 
+                                                id="verify" 
+                                                name="verify" 
+                                                value="Download" 
+                                                onClick={this.download} />
                                         </div>
                                     </div>
                                     <div className="hidden-passthrough">
