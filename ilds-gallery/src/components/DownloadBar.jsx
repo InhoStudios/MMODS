@@ -12,8 +12,8 @@ export default class DownloadBar extends React.Component {
         //         a.download = "FILENAME";
         //         a.click();
         //     });
-        // window.open(`${SERVER_ENDPOINT}/image/download`)
-        return await fetch(`${SERVER_ENDPOINT}/image/download`)
+        window.location.assign(`${SERVER_ENDPOINT}/image/download`)
+        // return await fetch(`${SERVER_ENDPOINT}/image/download`)
     }
 
     render() {
