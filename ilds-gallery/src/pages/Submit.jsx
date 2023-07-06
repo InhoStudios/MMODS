@@ -174,6 +174,7 @@ export default class Submit extends React.Component {
         formData.append("imageMetadata", JSON.stringify(this.state.metadata));
         await this.uploadICDEntities(this.state.entities);
         await axios.post(`${SERVER_ENDPOINT}/upload`, formData, {});
+        alert("Successfully uploaded");
         return;
     }
 

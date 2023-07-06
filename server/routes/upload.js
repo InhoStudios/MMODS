@@ -74,7 +74,10 @@ router.post('/', upload.single('image'), async (req, res, next) => {
             caseCategories.push(caseAncestorPair);
         }
 
-        let url = `${req.protocol}://${req.hostname}:9000/${req.file.path}`
+        console.log(req.file.path)
+        img_file_path = req.file.path.replaceAll("\\", "/")
+
+        let url = `${req.protocol}://${req.hostname}:8081/${img_file_path}`
 
         let uploadedCase = {
             case_id: `'${caseID}'`,
@@ -101,7 +104,7 @@ router.post('/', upload.single('image'), async (req, res, next) => {
             sql.insertArray("Case_Categories", caseCategories);
         });
 
-        console.log(`Image received: ${req.file.filename}\nImage hosted at ${req.protocol}://${req.hostname}:9000/${req.file.path}`);
+        console.log(`Image received: ${req.file.filename}\nImage hosted at ${req.protocol}://${req.hostname}:9000/${img_file_path}`);
         return res.send({
             success: true
         });

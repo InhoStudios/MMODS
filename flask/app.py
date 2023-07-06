@@ -492,4 +492,4 @@ def getCorrespondingEntry(data, id):
 
 # main function: run flask app in debugging mode
 if __name__ == "__main__":
-    app.run(port='5000', debug=True)
+    app.run(port='5000', host="128.189.163.168", debug=True)

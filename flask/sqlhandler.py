@@ -47,7 +47,7 @@ class SQLHandler:
             cursor.execute(create_alt_diag_link_query)
 
         # save image
-        insert_image_query = "insert ignore into image (img_id, filename, case_id, modality, clinical_site) values" + \
+        insert_image_query = "insert ignore into image (img_id, filename, case_id, modality, anatomic_site) values" + \
             f"(default, '{unit['file']}', '{unit['id']}', '{unit['imgtype']}', '{unit['site']}');"
         cursor.execute(insert_image_query)
 
@@ -78,7 +78,7 @@ class SQLHandler:
         cursor = self.mysql.connection.cursor()
 
         # get case data
-        get_cases_query = "select c.case_id, c.user_selected_entity, i.filename, e.entity_title, i.clinical_site, " + \
+        get_cases_query = "select c.case_id, c.user_selected_entity, i.filename, e.entity_title, i.anatomic_site, " + \
             "c.size, c.severity, c.age, c.sex, c.history, i.modality " + \
             "from Cases c, ICD_Entity e, Image i " + \
             "where i.case_id = c.case_id and e.entity_id = c.user_selected_entity;"
