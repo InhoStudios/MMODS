@@ -2,6 +2,12 @@ import React from "react";
 import { SERVER_ENDPOINT } from "../utilities/Structures";
 
 export default class DownloadBar extends React.Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            show: true,
+        };
+    }
 
     async download(e) {
         e.preventDefault()

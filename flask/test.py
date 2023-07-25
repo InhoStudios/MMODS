@@ -1,7 +1,6 @@
-from anatomic_site import AnatomyMap
+from icdutils import ICDManager
 
-map = AnatomyMap()
+manager = ICDManager()
 
-print(map.get_sites_at_level(1))
-print(map.get_sites_at_level(2))
-print(map.get_sites_at_level(3))
+load = manager.getEntityByID(1887882424)
+print(load)
