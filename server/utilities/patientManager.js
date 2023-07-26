@@ -5,7 +5,7 @@ alphabet = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ"
 
 function encode(input) {
     if (input === 0) {
-        return alphabet[0];
+        return alphabet[0] + alphabet[0];
     }
 
     let encodedString = ""
@@ -38,13 +38,17 @@ function id() {
         useGrouping: false
     });
 
-    counter += 1;
-
     let formattedCounter = encode(Math.floor(counter / 2));
     
     return `${year.toLocaleString('en-US').substring(3)}${formattedMonth}${formattedDay}${formattedCounter}`
 }
 
+function tick() {
+    counter += 1;
+    return counter
+}
+
 module.exports = {
     id: id,
+    tick: tick
 };

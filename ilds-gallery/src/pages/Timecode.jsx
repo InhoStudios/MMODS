@@ -15,11 +15,10 @@ export default class Timecode extends React.Component {
     }
 
     componentDidMount() {
-        // this.timerID = setInterval(
-        //     () => this.tick(),
-        //     1000
-        // );
-        this.getPID();
+        this.timerID = setInterval(
+            () => this.getPID(),
+            1000
+        );
     }
 
     async getPID() {
@@ -33,17 +32,19 @@ export default class Timecode extends React.Component {
         });
     }
 
-    // componentWillUnmount() {
-    //     clearInterval(this.timerID)
-    // };
+    componentWillUnmount() {
+        clearInterval(this.timerID);
+    };
 
-    tick() {
-        let cur_time = new Date();
-        let diff = this.getSecondsSince8(cur_time.getTime());
-        let encodedString = this.getDateCode(cur_time) + this.encode(diff, alphabet);
-        this.setState({
-            patient_id: encodedString
-        });
+    async tick() {
+        clearInterval(this.timerID);
+        await fetch(`${SERVER_ENDPOINT}/patient_id/tick`)
+        // let cur_time = new Date();
+        // let diff = this.getSecondsSince8(cur_time.getTime());
+        // let encodedString = this.getDateCode(cur_time) + this.encode(diff, alphabet);
+        // this.setState({
+        //     patient_id: encodedString
+        // });
     };
 
     getSecondsSince8(currentEpochTime) {
@@ -92,6 +93,7 @@ export default class Timecode extends React.Component {
                         <h1 className="mb-5">Hi there,</h1>
                         <h3>The current patient ID is</h3>
                         <h2><span style={{'color': "#ff0000"}}>{this.state.patient_id.substring(0, 6)}</span><span style={{'color': "#0000ff"}}>{this.state.patient_id.substring(6)}</span></h2>
+                        <button className="mt-3 col-md-6 btn btn-primary" onClick={this.tick}>Use this ID</button>
                     </div>
                 </div>
             </section>
