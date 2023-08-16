@@ -3,8 +3,9 @@ const icd = require('../utilities/ICDInterface');
 var router = express.Router();
 
 router.get('/', async (req, res, next) => {
-    token = await icd.useToken();
-    res.send(token);
+    let search = req.query.query;
+    let searchResult = await icd.search(search);
+    res.send(searchResult);
 });
 
 module.exports = router;

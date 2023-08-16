@@ -1,19 +1,20 @@
-export const ICD = {
+const ICD = {
     TOKEN_HOST: "icdaccessmanagement.who.int",
     TOKEN_PATH: "/connect/token",
     TOKEN_URL: "https://icdaccessmanagement.who.int/connect/token",
     SCOPE: "icdapi_access",
     GRANT_TYPE: "client_credentials",
-    QUERY_HOST: "id.who.int"
+    QUERY_HOST: "https://id.who.int"
 }
 
-export const METHODS = {
+const METHODS = {
     GET: "GET",
     POST: "POST"
 }
 
-export default class Case {
+class Case {
     caseID;
+    title;
     age;
     sex;
     history;
@@ -27,3 +28,11 @@ export default class Case {
     fitzpatrickType;
     tags;
 }
+
+class Image {
+    imgtype;
+}
+
+module.exports.ICD = ICD;
+module.exports.Case = Case;
+module.exports.METHODS = METHODS;
