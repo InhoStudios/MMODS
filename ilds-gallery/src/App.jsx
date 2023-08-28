@@ -8,6 +8,7 @@ import Home from "./pages/Home";
 import Submit from "./pages/Submit";
 import Verify from "./pages/Verify";
 import Timecode from "./pages/Timecode";
+import TimecodeOnLoad from "./pages/TimecodeOnLoad";
 export default class App extends React.Component {
     render() {
         return (
@@ -18,6 +19,7 @@ export default class App extends React.Component {
                         <Route path="submit" element={<Submit/>} />
                         <Route path="verify" element={<Verify/>} />
                         <Route path="timecode" element={<Timecode/>} />
+                        <Route path="timecode2" element={<TimecodeOnLoad/>} />
                     </Route>
                 </Routes>
             </BrowserRouter>

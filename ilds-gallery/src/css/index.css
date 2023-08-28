@@ -200,3 +200,8 @@ select:invalid {
   color: #6c757d;
   opacity: 1;
 }
+
+.unused {
+  text-decoration: line-through;
+  color: red;
+}
