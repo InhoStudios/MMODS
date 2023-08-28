@@ -53,7 +53,7 @@ async function getImagesFromRequest(req) {
     let site = req.query.site ? `l.anatomic_site=${req.query.site} and a.anatomic_site=l.anatomic_site` : "true";
 
     let query = `select p.participant_id, m.measurement_id, l.diagnosis_entity, e.entity_title, l.anatomic_site, m.filepath, 
-        p.birth_date, p.sex, l.severity, p.skin_type, p.tags, m.modality, a.anatomic_title
+        p.birth_date, p.sex, l.severity, p.skin_type, p.tags, m.modality, a.anatomic_site
         from Participant p, Measurement m, Lesion l, ICD_Entity e, Participates_in pi, Study s, Collected_Measurements cm, Anatomic_Site a
         where m.measurement_id=cm.measurement_id and s.study_id=cm.study_id and pi.study_id=s.study_id and p.participant_id=pi.participant_id and 
         ${entityCode} and ${view} and ${severity} and ${modality} 
