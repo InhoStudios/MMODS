@@ -7,7 +7,12 @@ export default class FilterBar extends React.Component {
         super(props);
         this.state = {
             image_types: [],
-            icd_entities: [],
+            icd_entities: [
+                {
+                    entity_id: "",
+                    entity_title: "",
+                },
+            ],
         };
         this.getEntitiesFromDB();
     }

@@ -2,9 +2,6 @@ const mysql = require("mysql2/promise");
 let connection;
 connect();
 
-console.log(process.env.SQL_USER)
-console.log(process.env.SQL_PASSWORD)
-
 async function connect() {
     connection = await mysql.createPool({
         host: 'localhost',
@@ -17,7 +14,8 @@ async function connect() {
         queueLimit: 0,
         enableKeepAlive: true,
         keepAliveInitialDelay: 0
-    })
+    });
+    console.log(`Connected`)
 }
 
 async function postQuery(query) {
