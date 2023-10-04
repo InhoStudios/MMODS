@@ -12,6 +12,33 @@ export const METHODS = {
     POST: "POST"
 }
 
+export class Participant {
+    participant_id;
+    sex;
+    eye_colour;
+    skin_type;
+    ethnicity;
+    hair_colour;
+    tags;
+}
+
+export class Lesion {
+    lesion_id;
+    diagnosis_entity;
+    morphology;
+    anatomic_site;
+    severity;
+}
+
+export class Measurement {
+    measurement_id;
+    lesion; // Lesion class
+    measurement_date;
+    is_lesion;
+    modality;
+    operator;
+}
+
 export class Case {
     caseID;
     ancestors;

@@ -255,40 +255,54 @@ export default class Measurement extends React.Component {
                             this.props.parent.state.selectedOption?.definition ? this.props.parent.state.selectedOption.definition["@value"] : ""
                         }</p>
                     </div>
-                    <label>
-                        Disease Severity
+                </div>
+                <div className="row mb-3">
+                    <div className="col-lg-6 dropdown">
                         <div className="row mb-3">
-                            <div className="form-group">
-                                <select class="form-control form-control-lg" name="severity" id="severity"
-                                    onChange={this.props.updateSeverity}
-                                    required>
-                                    <option value="" selected disabled hidden>Benign or Malignant ↓</option>
-                                    <option value="b">Benign</option>
-                                    <option value="m">Malignant</option>
-                                </select>
-                            </div>
+                            <label>
+                                Disease Severity
+                                    <div className="form-group">
+                                        <select class="form-control form-control-lg" name="severity" id="severity"
+                                            onChange={this.props.updateSeverity}
+                                            required>
+                                            <option value="" selected disabled hidden>Benign or Malignant ↓</option>
+                                            <option value="b">Benign</option>
+                                            <option value="m">Malignant</option>
+                                        </select>
+                                    </div>
+                            </label>
                         </div>
-                    </label>
-                    {/* <label>
-                        DIfficulty of Diagnosis
-                        <div className="form-group mb-3 row">
-                            <div className="form-control-lg">
-                                <input className="form-control-lg col-lg-12" type="range" min="1"
-                                        max="5" defaultValue="3" id="easeofdiag" name="easeofdiag" 
-                                        onChange={this.props.updateDod}/>
+                        {/* <label>
+                            DIfficulty of Diagnosis
+                            <div className="form-group mb-3 row">
+                                <div className="form-control-lg">
+                                    <input className="form-control-lg col-lg-12" type="range" min="1"
+                                            max="5" defaultValue="3" id="easeofdiag" name="easeofdiag" 
+                                            onChange={this.props.updateDod}/>
+                                </div>
                             </div>
-                        </div>
-                    </label> */}
-                    <label htmlFor="size">
-                        Lesion Size (mm)
+                        </label> */}
+                    </div>
+                    <div className="col-lg-6 dropdown">
                         <div className="mb-3 row">
-                            <div className="form-group">
-                                <input type="number" className="form-control form-control-lg" id="size"
-                                        name="size" placeholder="Lesion size (mm)" min="0"
-                                        onChange={this.props.updateSize}/>
-                            </div>
+                            <label htmlFor="size">
+                                Lesion Size (mm)
+                                    <div className="form-group">
+                                        <input type="number" className="form-control form-control-lg" id="size"
+                                                name="size" placeholder="Lesion size (mm)" min="0"
+                                                onChange={this.props.updateSize}/>
+                                    </div>
+                            </label>
                         </div>
-                    </label>
+                    </div>
+                    <div className="mb-3 row">
+                        <div className="form-group">
+                            <label>
+                                Morphology
+                            </label>
+                            <textarea className="form-control form-control-lg"></textarea>
+                        </div>
+                    </div>
                 </div>
             </>
         )

@@ -12,6 +12,7 @@ export default class Submit extends React.Component {
         this.state = {
             hideclass: "hidden-passthrough",
             searchTimeout: setTimeout(this.performSearch, 0),
+            patientTimeout: setTimeout(this.getPatient, 0),
             query: "",
             entities: [
             ],
@@ -41,6 +42,9 @@ export default class Submit extends React.Component {
     async handleUpdatePatientID(event) {
         event.preventDefault();
         this.setState({ patient_id: event.target.value });
+        clearTimeout(this.state.patientTimeout);
+        this.setState({ patientTimeout: setTimeout(() => this.getPatient(event.target.value, this), 300) });
+    
     }
 
     async handleGetPatientID(event) {
@@ -67,6 +71,15 @@ export default class Submit extends React.Component {
         event.preventDefault();
         clearTimeout(this.state.searchTimeout);
         this.setState({ searchTimeout: setTimeout(() => this.performSearch(event.target.value, this), 300) });
+    }
+
+    async getPatient(id, caller) {
+        if (id != undefined){
+            let patient = await fetch(`${SERVER_ENDPOINT}/db_select?values=*&from=Participant p&where=p.participant_id=${id}`)
+            .then((data) => data.json())
+            .catch((err) => console.log(err));
+            console.log(patient)
+        }
     }
 
     async performSearch(input, caller) {
