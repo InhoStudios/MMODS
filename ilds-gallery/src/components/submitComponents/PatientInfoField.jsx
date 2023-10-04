@@ -92,6 +92,11 @@ export default class PatientInfoField extends React.Component {
                                         onLoad={this.props.updateHist}
                                         required>
                                         <option value="" selected disabled hidden>Choose natural hair colour (at age 20) ↓</option>
+                                        <option value="black">Black</option>
+                                        <option value="darkbrown">Dark Brown</option>
+                                        <option value="lightbrown">Light Brown</option>
+                                        <option value="blonde">Blonde</option>
+                                        <option value="red">Red</option>
                                     </select>
                                 </div>
                             </label>

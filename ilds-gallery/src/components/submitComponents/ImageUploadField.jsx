@@ -7,7 +7,7 @@ export default class ImageUploadField extends React.Component {
     render() {
         return (
             <div>
-                <h4 className="mb-1">Image upload</h4>
+                <h4 className="mb-4">Measurements</h4>
                 <Measurement 
                     updateSite={this.props.updateSite} 
                     updateImage={this.props.updateImage}
