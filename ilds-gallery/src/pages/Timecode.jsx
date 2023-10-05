@@ -53,6 +53,15 @@ export default class Timecode extends React.Component {
         let log = await fetch(`${SERVER_ENDPOINT}/patient_id/log`)
             .then((res) => res.json())
             .catch((err) => console.log(err));
+        log.sort((a, b) => {
+            if (b.timestamp < a.timestamp) {
+                return -1;
+            }
+            if (b.timestamp > a.timestamp) {
+                return 1;
+            }
+            return 0;
+        });
         this.setState({
             log: log
         });

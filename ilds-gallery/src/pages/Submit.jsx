@@ -31,6 +31,12 @@ export default class Submit extends React.Component {
             metadata: new ImageMetadata(),
             attending_investigator: "",
             patient_id: "",
+            measurements: {
+                0: {
+                    image: '',
+                    image_file: ''
+                }
+            }
         };
     }
 
@@ -158,6 +164,8 @@ export default class Submit extends React.Component {
     nestedSort = (prop1) => (e1, e2) => {
         return (e1[prop1] < e2[prop1]) ? 1 : (e1[prop1] > e2[prop1]) ? -1 : 0;
     }
+
+    // TODO: UPDATE ALL HANDLERS TO INCLUDE ID
 
     handleUpdateSeverity(e) {
         this.updateCase("severity", e.target.value);
@@ -299,7 +307,7 @@ export default class Submit extends React.Component {
                                     selectChange={this.handleSelectChange}
                                     query={this.props.query}
                                     parent={this}
-                                    imageFile={this.state.image_file}
+                                    measurements={this.state.measurements}
                                 />
                             </div>
 
