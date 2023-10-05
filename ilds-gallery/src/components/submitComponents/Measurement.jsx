@@ -145,7 +145,7 @@ export default class Measurement extends React.Component {
 
     render() {
         return (
-            <div className="col-lg-12 row" id={"measurement" + this.props.id}>
+            <div className="row" id={"measurement" + this.props.id}>
                 <div className="col-lg-1 mb-3">
                     <input type="submit" 
                         className={`form-control form-control-lg ${this.state.show ? 'btn-primary': 'btn-secondary'}`} 

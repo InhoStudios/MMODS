@@ -38,7 +38,7 @@ export default class ImageUploadField extends React.Component {
 
     render() {
         return (
-            <div>
+            <div className="mb-4">
                 <h4 className="mb-4">Add Measurements</h4>
                 <div id="measurements-sect">
                     {this.state.measurements}

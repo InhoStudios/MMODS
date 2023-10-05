@@ -3,7 +3,7 @@ import React from "react";
 export default class PatientInfoField extends React.Component {
     render() {
         return (
-            <>
+            <div class="mb-4">
                 <h4 className="mb-4">Patient Information</h4>
                 <div className="row">
                     <div className="col-lg-6">
@@ -103,7 +103,7 @@ export default class PatientInfoField extends React.Component {
                         </div>
                     </div>
                 </div>
-            </>
+            </div>
         )
     }
 }

@@ -288,28 +288,24 @@ export default class Submit extends React.Component {
                                     <input type="submit" className="form-control form-control-lg btn btn-outline-primary btn-lg" value="Generate New ID" onClick={this.handleGetPatientID.bind(this)}/>
                                 </div>
                             </div>
-                            <div className="row mb-3">
-                                <PatientInfoField 
-                                    updateAge={this.handleUpdateAge.bind(this)}
-                                    updateSex={this.handleUpdateSex.bind(this)}
-                                    updateHist={this.handleUpdateHist.bind(this)}
-                                />
-                            </div>
-                            <div className="row mb-3">
-                                <ImageUploadField 
-                                    updateImage={this.handleUpdateImage.bind(this)}
-                                    updateImgtype={this.handleUpdateImgtype.bind(this)}
-                                    updateSite={this.handleUpdateSite.bind(this)}
-                                    updateQuery={this.handleQueryUpdate.bind(this)}
-                                    updateSeverity={this.handleUpdateSeverity.bind(this)} 
-                                    updateDod={this.handleUpdateDod.bind(this)}
-                                    updateSize={this.handleUpdateSize.bind(this)}
-                                    selectChange={this.handleSelectChange}
-                                    query={this.props.query}
-                                    parent={this}
-                                    measurements={this.state.measurements}
-                                />
-                            </div>
+                            <PatientInfoField 
+                                updateAge={this.handleUpdateAge.bind(this)}
+                                updateSex={this.handleUpdateSex.bind(this)}
+                                updateHist={this.handleUpdateHist.bind(this)}
+                            />
+                            <ImageUploadField 
+                                updateImage={this.handleUpdateImage.bind(this)}
+                                updateImgtype={this.handleUpdateImgtype.bind(this)}
+                                updateSite={this.handleUpdateSite.bind(this)}
+                                updateQuery={this.handleQueryUpdate.bind(this)}
+                                updateSeverity={this.handleUpdateSeverity.bind(this)} 
+                                updateDod={this.handleUpdateDod.bind(this)}
+                                updateSize={this.handleUpdateSize.bind(this)}
+                                selectChange={this.handleSelectChange}
+                                query={this.props.query}
+                                parent={this}
+                                measurements={this.state.measurements}
+                            />
 
                             <div className="row mb-5">
                                 <form method="post" encType="multipart/form-data">
