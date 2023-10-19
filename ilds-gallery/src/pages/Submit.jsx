@@ -38,6 +38,7 @@ export default class Submit extends React.Component {
                 }
             },
             participant: new Participant(),
+            participants: [],
         };
     }
 
@@ -50,7 +51,7 @@ export default class Submit extends React.Component {
         event.preventDefault();
         this.setState({ patient_id: event.target.value });
         clearTimeout(this.state.patientTimeout);
-        this.setState({ patientTimeout: setTimeout(() => this.getPatient(event.target.value, this), 300) });
+        this.setState({ patientTimeout: setTimeout(() => this.getPatientResults(event.target.value), 300) });
     
     }
 
@@ -77,7 +78,21 @@ export default class Submit extends React.Component {
     handleQueryUpdate(event) {
         event.preventDefault();
         clearTimeout(this.state.searchTimeout);
-        this.setState({ searchTimeout: setTimeout(() => this.performSearch(event.target.value, this), 300) });
+        this.setState({ searchTimeout: setTimeout(() => this.getPatientResults(event.target.value), 300) });
+    }
+
+    async getPatientResults(query) {
+        if (query != undefined) {
+            let res = await fetch(`${SERVER_ENDPOINT}/db_select?values=p.participant_id&from=Participant p&where=p.participant_id like '${query}%'`)
+                .then((data) => data.json())
+                .catch((err) => console.log(err));
+            if (res.length > 0) {
+                this.setState({
+                    participants: res,
+                });
+                console.log(this.state.participants);
+            }
+        }
     }
 
     async getPatient(id, caller) {
@@ -308,7 +323,26 @@ export default class Submit extends React.Component {
                                 <div className="col-lg-6">
                                     <input type="input" className="form-control form-control-lg" id="patient_id"
                                         name="patient_id" placeholder="Patient ID" value={this.state.patient_id}
-                                            onChange={this.handleUpdatePatientID.bind(this)}/>
+                                            onChange={this.handleUpdatePatientID.bind(this)}
+                                            onFocus={(e) => {
+                                                e.preventDefault();
+                                                document.querySelectorAll(`.participant-list`).forEach(a => a.style.display = "block");
+                                            }}
+                                            onBlur={(e) => {
+                                                e.preventDefault();
+                                                document.querySelectorAll(`.participant-list`).forEach(a => a.style.display = "none");
+                                            }}/>
+                                    <div className={`search-content participant-list`}>
+                                        {
+                                            this.state.participants.map((participant) => {
+                                                <a onClick={(e) => {
+                                                    e.preventDefault();
+                                                    this.getPatient(participant.participant_id, this);
+                                                }}
+                                                dangerouslySetInnerHTML={{__html: participant.participant_id}} />
+                                            })
+                                        }
+                                    </div>
                                 </div>
                                 <div className="col-lg-2">
                                     <input type="submit" className="form-control form-control-lg btn btn-outline-primary btn-lg" value="Generate New ID" onClick={this.handleGetPatientID.bind(this)}/>
