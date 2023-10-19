@@ -14,12 +14,23 @@ export const METHODS = {
 
 export class Participant {
     participant_id;
+    mob;
     sex;
     eye_colour;
     skin_type;
     ethnicity;
     hair_colour;
     tags;
+
+    constructor(pid, mob, sex, eyecol, skintype, eth, hc) {
+        this.participant_id = pid;
+        this.mob = mob;
+        this.sex = sex;
+        this.eye_colour = eyecol;
+        this.skin_type = skintype;
+        this.ethnicity = eth;
+        this.hair_colour = hc;
+    }
 }
 
 export class Lesion {

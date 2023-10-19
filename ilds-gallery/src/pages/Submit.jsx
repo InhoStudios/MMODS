@@ -2,7 +2,7 @@ import React from "react";
 import ImageUploadField from "../components/submitComponents/ImageUploadField";
 import PatientInfoField from "../components/submitComponents/PatientInfoField";
 import axios from "axios";
-import { Case, ImageMetadata, SERVER_ENDPOINT } from "../utilities/Structures";
+import { Case, ImageMetadata, Participant, SERVER_ENDPOINT } from "../utilities/Structures";
 
 export default class Submit extends React.Component {
     searchQuery = "test";
@@ -36,7 +36,8 @@ export default class Submit extends React.Component {
                     image: '',
                     image_file: ''
                 }
-            }
+            },
+            participant: new Participant(),
         };
     }
 
@@ -81,10 +82,26 @@ export default class Submit extends React.Component {
 
     async getPatient(id, caller) {
         if (id != undefined){
-            let patient = await fetch(`${SERVER_ENDPOINT}/db_select?values=*&from=Participant p&where=p.participant_id=${id}`)
-            .then((data) => data.json())
-            .catch((err) => console.log(err));
-            console.log(patient)
+            let part = await fetch(`${SERVER_ENDPOINT}/db_select?values=*&from=Participant p&where=p.participant_id="${id}"`)
+                .then((data) => data.json())
+                .catch((err) => console.log(err));
+            console.log(part);
+            if (part.length > 0) {
+                let part0 = part[0];
+                let dob = new Date(part0.birth_date);
+                let newPart = new Participant(
+                    part0.participant_id,
+                    `${dob.getFullYear()}-${String(dob.getMonth()).padStart(2, 0)}`,
+                    part0.sex,
+                    part0.eye_colour,
+                    part0.skin_type,
+                    part0.ethnicity,
+                    part0.hair_colour
+                )
+                this.setState({
+                    participant: newPart,
+                });
+            }
         }
     }
 
@@ -254,6 +271,15 @@ export default class Submit extends React.Component {
         return await this.setState({case: newCase});
     }
 
+    async updateParticipant(key, value) {
+        let part = this.state.participant;
+        let newPart = {
+            ...part
+        };
+        newPart[key] = value;
+        return await this.setState({participant: newPart});
+    }
+
     async updateImageMetadata(key, value) {
         let curImgMetadata = this.state.metadata;
         let newImgMetadata = {
@@ -292,6 +318,7 @@ export default class Submit extends React.Component {
                                 updateAge={this.handleUpdateAge.bind(this)}
                                 updateSex={this.handleUpdateSex.bind(this)}
                                 updateHist={this.handleUpdateHist.bind(this)}
+                                participant={this.state.participant}
                             />
                             <ImageUploadField 
                                 updateImage={this.handleUpdateImage.bind(this)}

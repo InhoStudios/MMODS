@@ -8,18 +8,24 @@ export default class ImageUploadField extends React.Component {
         super(props);
 
         this.state = {
-            measurements: [<Measurement id={0} removeField={this.removeField.bind(this)} {...this.props} />],
+            measurements: [
+                <Measurement 
+                    id={0} 
+                    removeField={this.removeField.bind(this)} 
+                    {...this.props} 
+                />],
             idCounter: 1,
         };
     }
 
     addImage() {
         this.setState(prevState => ({
-            measurements: [...prevState.measurements, <Measurement 
-                                                        id={prevState.idCounter} 
-                                                        removeField={this.removeField.bind(this)} 
-                                                        {...this.props} />
-                                                    ],
+            measurements: [...prevState.measurements, 
+                <Measurement 
+                    id={prevState.idCounter} 
+                    removeField={this.removeField.bind(this)} 
+                    {...this.props} />
+                ],
             idCounter: prevState.idCounter + 1,
         }));
     }
