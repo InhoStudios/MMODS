@@ -90,12 +90,12 @@ export default class Submit extends React.Component {
                 this.setState({
                     participants: res,
                 });
-                console.log(this.state.participants);
             }
         }
     }
 
-    async getPatient(id, caller) {
+    async getPatient(id) {
+        console.log(id);
         if (id != undefined){
             let part = await fetch(`${SERVER_ENDPOINT}/db_select?values=*&from=Participant p&where=p.participant_id="${id}"`)
                 .then((data) => data.json())
@@ -114,6 +114,7 @@ export default class Submit extends React.Component {
                     part0.hair_colour
                 )
                 this.setState({
+                    patient_id: id,
                     participant: newPart,
                 });
             }
@@ -334,13 +335,16 @@ export default class Submit extends React.Component {
                                             }}/>
                                     <div className={`search-content participant-list`}>
                                         {
-                                            this.state.participants.map((participant) => {
-                                                <a onClick={(e) => {
+                                            this.state.participants.map((participant) => (
+                                                <a onMouseDown={(e) => {
                                                     e.preventDefault();
-                                                    this.getPatient(participant.participant_id, this);
+                                                    this.getPatient(participant.participant_id);
                                                 }}
+                                                id={
+                                                    participant.participant_id
+                                                }
                                                 dangerouslySetInnerHTML={{__html: participant.participant_id}} />
-                                            })
+                                            ))
                                         }
                                     </div>
                                 </div>

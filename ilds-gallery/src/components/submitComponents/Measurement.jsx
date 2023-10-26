@@ -12,6 +12,7 @@ export default class Measurement extends React.Component {
             show: true,
             image: '',
             image_file: '',
+            visible: true, // is the entire field visible?
 
             searchTimeout: setTimeout(this.performSearch, 0),
             entities: [
@@ -144,7 +145,7 @@ export default class Measurement extends React.Component {
     }
 
     render() {
-        return (
+        return this.state.visible ? (
             <div className="row" id={"measurement" + this.props.id}>
                 <div className="col-lg-1 mb-3">
                     <input type="submit" 
@@ -164,7 +165,12 @@ export default class Measurement extends React.Component {
                     <input type="submit" 
                         className="form-control form-control-lg btn btn-danger btn-lg" 
                         value="✕"
-                        onClick={this.props.removeField}
+                        onClick={(e) => {
+                            e.preventDefault();
+                            this.setState({
+                                visible: false,
+                            });
+                        }}
                         id={this.props.id}
                         />
                 </div>
@@ -410,6 +416,8 @@ export default class Measurement extends React.Component {
                     </div>
                 </div>
             </div>
+        ) : (
+            <></>
         )
     }
 }
