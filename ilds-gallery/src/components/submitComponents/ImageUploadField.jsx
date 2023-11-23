@@ -11,7 +11,6 @@ export default class ImageUploadField extends React.Component {
             measurements: [
                 <Measurement 
                     id={0} 
-                    removeField={this.removeField.bind(this)} 
                     {...this.props} 
                 />],
             idCounter: 1,
@@ -23,23 +22,10 @@ export default class ImageUploadField extends React.Component {
             measurements: [...prevState.measurements, 
                 <Measurement 
                     id={prevState.idCounter} 
-                    removeField={this.removeField.bind(this)} 
                     {...this.props} />
                 ],
             idCounter: prevState.idCounter + 1,
         }));
-    }
-
-    removeField(e) {
-        let updatedMeasurements = [...this.state.measurements];
-        let index = updatedMeasurements.findIndex(item => item.props.id == e.target.id);
-        if (index >= 0) {
-            updatedMeasurements.splice(index, 1);
-        }
-        console.log(e.target.id);
-        this.setState({
-            measurements: updatedMeasurements
-        });
     }
 
     render() {

@@ -12,6 +12,7 @@ export default class Measurement extends React.Component {
             show: true,
             image: '',
             image_file: '',
+            visible: true, // is the entire field visible?
 
             searchTimeout: setTimeout(this.performSearch, 0),
             entities: [
@@ -144,7 +145,7 @@ export default class Measurement extends React.Component {
     }
 
     render() {
-        return (
+        return this.state.visible ? (
             <div className="row" id={"measurement" + this.props.id}>
                 <div className="col-lg-1 mb-3">
                     <input type="submit" 
@@ -164,7 +165,12 @@ export default class Measurement extends React.Component {
                     <input type="submit" 
                         className="form-control form-control-lg btn btn-danger btn-lg" 
                         value="✕"
-                        onClick={this.props.removeField}
+                        onClick={(e) => {
+                            e.preventDefault();
+                            this.setState({
+                                visible: false,
+                            });
+                        }}
                         id={this.props.id}
                         />
                 </div>
@@ -254,6 +260,44 @@ export default class Measurement extends React.Component {
                             
                         </div>
                         <div className="col-lg-6 mb-3">
+                            <form method="post" encType="multipart/form-data" onSubmit={(e) => e.preventDefault()}>
+                                <div className="row mb-3">
+                                    <div className="dropdown col-lg-8">
+                                        <input type="input" className="form-control form-control-lg" 
+                                            id="imgtype" placeholder="Lesion ↓"
+                                            value={this.state.lesion}
+                                            onChange={this.handleImageTypeInput.bind(this)}
+                                            onFocus={(e) => {
+                                                e.preventDefault();
+                                                document.querySelectorAll(`.lesions-${this.props.id}`).forEach(a => a.style.display = "block");
+                                            }}
+                                            onBlur={(e) => {
+                                                e.preventDefault();
+                                                document.querySelectorAll(`.lesions-${this.props.id}`).forEach(a => a.style.display = "none");
+                                            }}
+                                        />
+                                        <div className={`search-content lesions-${this.props.id}`}>
+                                            <a className="les"
+                                            onMouseDown={(e) => {
+                                                e.preventDefault();
+                                                // this.handleUpdateImgType("Clinical");
+                                            }}>
+                                                    230928A4a92
+                                            </a>
+                                            <a className="les"
+                                            onMouseDown={(e) => {
+                                                e.preventDefault();
+                                                // this.handleUpdateImgType("Dermoscopy");
+                                            }}>
+                                                    230928A2H57
+                                            </a>
+                                        </div>
+                                    </div>
+                                    <div className="col-lg-4">
+                                        <input type="submit" className="form-control form-control-lg btn btn-outline-primary btn-lg" value="New Lesion"/>
+                                    </div>
+                                </div>
+                            </form>
                             <div className="form-group row">
                                 <div className="mb-3 dropdown">
                                         <input type="input" className="form-control form-control-lg" id="search"
@@ -329,44 +373,6 @@ export default class Measurement extends React.Component {
                                         name="anatomicsite" value="" /> COMMENTED OUT
                                 </div> */}
                             </div>
-                            <form method="post" encType="multipart/form-data" onSubmit={(e) => e.preventDefault()}>
-                                <div className="row mb-3">
-                                    <div className="dropdown col-lg-8">
-                                        <input type="input" className="form-control form-control-lg" 
-                                            id="imgtype" placeholder="Lesion ↓"
-                                            value={this.state.lesion}
-                                            onChange={this.handleImageTypeInput.bind(this)}
-                                            onFocus={(e) => {
-                                                e.preventDefault();
-                                                document.querySelectorAll(".lesions").forEach(a => a.style.display = "block");
-                                            }}
-                                            onBlur={(e) => {
-                                                e.preventDefault();
-                                                document.querySelectorAll(".lesions").forEach(a => a.style.display = "none");
-                                            }}
-                                        />
-                                        <div className="search-content lesions">
-                                            <a className="les"
-                                            onMouseDown={(e) => {
-                                                e.preventDefault();
-                                                // this.handleUpdateImgType("Clinical");
-                                            }}>
-                                                    230928A4a92
-                                            </a>
-                                            <a className="les"
-                                            onMouseDown={(e) => {
-                                                e.preventDefault();
-                                                // this.handleUpdateImgType("Dermoscopy");
-                                            }}>
-                                                    230928A2H57
-                                            </a>
-                                        </div>
-                                    </div>
-                                    <div className="col-lg-4">
-                                        <input type="submit" className="form-control form-control-lg btn btn-outline-primary btn-lg" value="New Lesion"/>
-                                    </div>
-                                </div>
-                            </form>
                             <div className="row">
                                 <div className="col-lg-6 dropdown">
                                     <div className="row mb-3">
@@ -410,6 +416,8 @@ export default class Measurement extends React.Component {
                     </div>
                 </div>
             </div>
+        ) : (
+            <></>
         )
     }
 }
